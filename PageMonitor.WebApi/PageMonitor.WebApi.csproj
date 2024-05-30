@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PageMonitor.Application\PageMonitor.Application.csproj" />
     <ProjectReference Include="..\PageMonitor.Infrastructure\PageMonitor.Infrastructure.csproj" />
   </ItemGroup>
