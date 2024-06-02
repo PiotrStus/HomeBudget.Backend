@@ -9,7 +9,7 @@ namespace PageMonitor.Domain.Entities
 {
     public class AccountUser: DomainEntity
     {
-        public int AccountID { get; set; }
+        public int AccountId { get; set; }
         public Account Account { get; set; } = default!;
 
         public int UserId {  get; set; }
