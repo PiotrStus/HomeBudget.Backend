@@ -1,3 +1,4 @@
+using PageMonitor.Infrastructure.Persistance;
 using Serilog;
 
 namespace PageMonitor.WebApi
@@ -37,6 +38,9 @@ namespace PageMonitor.WebApi
                 .Enrich.FromLogContext());
 
             // Add services to the container.
+
+            // wywolanie metody rozszerzajacej, ktora zarejestruje EF i wszystkie ustawienia w kontenerze Dependency Injection
+            builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
 
             builder.Services.AddControllers();
 
