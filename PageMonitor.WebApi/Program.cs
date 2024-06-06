@@ -21,6 +21,13 @@ namespace PageMonitor.WebApi
 
             var builder = WebApplication.CreateBuilder(args);
 
+            // nadpisuje wszystkie ustawienia 
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Configuration.AddJsonFile("appsettings.Development.local.json");
+            }
+
+
             // context - 
             // services - konener z dependency injection
             // configuration - lokalna konfiguracja
