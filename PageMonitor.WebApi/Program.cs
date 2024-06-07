@@ -1,5 +1,6 @@
 using PageMonitor.Application.Logic.Abstractions;
 using PageMonitor.Infrastructure.Persistance;
+using PageMonitor.WebApi.Middlewares;
 using Serilog;
 
 namespace PageMonitor.WebApi
@@ -58,6 +59,8 @@ namespace PageMonitor.WebApi
             });
 
             var app = builder.Build();
+
+            app.UseExceptionResultMiddleware();
 
             // Configure the HTTP request pipeline.
 
