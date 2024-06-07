@@ -1,3 +1,4 @@
+using PageMonitor.Application.Logic.Abstractions;
 using PageMonitor.Infrastructure.Persistance;
 using Serilog;
 
@@ -50,6 +51,11 @@ namespace PageMonitor.WebApi
             builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
 
             builder.Services.AddControllers();
+
+            builder.Services.AddMediatR(c =>
+            {
+                c.RegisterServicesFromAssemblyContaining(typeof(BaseCommandHandler));
+            });
 
             var app = builder.Build();
 
