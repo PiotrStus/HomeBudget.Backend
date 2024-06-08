@@ -15,8 +15,4 @@
     <ProjectReference Include="..\PageMonitor.Domain\PageMonitor.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

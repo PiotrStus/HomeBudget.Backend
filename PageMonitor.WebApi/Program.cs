@@ -2,6 +2,8 @@ using PageMonitor.Application.Logic.Abstractions;
 using PageMonitor.Infrastructure.Persistance;
 using PageMonitor.WebApi.Middlewares;
 using Serilog;
+//trzeba bylo dodac using recznie
+using PageMonitor.Application;
 
 namespace PageMonitor.WebApi
 {
@@ -57,6 +59,10 @@ namespace PageMonitor.WebApi
             {
                 c.RegisterServicesFromAssemblyContaining(typeof(BaseCommandHandler));
             });
+
+            // wywolanie metody
+            builder.Services.AddApplicationServices();
+
 
             var app = builder.Build();
 
