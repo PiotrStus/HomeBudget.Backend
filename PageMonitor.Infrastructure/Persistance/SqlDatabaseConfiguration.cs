@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCoreSecondLevelCacheInterceptor;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PageMonitor.Application.Interfaces;
 using System;
@@ -20,7 +21,8 @@ namespace PageMonitor.Infrastructure.Persistance
             Action<IServiceProvider, DbContextOptionsBuilder> sqlOptions = (serviceProvider, options) => options.UseSqlServer(connectionString,
                 // dzieki temu jesli wyciagamy ustawienia z kilku tabel to one beda wyciagniete za pomoca jednego query
                 // bedzie join zamiast wielu pojedynczych strzalow
-                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
+                .AddInterceptors(serviceProvider.GetRequiredService<SecondLevelCacheInterceptor>());
 
             // AdDdBConxtext, ktora rejestruje w kontenerze pod interfejsem IApplicationDbContext
             // nasza klase MainDbContext, czyli nasza implementacje

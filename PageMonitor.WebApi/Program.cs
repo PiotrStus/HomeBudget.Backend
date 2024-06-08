@@ -50,6 +50,7 @@ namespace PageMonitor.WebApi
 
             // Add services to the container.
 
+            builder.Services.AddDatabaseCache();
             // wywolanie metody rozszerzajacej, ktora zarejestruje EF i wszystkie ustawienia w kontenerze Dependency Injection
             builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
 

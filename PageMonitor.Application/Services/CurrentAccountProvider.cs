@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCoreSecondLevelCacheInterceptor;
+using Microsoft.EntityFrameworkCore;
 using PageMonitor.Application.Exceptions;
 using PageMonitor.Application.Interfaces;
 using PageMonitor.Domain.Entities;
@@ -45,6 +46,8 @@ namespace PageMonitor.Application.Services
                     // Select przekształca wyniki, wybierając tylko AccountId z każdego AccountUser.
                     // (int ?) oznacza rzutowanie na nullable int(int ?), co pozwala na zwrócenie null w przypadku braku wyników.
                     .Select(au => (int?)au.AccountId)
+                    // metoda rozszerzajaca Cacheable, ktora wlacza cache dla tego zapytania
+                    .Cacheable()
                     // wybieramy pierwsze id -> pierwsze konto
                     .FirstOrDefaultAsync(); // => pobranie top1 wiersza w SQL, nalezy je posortowac, bo jesli nie, to np. wykonujac te samo zapytanie, mozemy dostac inne wyniki
 
@@ -63,7 +66,7 @@ namespace PageMonitor.Application.Services
                 throw new UnauthorizedException();
             }
             // pobieramy to konto z bazy danych
-            var account = await _applicationDbContext.Accounts.FirstOrDefaultAsync(a => a.Id == accountId.Value);
+            var account = await _applicationDbContext.Accounts.Cacheable().FirstOrDefaultAsync(a => a.Id == accountId.Value);
             // np. w miedzyczasie ktos to konto usunal albo gdzies jest jakies zapomniane id konta, ktore juz nie istnieje w bazie
             if (account == null)
             {
