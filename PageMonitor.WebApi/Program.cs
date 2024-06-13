@@ -55,6 +55,7 @@ namespace PageMonitor.WebApi
             builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
 
             builder.Services.AddControllers();
+            builder.Services.AddJwtAuth(builder.Configuration);
 
             builder.Services.AddMediatR(c =>
             {
