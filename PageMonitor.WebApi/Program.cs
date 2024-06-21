@@ -4,6 +4,9 @@ using PageMonitor.WebApi.Middlewares;
 using Serilog;
 //trzeba bylo dodac using recznie
 using PageMonitor.Application;
+using System;
+using PageMonitor.Infrastructure.Auth;
+using PageMonitor.WebApi.Application.Auth;
 
 namespace PageMonitor.WebApi
 {
@@ -50,12 +53,25 @@ namespace PageMonitor.WebApi
 
             // Add services to the container.
 
+
+            // standardowa metoda rozszerzajaca z frameworka
+            // dzieki temu moze IHttpContextAccessor jest zarejestrownay
+            // w kontenrze Dependency Injection i mozna go wstrzykiwac jak
+            // private readonly IHttpContextAccessor _httpContextAccessor
+            // w JwtAuthenticationDataProvider(JwtManager jwtManager, IHttpContextAccessor httpContextAccessor)
+            builder.Services.AddHttpContextAccessor(); 
+
+
             builder.Services.AddDatabaseCache();
             // wywolanie metody rozszerzajacej, ktora zarejestruje EF i wszystkie ustawienia w kontenerze Dependency Injection
             builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
 
             builder.Services.AddControllers();
             builder.Services.AddJwtAuth(builder.Configuration);
+
+            // wywyolujemy metode rozszerzajaca 
+            builder.Services.AddJwtAuthenticationDataProvider(builder.Configuration);
+
 
             builder.Services.AddMediatR(c =>
             {

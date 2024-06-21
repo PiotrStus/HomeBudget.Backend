@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Infrastructure.Persistance
+namespace PageMonitor.Infrastructure.Auth
 {
-    public static class JwtAuthentication
+    public static class JwtAuthConfiguration
     {
         // rozszerza interfejs IServiceCollection, ktory sluzy do rejestracji w konenterze Dependency Injection
         public static IServiceCollection AddJwtAuth(this IServiceCollection services, IConfiguration configuration)
