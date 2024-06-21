@@ -73,6 +73,8 @@ namespace PageMonitor.WebApi
             builder.Services.AddJwtAuthenticationDataProvider(builder.Configuration);
 
 
+            builder.Services.AddPasswordManager();
+
             builder.Services.AddMediatR(c =>
             {
                 c.RegisterServicesFromAssemblyContaining(typeof(BaseCommandHandler));
