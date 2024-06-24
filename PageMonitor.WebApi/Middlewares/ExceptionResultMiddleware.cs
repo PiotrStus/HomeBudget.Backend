@@ -29,12 +29,22 @@ namespace PageMonitor.WebApi.Middlewares
                 httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 await httpContext.Response.WriteAsJsonAsync(new UnauthorizedResponse { Reason = ue.Message ?? "Unauthorized" });
             }
+            // dodajemy catcha do walidacji requestow
+            // zwracamy kod 422 i jako json wypisujemy ta klase
+            // validation ValidationErrorResponse, ktora przyjmuje jako
+            // parametr nasz validation exception
+            catch (ValidationException ve)
+            {
+                httpContext.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+                await httpContext.Response.WriteAsJsonAsync(new ValidationErrorResponse(ve));
+            }
             catch (Exception e)
             {
                 logger.LogCritical(e, "Fatal error");
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await httpContext.Response.WriteAsJsonAsync("Server error");
             }
+
         }
     
   

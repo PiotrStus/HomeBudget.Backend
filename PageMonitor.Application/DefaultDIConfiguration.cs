@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using PageMonitor.Application.Interfaces;
+using PageMonitor.Application.Logic.Abstractions;
+using PageMonitor.Application.Logic.Validators;
 using PageMonitor.Application.Services;
 
 namespace PageMonitor.Application
@@ -23,6 +27,24 @@ namespace PageMonitor.Application
             
             // kolejne serwisy dodawac bedziemy w kolejnych linijkach
             
+            return services;
+        }
+
+        public static IServiceCollection AddValidators(this IServiceCollection services)
+        {
+            // dodaje walidatory z assembly, ktore zawiera klase BaseQueryHandler
+            // czyli to bedzie Assembly Application
+            // jest to metoda rozszerzajaca z fluentValidation
+            // ona autoamtycznie rejestruje wszystkie walidatory, ktore
+            // dziedzicza po klasie abstract Validator
+            services.AddValidatorsFromAssemblyContaining(typeof(BaseQueryHandler));
+            // tutaj dodajemy IPipelineBehavior do mediatora
+            // czyli wpinamy sie w proces przetwarzania command i query tym naszym
+            // typeof(ValidationBehavior, ktore moze odpalac jakis kod przed albo po
+            // command i query no i wlasnie my to robimy przed
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            // to nam zalatwia walidacje dla kazdego commanda i query osobno
+            // jedyne co to musimy dodac klase walidatora a reszta zadziala magicznie sama
             return services;
         }
     }

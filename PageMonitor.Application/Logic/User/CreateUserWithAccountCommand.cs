@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PageMonitor.Application.Interfaces;
 using PageMonitor.Application.Logic.Abstractions;
@@ -154,5 +155,24 @@ namespace PageMonitor.Application.Logic.User
                 };
             }
         }
+
+        // dodajemy to jako osobna klasa
+        // on dziediczy po AbstractValidatorze to jest klasa z fluentvalidation
+        // wszystkie klasy dziedziczace po AbstractValidator sa rejestrowane automatycznie w 
+        // kontenerze DI dzieki metodzie AddValidatorsFromAssemblyContaining()
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
+            {
+                // Dodaj reguły walidacji
+                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.Email).EmailAddress();
+                RuleFor(x => x.Email).MaximumLength(100);
+
+                RuleFor(x => x.Password).NotEmpty();
+                RuleFor(x => x.Password).MaximumLength(50);
+            }
+        }
+
     }
 }

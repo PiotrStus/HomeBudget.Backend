@@ -83,6 +83,9 @@ namespace PageMonitor.WebApi
             // wywolanie metody
             builder.Services.AddApplicationServices();
 
+            // wywolanie walidatorow
+            builder.Services.AddValidators();
+
             // swagger
             builder.Services.AddSwaggerGen(o =>
             {
