@@ -93,6 +93,7 @@ namespace PageMonitor.WebApi
                 // dzieki temu duzo latwiej sie czyta takie requesty i duzo czytelniejszy 
                 // kod z aplikacji frontendowej jest napisany, poniewaz zamiast liczb mozemy uzyc
                 // wartosci tekstowych
+                // koniec
                 }).AddJsonOptions(options =>
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
