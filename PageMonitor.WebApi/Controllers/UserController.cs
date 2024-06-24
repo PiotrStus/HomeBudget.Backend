@@ -17,7 +17,7 @@ namespace PageMonitor.WebApi.Controllers
     //dzieiczy po BaseControllerze
     public class UserController : BaseController
     {
-        public UserController(ILogger logger, IMediator mediator) : base(logger, mediator)
+        public UserController(ILogger<UserController> logger, IMediator mediator) : base(logger, mediator)
         {
         }
 

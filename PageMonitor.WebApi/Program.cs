@@ -83,8 +83,46 @@ namespace PageMonitor.WebApi
             // wywolanie metody
             builder.Services.AddApplicationServices();
 
+            // swagger
+            builder.Services.AddSwaggerGen(o =>
+            {
+                o.CustomSchemaIds(x =>
+                {
+                    var name = x.FullName;
+                    if (name != null)
+                    {
+                        // fix na bugga, ktory jest w swaggerze
+                        // my uzywamy klas statycznych do commands
+                        // i klas request results, ktore sa zagniezdzone w klasie staycznej
+                        // i one wtedy w nazwie typu, ktora .NET generuje jak serializuje
+                        // nazwe do stringa zawieraja + natomist swagger nie umie takiej
+                        // nazwy z + obsluzyc, dlatego musimy tutaj taka castomowa konfiguracje
+                        // dodac, ktora zamienia + n a _
+                        // ten blad wystepuje od dawna w swaggerze i nikt go nie naprawia
+                        // i trzeba po prostu dodac takiego fixa
+                        name = name.Replace("+", "_"); // swagger bug fix
+                    }
+
+                    return name;
+                });
+            });
+
 
             var app = builder.Build();
+
+            // juz po buildzie dodajemy samo u¿ycie tego swaggera
+            // i swaggera ui, dzieki czemu bedziemy mogli interefjs webowy sobie
+            // potestowac nasze akcje
+            // robimy to tylko na srodowisku developrskim poniewaz
+            // nie chcemy tego interfejsu na produkcji gdzies tam ludziom pokazywac
+
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
 
             app.UseExceptionResultMiddleware();
 
