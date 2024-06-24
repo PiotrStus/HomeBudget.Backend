@@ -8,6 +8,7 @@ using System;
 using PageMonitor.Infrastructure.Auth;
 using PageMonitor.WebApi.Application.Auth;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace PageMonitor.WebApi
 {
@@ -84,7 +85,16 @@ namespace PageMonitor.WebApi
                         // nie bedzie sie odpalal dla GET i bodajze OPTIONS
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     }
-                });
+                // pozwoli to nam skonfigurowac ustawienia serializacji/deserializacji jsona
+                // uzywanego przy odpowiedziach i przy parsowaniu requestow do akcji controllera
+                // JsonStringEnumConverter -> wbudowana klasa, dzieki czemu bedziemy mogli
+                // w przypadku, gdy w naszych requestach bedziemy wymagac podania enuma
+                // bedziemy mogli podac tez wartosci tekstowe zamiast liczbowych
+                // dzieki temu duzo latwiej sie czyta takie requesty i duzo czytelniejszy 
+                // kod z aplikacji frontendowej jest napisany, poniewaz zamiast liczb mozemy uzyc
+                // wartosci tekstowych
+                }).AddJsonOptions(options =>
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             builder.Services.AddJwtAuth(builder.Configuration);
 
