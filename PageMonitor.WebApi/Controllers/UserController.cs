@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -23,6 +24,8 @@ namespace PageMonitor.WebApi.Controllers
     {
         private readonly JwtManager _jwtManager;
         private readonly CookieSettings? _cookieSettings;
+        // interfejs, ktory pozwala na generowanie tych aniforgery tokenow przez framework
+        private readonly IAntiforgery _antiforgery;
 
         // dodajemy 2 properties w konstruktorze, ktora zostana wstrzykniete przez DI
         // IOptions<CookieSettings> cookieSettings => jedna z nich jest ustawienie ciastek,
@@ -32,9 +35,11 @@ namespace PageMonitor.WebApi.Controllers
         public UserController(ILogger<UserController> logger,
             IOptions<CookieSettings> cookieSettings,
             JwtManager jwtManager,
+            IAntiforgery antiforgery,
             IMediator mediator) : base(logger, mediator)
         {
             _jwtManager = jwtManager;
+            _antiforgery = antiforgery;
             // jesli sa ustawienia to przypisujemy wartosc a jesli nie to null
             _cookieSettings = cookieSettings != null ? cookieSettings.Value : null;
         }
@@ -46,6 +51,7 @@ namespace PageMonitor.WebApi.Controllers
         // zawartosc dane do tej klasy sa odczytywane z body requesta
         // jest to requesta typu post
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<ActionResult> CreateUserWithAccount([FromBody] CreateUserWithAccountCommand.Request model)
         {
             // to co robimy to bierzemy mediatora i wysylamy obiekt o nazwie model (nasz request)
@@ -95,6 +101,20 @@ namespace PageMonitor.WebApi.Controllers
             var data = await _mediator.Send(new LoggedInUserQuery.Request() { });
             return Ok(data);
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult> AntiforgeryToken()
+        {
+            // na podstawie contextu metoda ta generuje token,
+            // ktory zwrocimy z tej akcji
+            // dzieki temu bedziemy mogli ten token przekazac 
+            // w naszych requestach POST z aplikacji frontendowych 
+            // i ten token bedzie sprawdzany czy jest poprawny
+            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
+            return Ok(tokens.RequestToken);
+        }
+
 
 
         // dodajemy metode, która ustawi ciastko z tokenem

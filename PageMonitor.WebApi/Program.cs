@@ -7,6 +7,7 @@ using PageMonitor.Application;
 using System;
 using PageMonitor.Infrastructure.Auth;
 using PageMonitor.WebApi.Application.Auth;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PageMonitor.WebApi
 {
@@ -59,14 +60,32 @@ namespace PageMonitor.WebApi
             // w kontenrze Dependency Injection i mozna go wstrzykiwac jak
             // private readonly IHttpContextAccessor _httpContextAccessor
             // w JwtAuthenticationDataProvider(JwtManager jwtManager, IHttpContextAccessor httpContextAccessor)
-            builder.Services.AddHttpContextAccessor(); 
+            builder.Services.AddHttpContextAccessor();
 
 
             builder.Services.AddDatabaseCache();
             // wywolanie metody rozszerzajacej, ktora zarejestruje EF i wszystkie ustawienia w kontenerze Dependency Injection
             builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
 
-            builder.Services.AddControllers();
+
+            // to jest aby antyforgery token dzialal w ASP .NET Corze
+            builder.Services.AddControllersWithViews(options =>
+                {
+                    // nie dodajemy na developerskim, bo jak sie doda
+                    // na developerskim to przestana dzialac akcje ze swaggera
+                    // bo wtedy w swagerze tokkena nie bedzie
+                    // trzeba bedzie w swaggerze strzelac po token
+                    // potem ten token w naglowku przkazywac i to komplikuje testy
+                    if (!builder.Environment.IsDevelopment())
+                    {
+                        // mozemy dodac filter do kazdej akcji
+                        // to jest filtr z frameworka
+                        // bedzie sie automatycznie odpalal dla wszystkich akcji POST, PUT, DELETE
+                        // nie bedzie sie odpalal dla GET i bodajze OPTIONS
+                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    }
+                });
+
             builder.Services.AddJwtAuth(builder.Configuration);
 
             // wywyolujemy metode rozszerzajaca 
@@ -108,6 +127,15 @@ namespace PageMonitor.WebApi
 
                     return name;
                 });
+            });
+
+
+            // w ustawieniach podajemy nazwê nag³owka, w ktorym bedzie przychodzil nasz token 
+            // ktory framework bedzie sprawdzal
+            // czy zgadza sie z tokenem wygenerowanym wczesniej u nas w aplikacji
+            builder.Services.AddAntiforgery(o =>
+            {
+                o.HeaderName = "X-XSRF-TOKEN";
             });
 
             // dodajemy do serwisow obsluge CORS ona jest wbudowana w ASP .NET Core
