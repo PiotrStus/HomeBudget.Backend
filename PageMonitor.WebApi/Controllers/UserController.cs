@@ -77,6 +77,16 @@ namespace PageMonitor.WebApi.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<ActionResult> Logout()
+        {
+            // wysyla request, ktory aktualnie nic nie robi
+            var logoutResult = await _mediator.Send(new LogoutCommand.Request());
+            // usuwa ciastko
+            DeleteTokenCookie();
+            return Ok(logoutResult);
+        }
+
 
         // dodajemy metode, która ustawi ciastko z tokenem
         // w parametrze przyjmuje token
@@ -112,6 +122,12 @@ namespace PageMonitor.WebApi.Controllers
         }
 
 
-
+        private void DeleteTokenCookie()
+        {
+            Response.Cookies.Delete(CookieSettings.CookieName, new CookieOptions()
+            {
+                HttpOnly = true,
+            });
+        }
     }
 }
