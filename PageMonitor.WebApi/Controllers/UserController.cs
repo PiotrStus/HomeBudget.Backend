@@ -87,6 +87,15 @@ namespace PageMonitor.WebApi.Controllers
             return Ok(logoutResult);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetLoggedInUser()
+        {
+            // w mediatorze tworzymy sobie pusty obiekt klasy Request
+            // czyli to będzie zserializowany Result z LoggedInUserQuery, czyli Email
+            var data = await _mediator.Send(new LoggedInUserQuery.Request() { });
+            return Ok(data);
+        }
+
 
         // dodajemy metode, która ustawi ciastko z tokenem
         // w parametrze przyjmuje token
