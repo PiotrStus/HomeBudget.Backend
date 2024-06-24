@@ -110,6 +110,10 @@ namespace PageMonitor.WebApi
                 });
             });
 
+            // dodajemy do serwisow obsluge CORS ona jest wbudowana w ASP .NET Core
+            builder.Services.AddCors();
+
+
 
             var app = builder.Build();
 
@@ -125,6 +129,33 @@ namespace PageMonitor.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+
+            app.UseCors(builder => builder
+                // pozwalamy na komunikacje z naszym api tylko z domen, które
+                // bêd¹ w naszej aplikacji dodane pod kluczem WebAppBaseUrl
+                // pozniej tego klucza bedziemy uzywac np. do generowania linkow
+                // do naszej aplikacji frontendowej
+                // wiec WebAppBaseUrl to jest po prostu adres aplikacji frontendowej
+                // ktora bedziemy tworzyc pozniej
+                .WithOrigins(app.Configuration.GetValue<string>("WebAppBaseUrl") ?? "")
+                // dodajemy tez domeny, ktore sa w AdditionalCorsOrigins
+                // to sie czasem przydaje, kiedy chcemy sie dostawac do naszego api
+                // z kilku domen, np. na jakis testach albo po prostu chcemy gdzies sie
+                // na chwile wpiac do naszego api
+                // na produkcji to ustawienie powinno zostac puste
+                .WithOrigins(app.Configuration.GetSection("AdditionalCorsOrigins").Get<string[]>() ?? new string[0])
+                // to jest to samo, ale odczytujemy jeszcze domeny ze zmiennej srodowiskowej
+                // ktore sa oddzielone przecinkiem, to ulatwia konfiguracje
+                // np. w Azurze, latwiej podac liste takich domen
+                .WithOrigins((Environment.GetEnvironmentVariable("AdditionalCorsOrigins") ?? "").Split(',').Where(h => !string.IsNullOrEmpty(h)).Select(h => h.Trim()).ToArray())
+                // pozwalamy na komunikacji z dowolnym naglowkiem
+                .AllowAnyHeader()
+                // opcja niezbedna po to zeby cookies sie wysylaly
+                // i ustawialy z naszego api
+                .AllowCredentials()
+                // zezwalamy na kazda metode: get, post itd.
+                .AllowAnyMethod());
 
 
             app.UseExceptionResultMiddleware();
