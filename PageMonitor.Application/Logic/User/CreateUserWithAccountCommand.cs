@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using PageMonitor.Application.Exceptions;
 using PageMonitor.Application.Interfaces;
 using PageMonitor.Application.Logic.Abstractions;
 using PageMonitor.Domain.Entities;
@@ -66,7 +67,7 @@ namespace PageMonitor.Application.Logic.User
                 if (userExists)
                 {
                     // rzucamy wyjatek, ze konto o danym adresie email juz istnieje
-                    throw new Exception("AccountWithThisEmailAlreadyExists");
+                    throw new ErrorException("AccountWithThisEmailAlreadyExists");
                 }
 
                 // kolejny krok to jest utworzenie nowej encji uzytkownika i dodanie jej do
