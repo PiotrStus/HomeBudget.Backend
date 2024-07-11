@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PageMonitor.Application\PageMonitor.Application.csproj" />
-    <ProjectReference Include="..\PageMonitor.Domain\PageMonitor.Domain.csproj" />
+    <ProjectReference Include="..\HomeBudget.Application\HomeBudget.Application.csproj" />
+    <ProjectReference Include="..\HomeBudget.Domain\HomeBudget.Domain.csproj" />
   </ItemGroup>
 
 </Project>

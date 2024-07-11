@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PageMonitor.Domain", "PageMonitor.Domain\PageMonitor.Domain.csproj", "{D21BEE44-FCC9-45BC-B15F-A0F77F0CC948}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeBudget.Domain", "HomeBudget.Domain\HomeBudget.Domain.csproj", "{D21BEE44-FCC9-45BC-B15F-A0F77F0CC948}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PageMonitor.Application", "PageMonitor.Application\PageMonitor.Application.csproj", "{B4475401-C0A5-498D-8C29-61E452E5683E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeBudget.Application", "HomeBudget.Application\HomeBudget.Application.csproj", "{B4475401-C0A5-498D-8C29-61E452E5683E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D21BEE44-FCC9-45BC-B15F-A0F77F0CC948} = {D21BEE44-FCC9-45BC-B15F-A0F77F0CC948}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PageMonitor.Infrastructure", "PageMonitor.Infrastructure\PageMonitor.Infrastructure.csproj", "{0F60DCCD-EB7B-4A1D-A08D-29BB11F4B6D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeBudget.Infrastructure", "HomeBudget.Infrastructure\HomeBudget.Infrastructure.csproj", "{0F60DCCD-EB7B-4A1D-A08D-29BB11F4B6D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PageMonitor.WebApi", "PageMonitor.WebApi\PageMonitor.WebApi.csproj", "{82CCFD6E-7E4F-47DA-A079-7EE996B03EA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeBudget.WebApi", "HomeBudget.WebApi\HomeBudget.WebApi.csproj", "{82CCFD6E-7E4F-47DA-A079-7EE996B03EA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
