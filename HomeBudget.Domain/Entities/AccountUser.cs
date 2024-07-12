@@ -1,4 +1,4 @@
-﻿using PageMonitor.Domain.Common;
+﻿using HomeBudget.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,7 @@ namespace PageMonitor.Domain.Entities
     public class AccountUser: DomainEntity
     {
         public int AccountId { get; set; }
+
         public Account Account { get; set; } = default!;
 
         public int UserId {  get; set; }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Domain.Common
+namespace HomeBudget.Domain.Common
 {
     public abstract class DomainEntity
     {
