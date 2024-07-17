@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Application.Logic.Validators
+namespace HomeBudget.Application.Logic.Validators
 {
     // IPipelineBehavior to jest interfejs z mediatora
     // on wpina się w dowolny request i dowolny response

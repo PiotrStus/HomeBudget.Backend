@@ -1,6 +1,6 @@
-﻿using PageMonitor.Application.Exceptions;
+﻿using HomeBudget.Application.Exceptions;
 
-namespace PageMonitor.WebApi.Application.Response
+namespace HomeBudget.WebApi.Application.Response
 {
     public class ValidationErrorResponse
     {

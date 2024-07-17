@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Infrastructure.Persistance
+namespace HomeBudget.Infrastructure.Persistance
 {
     public static class CacheConfiguration
     {

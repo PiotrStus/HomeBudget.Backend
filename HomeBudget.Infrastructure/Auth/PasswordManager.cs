@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using PageMonitor.Application.Interfaces;
+using HomeBudget.Application.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Infrastructure.Auth
+namespace HomeBudget.Infrastructure.Auth
 {
     public class PasswordManager : IPasswordManager
     {

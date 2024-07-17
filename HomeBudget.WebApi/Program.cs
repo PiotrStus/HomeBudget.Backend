@@ -1,16 +1,16 @@
-using PageMonitor.Application.Logic.Abstractions;
-using PageMonitor.Infrastructure.Persistance;
-using PageMonitor.WebApi.Middlewares;
+using HomeBudget.Application.Logic.Abstractions;
+using HomeBudget.Infrastructure.Persistance;
+using HomeBudget.WebApi.Middlewares;
 using Serilog;
 //trzeba bylo dodac using recznie
-using PageMonitor.Application;
+using HomeBudget.Application;
 using System;
-using PageMonitor.Infrastructure.Auth;
-using PageMonitor.WebApi.Application.Auth;
+using HomeBudget.Infrastructure.Auth;
+using HomeBudget.WebApi.Application.Auth;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
-namespace PageMonitor.WebApi
+namespace HomeBudget.WebApi
 {
     public class Program
     {

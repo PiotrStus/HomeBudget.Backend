@@ -12,11 +12,11 @@ namespace HomeBudget.Domain.Entities
     {
         public required string Name { get; set; }
 
-        public required string Description { get; set; }
+        public string? Description { get; set; }
 
         public int BudgetCategoryId { get; set; }
 
-        public ExpenseCategory ExpenseCategory { get; set; }
+        public ExpenseCategory ExpenseCategory { get; set; } = default!;
 
         public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
     }

@@ -1,11 +1,11 @@
-﻿using PageMonitor.Application.Interfaces;
+﻿using HomeBudget.Application.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Application.Logic.Abstractions
+namespace HomeBudget.Application.Logic.Abstractions
 {
     public abstract class BaseCommandHandler
     {

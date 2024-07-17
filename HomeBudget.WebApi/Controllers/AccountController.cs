@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using PageMonitor.Application.Logic.Account;
-using PageMonitor.Application.Logic.User;
-using PageMonitor.Infrastructure.Auth;
-using PageMonitor.WebApi.Application.Auth;
-using PageMonitor.WebApi.Application.Response;
+using HomeBudget.Application.Logic.Account;
+using HomeBudget.Application.Logic.User;
+using HomeBudget.Infrastructure.Auth;
+using HomeBudget.WebApi.Application.Auth;
+using HomeBudget.WebApi.Application.Response;
 
-namespace PageMonitor.WebApi.Controllers
+namespace HomeBudget.WebApi.Controllers
 {
 
     // zmienamy routing w tej chwili dzialat tak, ze mamy adres api

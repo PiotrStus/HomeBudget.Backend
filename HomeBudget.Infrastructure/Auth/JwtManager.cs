@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Infrastructure.Auth
+namespace HomeBudget.Infrastructure.Auth
 {
     public class JwtManager
     {

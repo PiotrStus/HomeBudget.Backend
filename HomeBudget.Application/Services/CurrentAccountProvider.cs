@@ -1,15 +1,15 @@
 ﻿using EFCoreSecondLevelCacheInterceptor;
 using Microsoft.EntityFrameworkCore;
-using PageMonitor.Application.Exceptions;
-using PageMonitor.Application.Interfaces;
-using PageMonitor.Domain.Entities;
+using HomeBudget.Application.Exceptions;
+using HomeBudget.Application.Interfaces;
+using HomeBudget.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Application.Services
+namespace HomeBudget.Application.Services
 {
     public class CurrentAccountProvider : ICurrentAccountProvider
     {

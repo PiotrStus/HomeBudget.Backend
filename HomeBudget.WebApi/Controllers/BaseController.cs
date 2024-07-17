@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PageMonitor.WebApi.Controllers
+namespace HomeBudget.WebApi.Controllers
 {
     // jest to klasa abstrakcyjna, która dziediczy po ControllerBase
     // dzieki czemu nasze kontrolery nie będą już musiały po tej klasie dziediczyć

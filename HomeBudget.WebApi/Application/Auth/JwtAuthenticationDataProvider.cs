@@ -1,7 +1,7 @@
-﻿using PageMonitor.Application.Interfaces;
-using PageMonitor.Infrastructure.Auth;
+﻿using HomeBudget.Application.Interfaces;
+using HomeBudget.Infrastructure.Auth;
 
-namespace PageMonitor.WebApi.Application.Auth
+namespace HomeBudget.WebApi.Application.Auth
 {
     public class JwtAuthenticationDataProvider : IAuthenticationDataProvider
     {

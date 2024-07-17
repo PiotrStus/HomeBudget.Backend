@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Application.Interfaces
+namespace HomeBudget.Application.Interfaces
 {
     public interface IAuthenticationDataProvider
     {

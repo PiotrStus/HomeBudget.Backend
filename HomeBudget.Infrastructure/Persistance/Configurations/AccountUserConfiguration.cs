@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PageMonitor.Domain.Entities;
+using HomeBudget.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Infrastructure.Persistance.Configurations
+namespace HomeBudget.Infrastructure.Persistance.Configurations
 {
     // IEntityTypeConfiguration -> interfejs z EF, ktory pozwala na ustawienie konfiguracji dla dengo typu encji
     public class AccountUserConfiguration : IEntityTypeConfiguration<AccountUser>

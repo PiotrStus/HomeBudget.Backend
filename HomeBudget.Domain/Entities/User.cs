@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Domain.Entities
+namespace HomeBudget.Domain.Entities
 {
     public class User : DomainEntity
     {

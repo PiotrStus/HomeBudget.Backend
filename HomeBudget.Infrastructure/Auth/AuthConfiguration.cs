@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PageMonitor.Application.Interfaces;
-using PageMonitor.Infrastructure.Auth;
+using HomeBudget.Application.Interfaces;
+using HomeBudget.Infrastructure.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Infrastructure.Auth
+namespace HomeBudget.Infrastructure.Auth
 {
     public static class AuthConfiguration
     {

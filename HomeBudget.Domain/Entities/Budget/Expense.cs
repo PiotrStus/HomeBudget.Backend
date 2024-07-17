@@ -12,6 +12,8 @@ namespace HomeBudget.Domain.Entities.Budget
     {
         public int MonthlyBudgetId { get; set; }
 
+        public int YearBudgetId { get; set; }
+
         public int BudgetCategoryId { get; set; }
 
         public int BudgetSubcategoryId { get; set; }
@@ -22,12 +24,14 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public DateTimeOffset Date { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public MonthlyBudget MonthlyBudget { get; set; }
+        public MonthlyBudget MonthlyBudget { get; set; } = default!;
 
-        public ExpenseCategory ExpenseCategory { get; set; }
+        public YearBudget YearBudget { get; set; } = default!;
 
-        public ExpenseSubcategory ExpenseSubcategory { get; set; }
+        public ExpenseCategory ExpenseCategory { get; set; } = default!;
+
+        public ExpenseSubcategory ExpenseSubcategory { get; set; } = default!;
     }
 }

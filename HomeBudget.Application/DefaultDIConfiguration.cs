@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using PageMonitor.Application.Interfaces;
-using PageMonitor.Application.Logic.Abstractions;
-using PageMonitor.Application.Logic.Validators;
-using PageMonitor.Application.Services;
+using HomeBudget.Application.Interfaces;
+using HomeBudget.Application.Logic.Abstractions;
+using HomeBudget.Application.Logic.Validators;
+using HomeBudget.Application.Services;
 
-namespace PageMonitor.Application
+namespace HomeBudget.Application
 {
     public static class DefaultDIConfiguration
     {

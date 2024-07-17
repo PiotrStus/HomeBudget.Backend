@@ -1,8 +1,8 @@
-﻿using PageMonitor.Application.Exceptions;
-using PageMonitor.WebApi.Application.Response;
+﻿using HomeBudget.Application.Exceptions;
+using HomeBudget.WebApi.Application.Response;
 using System.Net;
 
-namespace PageMonitor.WebApi.Middlewares
+namespace HomeBudget.WebApi.Middlewares
 {
     public class ExceptionResultMiddleware
     {

@@ -1,4 +1,4 @@
-﻿namespace PageMonitor.WebApi.Application.Response
+﻿namespace HomeBudget.WebApi.Application.Response
 {
     public class UnauthorizedResponse
     {

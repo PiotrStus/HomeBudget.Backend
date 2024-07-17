@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PageMonitor.Application.Interfaces;
-using PageMonitor.Domain.Entities;
+using HomeBudget.Application.Interfaces;
+using HomeBudget.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HomeBudget.Domain.Entities.Budget.Budget;
+using HomeBudget.Domain.Entities.Budget;
+using HomeBudget.Infrastructure.Persistance.Configurations;
 
-namespace PageMonitor.Infrastructure.Persistance
+namespace HomeBudget.Infrastructure.Persistance
 {
     public class MainDbContext : DbContext, IApplicationDbContext
     {
@@ -21,6 +24,25 @@ namespace PageMonitor.Infrastructure.Persistance
 
         public DbSet<AccountUser> AccountUsers { get; set; }
 
+        public DbSet<DraftExpense> DraftExpenses { get; set; }
+
+        public DbSet<Expense> Expenses { get; set; }
+
+        public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
+
+        public DbSet<ExpenseSubcategory> ExpenseSubcategories { get; set; }
+
+        public DbSet<Goal> Goals { get; set; }
+
+        public DbSet<Income> Incomes { get; set; }
+
+        public DbSet<IncomeCategory> IncomeCategories { get; set; }
+
+        public DbSet<MonthlyBudget> MonthlyBudgets { get; set; }
+
+        public DbSet<YearBudget> YearBudgets { get; set; }
+
+
         // mechanizm, ktory automatycznie zaimportuje konfiguracje z plikow z folderu Configurations
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +50,12 @@ namespace PageMonitor.Infrastructure.Persistance
             //czyli w tym przypadku infrastructure
             // dzieki temu wszystkie klasy ktore dziedicza po IEntityTypeConfiguration beda uzyte do zastosowania konfiguracji
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MainDbContext).Assembly);
+
+            // inaczej trzeba by 
+            //modelBuilder.ApplyConfiguration(new GoalsConfiguration());
+            //modelBuilder.ApplyConfiguration(new AccountUserConfiguration());
+            // itd.
+
         }
 
         // pozwala ustawic globalne ustawienia dla propertisow, dzieki czemu mozna zrobic to w jednym miejscu i bedzie obowiazywac we wszystkich encjach domenowych
@@ -35,6 +63,7 @@ namespace PageMonitor.Infrastructure.Persistance
         {
 
             // decimal w kodzie c# to bedzie precyzja 18 i 4 globalnie!!!
+            // to jest z fluent api, ktory jest czescia entity frameworka
             configurationBuilder.Properties<decimal>().HavePrecision(18, 4);
 
             base.ConfigureConventions(configurationBuilder);

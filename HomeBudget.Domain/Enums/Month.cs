@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Domain.Enums
 {
-    public enum Months
+    public enum Month
     {
         January = 1,
         February = 2,

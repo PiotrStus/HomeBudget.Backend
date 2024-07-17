@@ -20,11 +20,11 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public DateTimeOffset Date { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public MonthlyBudget MonthlyBudget { get; set; }
+        public MonthlyBudget MonthlyBudget { get; set; } = default!;
 
-        public IncomeCategory IncomeCategory { get; set; }
+        public IncomeCategory IncomeCategory { get; set; } = default!;
 
     }
 }

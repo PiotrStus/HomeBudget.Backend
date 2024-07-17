@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Application.Exceptions
+namespace HomeBudget.Application.Exceptions
 {
     public class ValidationException : Exception
     {

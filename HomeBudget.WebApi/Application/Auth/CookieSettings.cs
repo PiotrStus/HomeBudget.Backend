@@ -1,4 +1,4 @@
-﻿namespace PageMonitor.WebApi.Application.Auth
+﻿namespace HomeBudget.WebApi.Application.Auth
 {
     public class CookieSettings
     {

@@ -14,18 +14,16 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public decimal TotalAmount { get; set; }
 
-        public string Description { get; set; } // optional
+        public string? Description { get; set; }
+
+        public int AccountId { get; set; }
+
+        public Account Account { get; set; } = default!;
 
         public ICollection<MonthlyBudget> MonthlyBudgets { get; set; } = new List<MonthlyBudget>();
 
-        public ICollection<Expense> PlannedExpenses { get; set; } = new List<Expense>();
+        public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
 
-        public ICollection<Expense> ActualExpenses { get; set; } = new List<Expense>();
-
-        public ICollection<Income> PlannedIncome { get; set; } = new List<Income>();
-
-        public ICollection<Income> ActualIncome { get; set; } = new List<Income>();
-
-        public ICollection<Goals> Goals { get; set; } = new List<Goals>();
+        public ICollection<Goal> Goals { get; set; } = new List<Goal>();
     }
 }

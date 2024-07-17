@@ -2,18 +2,18 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using PageMonitor.Application.Exceptions;
-using PageMonitor.Application.Interfaces;
-using PageMonitor.Application.Logic.Abstractions;
-using PageMonitor.Domain.Entities;
+using HomeBudget.Application.Exceptions;
+using HomeBudget.Application.Interfaces;
+using HomeBudget.Application.Logic.Abstractions;
+using HomeBudget.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static PageMonitor.Application.Logic.User.CreateUserWithAccountCommand.Request;
+using static HomeBudget.Application.Logic.User.CreateUserWithAccountCommand.Request;
 
-namespace PageMonitor.Application.Logic.User
+namespace HomeBudget.Application.Logic.User
 {
     public static class LoggedInUserQuery
     {

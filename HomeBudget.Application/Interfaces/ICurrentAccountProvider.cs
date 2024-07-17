@@ -1,11 +1,11 @@
-﻿using PageMonitor.Domain.Entities;
+﻿using HomeBudget.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PageMonitor.Application.Interfaces
+namespace HomeBudget.Application.Interfaces
 {
     public interface ICurrentAccountProvider
     {

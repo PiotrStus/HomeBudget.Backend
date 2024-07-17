@@ -12,20 +12,16 @@ namespace HomeBudget.Domain.Entities.Budget.Budget
     {
         public int YearBudgetId { get; set; }
 
-        public Months Month { get; set; }
+        public Month Month { get; set; }
 
         public decimal TotalAmount { get; set; }
 
-        public YearBudget YearBudget { get; set; }
+        public YearBudget YearBudget { get; set; } = default!;
 
-        public ICollection<Expense> PlannedExpenses { get; set; } = new List<Expense>();
 
-        public ICollection<Expense> ActualExpenses { get; set; } = new List<Expense>();
+        public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
 
-        public ICollection<Income> PlannedIncome { get; set; } = new List<Income>();
 
-        public ICollection<Income> ActualIncome { get; set; } = new List<Income>();
-
-        public ICollection<DraftExpense> PlannedDraftExpenses { get; set; } = new List<DraftExpense>();
+        public ICollection<Income> Income { get; set; } = new List<Income>();
     }
 }
