@@ -18,6 +18,9 @@ namespace HomeBudget.Domain.Entities
 
         public ICollection<YearBudget> YearsBudgets { get; set;} = new List<YearBudget>();
 
-        public ICollection<Goal> Goals { get; set; } = new List<Goal>();
+        public ICollection<Category> Categories { get; set; } = new List<Category>();  
+
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+
     }
 }

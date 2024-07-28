@@ -8,17 +8,21 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Domain.Entities.Budget
 {
-    public class YearBudget : DomainEntity
+    public class Transaction : DomainEntity
     {
-        public required int Year { get; set; }
+        public required string Name { get; set; } = default!;
 
-        public string? Description { get; set; }
+        public DateTimeOffset Date { get; set; }
 
         public int AccountId { get; set; }
 
         public Account Account { get; set; } = default!;
 
-        public ICollection<MonthlyBudget> MonthlyBudgets { get; set; } = new List<MonthlyBudget>();
+        public int? CategoryId { get; set; }
+
+        public Category? Category { get; set; } = default;
+
+        public required decimal Amount {  get; set; }
 
     }
 }

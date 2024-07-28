@@ -18,21 +18,13 @@ namespace HomeBudget.Application.Interfaces
 
         DbSet<AccountUser> AccountUsers { get; set; }
 
-        DbSet<DraftExpense> DraftExpenses { get; set; }
+        DbSet<Transaction> Transactions { get; set; }
 
-        DbSet<Expense> Expenses { get; set; }
-
-        DbSet<ExpenseCategory> ExpenseCategories { get; set; }
-
-        DbSet<ExpenseSubcategory> ExpenseSubcategories { get; set; }
-
-        DbSet<Goal> Goals { get; set; }
-
-        DbSet<Income> Incomes { get; set; }
-
-        DbSet<IncomeCategory> IncomeCategories { get; set; }
+        DbSet<Category> Categories { get; set; }
 
         DbSet<MonthlyBudget> MonthlyBudgets { get; set; }
+
+        DbSet<MonthlyBudgetCategory> MonthlyBudgetCategories { get; set; }
 
         DbSet<YearBudget> YearBudgets { get; set; }
 

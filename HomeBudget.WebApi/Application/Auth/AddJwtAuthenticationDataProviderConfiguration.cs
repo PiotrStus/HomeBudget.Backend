@@ -18,7 +18,7 @@ namespace HomeBudget.WebApi.Application.Auth
         public static IServiceCollection AddJwtAuthenticationDataProvider(this IServiceCollection services, IConfiguration configuration)
         {
             // zmieniamy sekcje na cookieSettings
-            services.Configure<JwtAuthenticationOptions>(configuration.GetSection("CookieSettings"));
+            services.Configure<CookieSettings>(configuration.GetSection("CookieSettings"));
             // dodanie implementajci do naszej interfejsu
             // w tym przypadku bedzie to addScope a nie addSingleton            
             // do naszego interfejsu IAuthenticationDataProvider

@@ -20,14 +20,6 @@ namespace HomeBudget.Infrastructure.Persistance.Configurations
             builder.HasMany(y => y.MonthlyBudgets)
                    .WithOne(m => m.YearBudget)
                    .HasForeignKey(k => k.YearBudgetId);
-
-            builder.HasMany(y => y.Expenses)
-                   .WithOne(m => m.YearBudget)
-                   .HasForeignKey(k => k.YearBudgetId);
-
-            builder.HasMany(y => y.Goals)
-                   .WithOne(m => m.YearBudget)
-                   .HasForeignKey(k => k.YearBudgetId);
         }
     }
 }

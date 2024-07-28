@@ -4,6 +4,7 @@ namespace HomeBudget.WebApi.Application.Response
 {
     public class ValidationErrorResponse
     {
+
         public ValidationErrorResponse()
         {
         }

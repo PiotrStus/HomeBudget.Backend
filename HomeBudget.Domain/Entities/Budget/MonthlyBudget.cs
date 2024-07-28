@@ -18,10 +18,6 @@ namespace HomeBudget.Domain.Entities.Budget.Budget
 
         public YearBudget YearBudget { get; set; } = default!;
 
-
-        public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
-
-
-        public ICollection<Income> Income { get; set; } = new List<Income>();
+        public ICollection<MonthlyBudgetCategory> MonthlyBudgetCategories { get; set; } = new List<MonthlyBudgetCategory>();
     }
 }

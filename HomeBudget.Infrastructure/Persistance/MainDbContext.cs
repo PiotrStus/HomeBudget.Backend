@@ -24,23 +24,18 @@ namespace HomeBudget.Infrastructure.Persistance
 
         public DbSet<AccountUser> AccountUsers { get; set; }
 
-        public DbSet<DraftExpense> DraftExpenses { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
-        public DbSet<Expense> Expenses { get; set; }
-
-        public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
-
-        public DbSet<ExpenseSubcategory> ExpenseSubcategories { get; set; }
-
-        public DbSet<Goal> Goals { get; set; }
-
-        public DbSet<Income> Incomes { get; set; }
-
-        public DbSet<IncomeCategory> IncomeCategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public DbSet<MonthlyBudget> MonthlyBudgets { get; set; }
 
+        public DbSet<MonthlyBudgetCategory> MonthlyBudgetCategories { get; set; }
+
         public DbSet<YearBudget> YearBudgets { get; set; }
+
+
+
 
 
         // mechanizm, ktory automatycznie zaimportuje konfiguracje z plikow z folderu Configurations
