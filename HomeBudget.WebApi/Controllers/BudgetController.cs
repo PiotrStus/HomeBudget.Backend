@@ -1,4 +1,5 @@
 ﻿using HomeBudget.Application.Logic.Budget;
+using HomeBudget.Application.Logic.Budget.Category;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,11 +36,46 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(createYearResult);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> CreateMonthlyBudget([FromBody] CreateMonthlyBudgetCommand.Request model)
+        {
+            var createMonthlyBudgetResult = await _mediator.Send(model);
+            return Ok(createMonthlyBudgetResult);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateCategoryMonthlyBudget([FromBody] CreateCategoryMonthlyBudgetCommand.Request model)
+        {
+            var CreateCategoryMonthlyBudgetResult = await _mediator.Send(model);
+            return Ok(CreateCategoryMonthlyBudgetResult);
+        }
+
         [HttpGet]
         public async Task<ActionResult> GetAllCategories([FromQuery] GetAllCategoriesQuery.Request model)
         {
             var data = await _mediator.Send(model);
             return Ok(data);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetCategory([FromQuery] GetCommandQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            return Ok(data);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateCategory([FromBody] UpdateCategoryCommand.Request model)
+        {
+            var UpdateCategoryResult = await _mediator.Send(model);
+            return Ok(UpdateCategoryResult);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteCategory([FromBody] DeleteCategoryCommand.Request model)
+        {
+            var DeleteCategoryResult = await _mediator.Send(model);
+            return Ok(DeleteCategoryResult);
         }
 
     }

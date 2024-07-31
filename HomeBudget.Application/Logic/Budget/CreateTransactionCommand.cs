@@ -49,6 +49,7 @@ namespace HomeBudget.Application.Logic.Budget
                     Name = request.Name,
                     Date = request.Date ?? utcNow,
                     CategoryId = request.CategoryId,
+                    AccountId = account.Id,
                     Amount = request.Amount,
                 };
 

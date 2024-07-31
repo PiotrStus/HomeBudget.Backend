@@ -11,14 +11,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.Category
 {
     public static class GetAllCategoriesQuery
     {
 
         public class Request() : IRequest<Result>
         {
-            
+
         }
 
         public class Result()
@@ -30,7 +30,7 @@ namespace HomeBudget.Application.Logic.Budget
                 public required int Id { get; set; }
 
                 public required string Name { get; set; }
-                
+
                 public required CategoryType CategoryType { get; set; }
 
             }
@@ -47,8 +47,8 @@ namespace HomeBudget.Application.Logic.Budget
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
                 var categories = await _applicationDbContext.Categories
-                     .Where(c => c.AccountId == account.Id)
-                     .Select(c => new Result.AccountCategories ()
+                     .Where(c => c.AccountId == account.Id && c.IsDeleted == false)
+                     .Select(c => new Result.AccountCategories()
                      {
                          Id = c.Id,
                          Name = c.Name,
@@ -62,7 +62,7 @@ namespace HomeBudget.Application.Logic.Budget
                 return new Result()
                 {
                     Categories = categories
-                }; 
+                };
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
-using HomeBudget.Domain.Entities.Budget;
+using BudgetEntities = HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Domain.Enums;
 using MediatR;
 using System;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.Category
 {
     public static class CreateCategoryCommand
     {
@@ -35,7 +35,7 @@ namespace HomeBudget.Application.Logic.Budget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var category = new Category()
+                var category = new BudgetEntities.Category()
                 {
                     Name = request.Name,
                     CategoryType = request.CategoryType,

@@ -1,36 +1,36 @@
 ﻿using FluentValidation;
+using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
-using HomeBudget.Domain.Entities.Budget.Budget;
 using HomeBudget.Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.Category
 {
-    public static class CreateMonthlyBudgetCommand
+    public static class UpdateCategoryCommand
     {
         public class Request : IRequest<Result>
         {
-            public required int YearBudgetId { get; set; }
+            public required int Id { get; set; }
 
-            public required Month Month { get; set; }
+            public required string Name { get; set; }
 
-            public required decimal TotalAmount { get; set; }
+            public required CategoryType CategoryType { get; set; }
         }
 
         public class Result
         {
-            public int MonthlyBudgetId {  get; set; }
+
         }
 
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
-
             public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext) : base(currentAccountProvider, applicationDbContext)
             {
             }
@@ -39,32 +39,30 @@ namespace HomeBudget.Application.Logic.Budget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                Domain.Entities.Budget.Category? model = null;
 
-                var monthlyBudget = new MonthlyBudget()
+                model = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == request.Id && c.AccountId == account.Id);
+
+                if (model == null)
                 {
-                    YearBudgetId = request.YearBudgetId,
-                    Month = request.Month,
-                    TotalAmount = request.TotalAmount
-                };
+                    throw new UnauthorizedException();
+                }
 
-                _applicationDbContext.MonthlyBudgets.Add(monthlyBudget);
+                model.Name = request.Name;
+                model.CategoryType = request.CategoryType;
+            
+                await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-                await _applicationDbContext.SaveChangesAsync();
-
-
-                return new Result()
-                {
-                    MonthlyBudgetId = monthlyBudget.Id
-                };
+                return new Result();
             }
 
             public class Validator : AbstractValidator<Request>
             {
                 public Validator()
                 {
-                    RuleFor(x => x.YearBudgetId).NotEmpty();
-                    RuleFor(x => x.Month).IsInEnum();
-                    RuleFor(x => x.TotalAmount).GreaterThanOrEqualTo(0);
+                    RuleFor(x => x.Name).NotEmpty();
+                    RuleFor(x => x.Name).MaximumLength(50);
+                    RuleFor(x => x.CategoryType).IsInEnum();
                 }
             }
         }
