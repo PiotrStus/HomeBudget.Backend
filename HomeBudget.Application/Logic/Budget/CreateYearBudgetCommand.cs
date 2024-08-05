@@ -50,18 +50,16 @@ namespace HomeBudget.Application.Logic.Budget
                     .Where(c => c.CategoryType == CategoryType.Expense)
                     .ToListAsync();
 
-                using (var yearBudgetTransaction = await _applicationDbContext.Database.BeginTransactionAsync(cancellationToken))
+                var yearBudget = new YearBudget()
                 {
-                    var yearBudget = new YearBudget()
-                    {
-                        Year = request.Year,
-                        Description = request.Description,
-                        AccountId = account.Id
-                    };
+                    Year = request.Year,
+                    Description = request.Description,
+                    AccountId = account.Id
+                };
 
-                    _applicationDbContext.YearBudgets.Add(yearBudget);
+                _applicationDbContext.YearBudgets.Add(yearBudget);
 
-                    for (var i = 1; i <= 12; i++)
+                for (var i = 1; i <= 12; i++)
                     {
                         var monthlyBudget = new MonthlyBudget()
                         {
@@ -69,12 +67,12 @@ namespace HomeBudget.Application.Logic.Budget
                             YearBudget = yearBudget,
                             TotalAmount = 0,
                         };
-                        yearBudget.MonthlyBudgets.Add(monthlyBudget);
 
+                        yearBudget.MonthlyBudgets.Add(monthlyBudget);
 
                         foreach (var category in categories)
                         {
-                            if (category.CategoryType == CategoryType.Income && !category.IsDeleted )
+                            if (category.CategoryType == CategoryType.Expense && !category.IsDeleted )
                             {
                                 var plannedCategory = new MonthlyBudgetCategory()
                                 {
@@ -87,25 +85,22 @@ namespace HomeBudget.Application.Logic.Budget
                         }
                     }
 
-                    await _applicationDbContext.SaveChangesAsync(cancellationToken);
+                await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-                    await yearBudgetTransaction.CommitAsync(cancellationToken);
-
-                    return new Result()
-                    {
-                        YearBudgetId = yearBudget.Id
-                    };
-                }
+                return new Result()
+                {
+                    YearBudgetId = yearBudget.Id
+                };
             }
         }
 
-            public class Validator : AbstractValidator<Request>
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
             {
-                public Validator()
-                {
                     RuleFor(x => x.Year).NotEqual(0);
                     RuleFor(x => x.Description).MaximumLength(255);
-                }
-            }
+             }
+        }
     }
 }

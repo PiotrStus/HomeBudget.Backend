@@ -33,6 +33,5 @@ namespace HomeBudget.Application.Interfaces
         // sluzy do zapisu danych do BD, jej implementacje zawiera juz klasa DbContext z Entity Frameworka
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-        DatabaseFacade Database { get; }
     }
 }
