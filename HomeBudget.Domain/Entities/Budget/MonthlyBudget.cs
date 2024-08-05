@@ -12,9 +12,9 @@ namespace HomeBudget.Domain.Entities.Budget.Budget
     {
         public int YearBudgetId { get; set; }
 
-        public Month Month { get; set; }
+        public required Month Month { get; set; }
 
-        public decimal TotalAmount { get; set; }
+        public required decimal TotalAmount { get; set; }
 
         public YearBudget YearBudget { get; set; } = default!;
 

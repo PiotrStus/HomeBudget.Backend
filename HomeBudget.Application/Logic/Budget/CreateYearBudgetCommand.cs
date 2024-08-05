@@ -3,6 +3,8 @@ using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities.Budget;
+using HomeBudget.Domain.Entities.Budget.Budget;
+using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -44,34 +46,66 @@ namespace HomeBudget.Application.Logic.Budget
                     throw new ErrorException("AccountWithThisYearBudgetAlreadyExists");
                 }
 
-                var yearBudget = new YearBudget()
+                var categories = await _applicationDbContext.Categories
+                    .Where(c => c.CategoryType == CategoryType.Expense)
+                    .ToListAsync();
+
+                using (var yearBudgetTransaction = await _applicationDbContext.Database.BeginTransactionAsync(cancellationToken))
                 {
-                    Year = request.Year,
-                    Description = request.Description,
-                    AccountId = account.Id
-                };
+                    var yearBudget = new YearBudget()
+                    {
+                        Year = request.Year,
+                        Description = request.Description,
+                        AccountId = account.Id
+                    };
 
-                _applicationDbContext.YearBudgets.Add(yearBudget);
+                    _applicationDbContext.YearBudgets.Add(yearBudget);
+
+                    for (var i = 1; i <= 12; i++)
+                    {
+                        var monthlyBudget = new MonthlyBudget()
+                        {
+                            Month = (Month)i,
+                            YearBudget = yearBudget,
+                            TotalAmount = 0,
+                        };
+                        yearBudget.MonthlyBudgets.Add(monthlyBudget);
 
 
-                await _applicationDbContext.SaveChangesAsync(cancellationToken);
+                        foreach (var category in categories)
+                        {
+                            if (category.CategoryType == CategoryType.Income && !category.IsDeleted )
+                            {
+                                var plannedCategory = new MonthlyBudgetCategory()
+                                {
+                                    Amount = 0,
+                                    MonthlyBudget = monthlyBudget,
+                                    Category = category
+                                };
+                                monthlyBudget.MonthlyBudgetCategories.Add(plannedCategory);
+                            }
+                        }
+                    }
 
-                return new Result()
-                {
-                    YearBudgetId = yearBudget.Id
-                };
+                    await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+                    await yearBudgetTransaction.CommitAsync(cancellationToken);
+
+                    return new Result()
+                    {
+                        YearBudgetId = yearBudget.Id
+                    };
+                }
             }
+        }
 
             public class Validator : AbstractValidator<Request>
             {
                 public Validator()
                 {
                     RuleFor(x => x.Year).NotEqual(0);
-                    RuleFor(x => x.Year).InclusiveBetween(1900, DateTime.Now.Year);
                     RuleFor(x => x.Description).MaximumLength(255);
                 }
             }
-
-        }
     }
 }

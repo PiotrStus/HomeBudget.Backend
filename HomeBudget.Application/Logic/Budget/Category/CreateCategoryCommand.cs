@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HomeBudget.Application.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace HomeBudget.Application.Logic.Budget.Category
 {
@@ -34,6 +36,13 @@ namespace HomeBudget.Application.Logic.Budget.Category
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
+
+                var categoryExist = await _applicationDbContext.Categories.AnyAsync(y => y.Name == request.Name && y.CategoryType == request.CategoryType && y.AccountId == account.Id && !y.IsDeleted);
+
+                if (categoryExist)
+                {
+                    throw new ErrorException("CategoryWithThisTypeCategoryAlreadyExists");
+                }
 
                 var category = new BudgetEntities.Category()
                 {

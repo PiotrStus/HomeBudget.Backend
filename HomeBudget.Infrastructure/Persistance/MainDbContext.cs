@@ -41,14 +41,14 @@ namespace HomeBudget.Infrastructure.Persistance
         // mechanizm, ktory automatycznie zaimportuje konfiguracje z plikow z folderu Configurations
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //typeof(MainDbContext).Assembly jako parametr z ktorego assembly chcemy wziac konfiguracje,
-            //czyli w tym przypadku infrastructure
+            // typeof(MainDbContext).Assembly jako parametr z ktorego assembly chcemy wziac konfiguracje,
+            // czyli w tym przypadku infrastructure
             // dzieki temu wszystkie klasy ktore dziedicza po IEntityTypeConfiguration beda uzyte do zastosowania konfiguracji
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MainDbContext).Assembly);
 
             // inaczej trzeba by 
-            //modelBuilder.ApplyConfiguration(new GoalsConfiguration());
-            //modelBuilder.ApplyConfiguration(new AccountUserConfiguration());
+            // modelBuilder.ApplyConfiguration(new YearBudgetConfiguration());
+            // modelBuilder.ApplyConfiguration(new AccountUserConfiguration());
             // itd.
 
         }

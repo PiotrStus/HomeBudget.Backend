@@ -22,13 +22,6 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(createTransactionResult);
         }
 
-        [HttpPost] 
-        public async Task<ActionResult> CreateCategory([FromBody] CreateCategoryCommand.Request model)
-        {
-            var createCategoryResult = await _mediator.Send(model);
-            return Ok(createCategoryResult);
-        }
-
         [HttpPost]
         public async Task<ActionResult> CreateYearBudget([FromBody] CreateYearBudgetCommand.Request model)
         {
@@ -51,32 +44,10 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllCategories([FromQuery] GetAllCategoriesQuery.Request model)
+        public async Task<ActionResult> GetAllYearBudgets([FromQuery] GetAllYearBudgetsQuery.Request model)
         {
             var data = await _mediator.Send(model);
             return Ok(data);
         }
-
-        [HttpGet]
-        public async Task<ActionResult> GetCategory([FromQuery] GetCommandQuery.Request model)
-        {
-            var data = await _mediator.Send(model);
-            return Ok(data);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> UpdateCategory([FromBody] UpdateCategoryCommand.Request model)
-        {
-            var UpdateCategoryResult = await _mediator.Send(model);
-            return Ok(UpdateCategoryResult);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> DeleteCategory([FromBody] DeleteCategoryCommand.Request model)
-        {
-            var DeleteCategoryResult = await _mediator.Send(model);
-            return Ok(DeleteCategoryResult);
-        }
-
     }
 }

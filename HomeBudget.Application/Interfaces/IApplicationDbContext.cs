@@ -2,6 +2,7 @@
 using HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Domain.Entities.Budget.Budget;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,5 +32,7 @@ namespace HomeBudget.Application.Interfaces
 
         // sluzy do zapisu danych do BD, jej implementacje zawiera juz klasa DbContext z Entity Frameworka
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        DatabaseFacade Database { get; }
     }
 }

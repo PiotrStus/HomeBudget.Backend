@@ -25,6 +25,7 @@ namespace HomeBudget.WebApi
                 .Enrich.FromLogContext()
                 // na sztywno loguje do konsoli
                 .WriteTo.Console()
+                .WriteTo.Seq("http://localhost:5341")
                 // konfiguruje logger w taki sposob, aby moc zalogowac bledy zanim app na dobre wystartuje
                 .CreateBootstrapLogger();
 
