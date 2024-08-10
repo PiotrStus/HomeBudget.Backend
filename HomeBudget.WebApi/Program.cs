@@ -14,7 +14,7 @@ namespace HomeBudget.WebApi
 {
     public class Program
     {
-        public static string APP_NAME = "PageMonitor.WebApi";
+        public static string APP_NAME = "HomeBudget.WebApi";
         public static void Main(string[] args)
         {
 

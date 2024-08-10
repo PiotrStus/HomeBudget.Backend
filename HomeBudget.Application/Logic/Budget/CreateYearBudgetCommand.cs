@@ -47,7 +47,7 @@ namespace HomeBudget.Application.Logic.Budget
                 }
 
                 var categories = await _applicationDbContext.Categories
-                    .Where(c => c.CategoryType == CategoryType.Expense)
+                    //.Where(c => c.CategoryType == CategoryType.Expense)
                     .ToListAsync();
 
                 var yearBudget = new YearBudget()
@@ -58,32 +58,6 @@ namespace HomeBudget.Application.Logic.Budget
                 };
 
                 _applicationDbContext.YearBudgets.Add(yearBudget);
-
-                for (var i = 1; i <= 12; i++)
-                    {
-                        var monthlyBudget = new MonthlyBudget()
-                        {
-                            Month = (Month)i,
-                            YearBudget = yearBudget,
-                            TotalAmount = 0,
-                        };
-
-                        yearBudget.MonthlyBudgets.Add(monthlyBudget);
-
-                        foreach (var category in categories)
-                        {
-                            if (category.CategoryType == CategoryType.Expense && !category.IsDeleted )
-                            {
-                                var plannedCategory = new MonthlyBudgetCategory()
-                                {
-                                    Amount = 0,
-                                    MonthlyBudget = monthlyBudget,
-                                    Category = category
-                                };
-                                monthlyBudget.MonthlyBudgetCategories.Add(plannedCategory);
-                            }
-                        }
-                    }
 
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

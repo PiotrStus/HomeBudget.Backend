@@ -4,11 +4,15 @@ using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities.Budget.Budget;
 using HomeBudget.Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HomeBudget.Domain.Entities.Budget;
+using HomeBudget.Application.Exceptions;
+
 
 namespace HomeBudget.Application.Logic.Budget
 {
@@ -20,7 +24,7 @@ namespace HomeBudget.Application.Logic.Budget
 
             public required Month Month { get; set; }
 
-            public required decimal TotalAmount { get; set; }
+            public decimal? TotalAmount { get; set; }
         }
 
         public class Result
@@ -39,15 +43,48 @@ namespace HomeBudget.Application.Logic.Budget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                var categories = await _applicationDbContext.Categories
+                    .Where(c => c.IsDraft && c.AccountId == account.Id)
+                    .ToListAsync();
+
+                var monthlyBudgetExist = await _applicationDbContext.MonthlyBudgets
+                    //.Include(m => m.YearBudget)
+                    .AnyAsync(m => m.YearBudgetId == request.YearBudgetId && m.Month == request.Month && m.YearBudget.AccountId == account.Id);
+
+                if (monthlyBudgetExist)
+                {
+                    throw new ErrorException("MonthlyBudgetAlreadyExists");
+                }
+
+                if (request.TotalAmount != null)
+                { 
+                }
 
                 var monthlyBudget = new MonthlyBudget()
                 {
                     YearBudgetId = request.YearBudgetId,
                     Month = request.Month,
-                    TotalAmount = request.TotalAmount
+                    TotalAmount = request.TotalAmount ?? 0m
                 };
 
-                _applicationDbContext.MonthlyBudgets.Add(monthlyBudget);
+                foreach (var category in categories)
+                {
+                    //if (category.CategoryType == CategoryType.Expense && !category.IsDeleted )
+                    if (!category.IsDeleted)
+                    {
+                        var plannedCategory = new MonthlyBudgetCategory()
+                        {
+                            Amount = 0,
+                            MonthlyBudget = monthlyBudget,
+                            Category = category
+                        };
+                        monthlyBudget.MonthlyBudgetCategories.Add(plannedCategory);
+                    }
+                }
+            
+
+
+            _applicationDbContext.MonthlyBudgets.Add(monthlyBudget);
 
                 await _applicationDbContext.SaveChangesAsync();
 

@@ -22,6 +22,8 @@ namespace HomeBudget.Application.Logic.Budget.Category
             public required string Name { get; set; }
 
             public required CategoryType CategoryType { get; set; }
+
+            public required bool IsDraft { get; set; }
         }
 
         public class Result
@@ -39,7 +41,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var categoryExist = await _applicationDbContext.Categories.AnyAsync(y => y.Name == request.Name && y.CategoryType == request.CategoryType && y.AccountId == account.Id && !y.IsDeleted);
+                var categoryExist = await _applicationDbContext.Categories.AnyAsync(y => y.Name == request.Name && y.CategoryType == request.CategoryType && y.AccountId == account.Id && !y.IsDeleted && y.IsDraft == request.IsDraft);
 
                 if (categoryExist)
                 {
@@ -57,6 +59,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
 
                 model.Name = request.Name;
                 model.CategoryType = request.CategoryType;
+                model.IsDraft = request.IsDraft;
             
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

@@ -19,7 +19,10 @@ namespace HomeBudget.Application.Logic.Budget.Category
         public class Request : IRequest<Result>
         {
             public required string Name { get; set; }
+
             public required CategoryType CategoryType { get; set; }
+
+            public required bool IsDraft { get; set; }
         }
 
         public class Result
@@ -48,7 +51,8 @@ namespace HomeBudget.Application.Logic.Budget.Category
                 {
                     Name = request.Name,
                     CategoryType = request.CategoryType,
-                    Account = account
+                    Account = account,
+                    IsDraft = request.IsDraft
                 };
 
                 _applicationDbContext.Categories.Add(category);

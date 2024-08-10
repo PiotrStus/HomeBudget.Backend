@@ -48,5 +48,12 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(DeleteCategoryResult);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetPlannedCategories([FromQuery] GetPlannedCategoriesQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            return Ok(data);
+        }
+
     }
 }

@@ -15,11 +15,16 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public required CategoryType CategoryType { get; set; }
 
+        public required bool IsDraft { get; set; }
+
         public int AccountId { get; set; }
+
 
         public Account Account { get; set; } = default!;
 
         public bool IsDeleted { get; set; }
+
+        //public bool MonthSpecific { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 

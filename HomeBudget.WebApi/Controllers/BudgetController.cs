@@ -44,7 +44,7 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllYearBudgets([FromQuery] GetAllYearBudgetsQuery.Request model)
+        public async Task<ActionResult> GetBudgets([FromQuery] GetBudgetsQuery.Request model)
         {
             var data = await _mediator.Send(model);
             return Ok(data);

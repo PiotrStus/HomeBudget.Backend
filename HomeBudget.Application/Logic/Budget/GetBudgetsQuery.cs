@@ -2,6 +2,7 @@
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities;
 using HomeBudget.Domain.Entities.Budget;
+using HomeBudget.Domain.Entities.Budget.Budget;
 using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static HomeBudget.Application.Logic.Budget.GetBudgetsQuery.Result;
 
 namespace HomeBudget.Application.Logic.Budget
 {
-    public static class GetAllYearBudgetsQuery
+    public static class GetBudgetsQuery
     {
 
         public class Request() : IRequest<Result>
@@ -23,9 +25,19 @@ namespace HomeBudget.Application.Logic.Budget
 
         public class Result()
         {
-            public required List<AllYearBudgets> YearBudgets { get; set; } = new List<AllYearBudgets>();
+            public required List<YearBudget> YearBudgets { get; set; } = new List<YearBudget>();
 
-            public class AllYearBudgets()
+            public class MonthlyBudget()
+            {
+                public required int Id { get; set; }
+
+                public required Month Month { get; set; }
+
+                public required decimal TotalAmount { get; set; }
+
+            }
+
+            public class YearBudget()
             {
                 public required int Id { get; set; }
 
@@ -33,6 +45,7 @@ namespace HomeBudget.Application.Logic.Budget
 
                 public string? Description { get; set; }
 
+                public List<MonthlyBudget> MonthlyBudgets { get; set; } = new List<MonthlyBudget>();
             }
         }
 
@@ -47,14 +60,22 @@ namespace HomeBudget.Application.Logic.Budget
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
                 var yearBudgets = await _applicationDbContext.YearBudgets
-                     .Where(c => c.AccountId == account.Id)
-                     .Select(c => new Result.AllYearBudgets()
+                     .Where(y => y.AccountId == account.Id)
+                     .Select(y => new Result.YearBudget()
                      {
-                         Id = c.Id,
-                         Year = c.Year,
-                         Description = c.Description,
+                         Id = y.Id,
+                         Year = y.Year,
+                         Description = y.Description,
+                         MonthlyBudgets = y.MonthlyBudgets
+                            .Select(mb => new Result.MonthlyBudget()
+                            {
+                                Id = mb.Id,
+                                Month = mb.Month,
+                                TotalAmount = mb.TotalAmount
+                            })
+                            .ToList()
                      })
-                     .ToListAsync();
+                     .ToListAsync(cancellationToken);
 
 
 

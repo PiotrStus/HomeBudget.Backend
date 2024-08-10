@@ -12,11 +12,11 @@ namespace HomeBudget.Domain.Entities.Budget
     {
         public int MonthlyBudgetId { get; set; }
 
-        public  MonthlyBudget MonthlyBudget { get; set; } = default!;
+        public MonthlyBudget MonthlyBudget { get; set; } = default!;
 
         public int CategoryId { get; set; }
 
-        public  Category Category { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public required decimal Amount { get; set; } = default!;
     }

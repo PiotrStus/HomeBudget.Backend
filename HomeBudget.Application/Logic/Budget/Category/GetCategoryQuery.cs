@@ -26,6 +26,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
 
                 public required CategoryType CategoryType { get; set; }
 
+                public required bool IsDraft { get; set; }
         }
 
 
@@ -50,6 +51,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
                 {
                         Name = model.Name,
                         CategoryType = model.CategoryType,
+                        IsDraft = model.IsDraft,
                 };
             }
         }
