@@ -2,6 +2,7 @@
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Enums;
+using HomeBudget.Domain.Entities.Budget;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,23 +11,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.Budget.Category.GetCategoryQuery.Result;
+using HomeBudget.Domain.Entities.Budget.Budget;
+using static HomeBudget.Application.Logic.Budget.GetBudgetsQuery.Result;
 
-namespace HomeBudget.Application.Logic.Budget.Category
+namespace HomeBudget.Application.Logic.Budget
 {
-    public static class GetCategoryQuery
+    public static class GetMonthlyBudgetQuery
     {
-        public class Request :IRequest<Result>
+        public class Request : IRequest<Result>
         {
             public int Id { get; set; }
         }
 
-        public class Result 
+        public class Result
         {
-                public required string Name { get; set; }
+            public required Month Month { get; set; }
 
-                public required CategoryType CategoryType { get; set; }
+            public required decimal TotalAmount { get; set; }
 
-                public required bool IsDraft { get; set; }
+            public required YearDTO Year { get; set; }
+
+
+            public class YearDTO
+            {
+                public int Id { get; set; }
+
+                public int Year { get; set; }
+            }
         }
 
 
@@ -40,18 +51,27 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var model = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == request.Id && c.AccountId == account.Id);
+                var model = await _applicationDbContext.MonthlyBudgets
+                    .Include(mb => mb.YearBudget)
+                    .FirstOrDefaultAsync(c => c.Id == request.Id && c.YearBudget.AccountId == account.Id);
+
+                
 
                 if (model == null)
                 {
                     throw new UnauthorizedException();
                 }
 
+
                 return new Result
                 {
-                        Name = model.Name,
-                        CategoryType = model.CategoryType,
-                        IsDraft = model.IsDraft,
+                    Month = model.Month,
+                    TotalAmount = model.TotalAmount,
+                    Year = new Result.YearDTO()
+                    {
+                        Id = model.YearBudgetId,
+                        Year = model.YearBudget.Year
+                    }
                 };
             }
         }

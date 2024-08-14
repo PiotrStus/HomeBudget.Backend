@@ -22,7 +22,7 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetCategory([FromQuery] GetCommandQuery.Request model)
+        public async Task<ActionResult> GetCategory([FromQuery] GetCategoryQuery.Request model)
         {
             var data = await _mediator.Send(model);
             return Ok(data);

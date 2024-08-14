@@ -63,5 +63,12 @@ namespace HomeBudget.WebApi.Controllers
             var deleteMonthlyBudgetResult = await _mediator.Send(model);
             return Ok(deleteMonthlyBudgetResult);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetMonthlyBudget([FromQuery] GetMonthlyBudgetQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            return Ok(data);
+        }
     }
 }

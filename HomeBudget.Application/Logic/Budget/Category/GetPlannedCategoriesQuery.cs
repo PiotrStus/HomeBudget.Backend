@@ -20,9 +20,8 @@ namespace HomeBudget.Application.Logic.Budget.Category
 
         public class Request() : IRequest<Result>
         {
-            public required int YearId { get; set; }
+            public required int MonthId { get; set; }
 
-            public required Month Month { get; set; }
         }
 
         public class Result()
@@ -51,25 +50,25 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var yearBudget = await _applicationDbContext.YearBudgets
-                     .FirstOrDefaultAsync(y => y.AccountId == account.Id && y.Id == request.YearId, cancellationToken);
+                //var yearBudget = await _applicationDbContext.YearBudgets
+                //     .FirstOrDefaultAsync(y => y.AccountId == account.Id && y.Id == request.YearId, cancellationToken);
 
-                if (yearBudget == null)
-                {
-                    throw new ErrorException("YearBudgetNotExists");
+                //if (yearBudget == null)
+                //{
+                //    throw new ErrorException("YearBudgetNotExists");
 
-                }
+                //}
 
-                var monthlyBudget = await _applicationDbContext.MonthlyBudgets
-                    .FirstOrDefaultAsync(m => m.Month == request.Month && m.YearBudget == yearBudget, cancellationToken);
+                //var monthlyBudget = await _applicationDbContext.MonthlyBudgets
+                //    .FirstOrDefaultAsync(m => m.Month == request.Month && m.YearBudget == yearBudget, cancellationToken);
 
-                if (monthlyBudget == null)
-                {
-                    throw new ErrorException("MonthlyBudgetNotExists");
-                }
+                //if (monthlyBudget == null)
+                //{
+                //    throw new ErrorException("MonthlyBudgetNotExists");
+                //}
 
                 var plannedCategories = await _applicationDbContext.MonthlyBudgetCategories
-                    .Where(p => p.MonthlyBudget == monthlyBudget)
+                    .Where(p => p.MonthlyBudgetId == request.MonthId)
                     .Select(p => new PlannedCategoriesBudgets()
                     {
                         Id = p.Id,
