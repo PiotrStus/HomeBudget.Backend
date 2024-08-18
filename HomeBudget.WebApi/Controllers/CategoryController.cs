@@ -56,5 +56,34 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(data);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> CreatePlannedCategory([FromBody] CreatePlannedCategoryCommand.Request model)
+        {
+            var createPlannedCategoryResult = await _mediator.Send(model);
+            return Ok(createPlannedCategoryResult);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeletePlannedCategory([FromBody] DeletePlannedCategoryCommand.Request model)
+        {
+            var DeletePlannedCategoryResult = await _mediator.Send(model);
+            return Ok(DeletePlannedCategoryResult);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdatePlannedCategory([FromBody] UpdatePlannedCategoryCommand.Request model)
+        {
+            var UpdatePlannedCategoryResult = await _mediator.Send(model);
+            return Ok(UpdatePlannedCategoryResult);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetPlannedCategory([FromQuery] GetPlannedCategoryQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            return Ok(data);
+        }
+
+
     }
 }

@@ -32,7 +32,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 public required int Id { get; set; }
 
-                public required string? Category { get; set; }
+                public required string? Name { get; set; }
 
                 public required decimal Amount { get; set; }
 
@@ -72,7 +72,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
                     .Select(p => new PlannedCategoriesBudgets()
                     {
                         Id = p.Id,
-                        Category = p.Category.Name,
+                        Name = p.Category.Name,
                         Amount = p.Amount,
                         CategoryType = p.Category.CategoryType
                     })

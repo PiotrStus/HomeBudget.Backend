@@ -70,5 +70,13 @@ namespace HomeBudget.WebApi.Controllers
             var data = await _mediator.Send(model);
             return Ok(data);
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateMonthlyBudget([FromBody] UpdateMonthlyBudgetCommand.Request model)
+        {
+            var UpdateMonthlyBudget = await _mediator.Send(model);
+            return Ok(UpdateMonthlyBudget);
+        }
     }
 }
