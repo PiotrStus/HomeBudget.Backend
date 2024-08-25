@@ -57,6 +57,17 @@ namespace HomeBudget.Application.Logic.Budget.Category
                     throw new ErrorException("MonthlyBudgetNotFound");
                 }
 
+                var plannedCategoryAlreadyExist = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.MonthlyBudgetId == request.MonthlyBudgetId && m.Category.Name == request.Name && m.Category.CategoryType == request.CategoryType);
+
+                if (plannedCategoryAlreadyExist)
+                {
+                    throw new ErrorException("PlannedCategoryAlreadyExists");
+                }
+
+
+                //var monthlyBudgetCategoryExist = await _applicationDbContext.MonthlyBudgetCategories
+                //    .AnyAsync(m => m.);
+
 
                 var plannedCategory = new MonthlyBudgetCategory()
                 {

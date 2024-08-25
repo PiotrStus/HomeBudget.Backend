@@ -41,11 +41,11 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var categoryExist = await _applicationDbContext.Categories.AnyAsync(y => y.Name == request.Name && y.CategoryType == request.CategoryType && y.AccountId == account.Id && !y.IsDeleted && y.IsDraft == request.IsDraft);
+                var categoryExist = await _applicationDbContext.Categories.AnyAsync(y =>  y.Name == request.Name && y.CategoryType == request.CategoryType && y.AccountId == account.Id && y.IsDraft == request.IsDraft && !y.IsDeleted);
 
                 if (categoryExist)
                 {
-                    throw new ErrorException("CategoryWithThisTypeCategoryAlreadyExists");
+                    throw new ErrorException("CategoryDidNotChange");
                 }
 
                 Domain.Entities.Budget.Category? model = null;

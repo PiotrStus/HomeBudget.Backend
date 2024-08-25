@@ -38,15 +38,21 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                var plannedCategoryNotChanged = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.Amount == request.Amount && m.MonthlyBudget.YearBudget.AccountId == account.Id);
 
-                var monthlyBudget = await _applicationDbContext.MonthlyBudgetCategories.FirstOrDefaultAsync(m => m.Id == request.Id && m.MonthlyBudget.YearBudget.AccountId == account.Id);
+                if (plannedCategoryNotChanged)
+                {
+                    throw new ErrorException("PlannedCategoryDidNotChange");
+                }
 
-                if (monthlyBudget == null)
+                var plannedMonthlyBudget = await _applicationDbContext.MonthlyBudgetCategories.FirstOrDefaultAsync(m => m.Id == request.Id && m.MonthlyBudget.YearBudget.AccountId == account.Id);
+
+                if (plannedMonthlyBudget == null)
                 {
                     throw new UnauthorizedException();
                 }
 
-                monthlyBudget.Amount = request.Amount;
+                plannedMonthlyBudget.Amount = request.Amount;
             
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

@@ -75,7 +75,7 @@ namespace HomeBudget.WebApi
                 {
                     // nie dodajemy na developerskim, bo jak sie doda
                     // na developerskim to przestana dzialac akcje ze swaggera
-                    // bo wtedy w swagerze tokkena nie bedzie
+                    // bo wtedy w swagerze tokena nie bedzie
                     // trzeba bedzie w swaggerze strzelac po token
                     // potem ten token w naglowku przkazywac i to komplikuje testy
                     if (!builder.Environment.IsDevelopment())

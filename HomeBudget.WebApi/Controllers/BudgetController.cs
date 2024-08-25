@@ -10,7 +10,7 @@ namespace HomeBudget.WebApi.Controllers
     [ApiController]
     public class BudgetController : BaseController
     {
-        public BudgetController(ILogger<BudgetController> logger, IMediator mediator) : base(logger, mediator)
+        public BudgetController(ILogger<MonthlyBudgetController> logger, IMediator mediator) : base(logger, mediator)
         {
         }
 
@@ -30,17 +30,10 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateMonthlyBudget([FromBody] CreateMonthlyBudgetCommand.Request model)
+        public async Task<ActionResult> DeleteYearBudget([FromBody] DeleteYearBudgetCommand.Request model)
         {
-            var createMonthlyBudgetResult = await _mediator.Send(model);
-            return Ok(createMonthlyBudgetResult);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> CreateCategoryMonthlyBudget([FromBody] CreateCategoryMonthlyBudgetCommand.Request model)
-        {
-            var CreateCategoryMonthlyBudgetResult = await _mediator.Send(model);
-            return Ok(CreateCategoryMonthlyBudgetResult);
+            var DeleteYearBudgetResult = await _mediator.Send(model);
+            return Ok(DeleteYearBudgetResult);
         }
 
         [HttpGet]
@@ -48,35 +41,6 @@ namespace HomeBudget.WebApi.Controllers
         {
             var data = await _mediator.Send(model);
             return Ok(data);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> DeleteYearBudget([FromBody] DeleteYearBudgetCommand.Request model)
-        {
-            var DeleteYearBudgetResult = await _mediator.Send(model);
-            return Ok(DeleteYearBudgetResult);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> DeleteMonthlyBudget([FromBody] DeleteMonthlyBudgetCommand.Request model)
-        {
-            var deleteMonthlyBudgetResult = await _mediator.Send(model);
-            return Ok(deleteMonthlyBudgetResult);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> GetMonthlyBudget([FromQuery] GetMonthlyBudgetQuery.Request model)
-        {
-            var data = await _mediator.Send(model);
-            return Ok(data);
-        }
-
-
-        [HttpPost]
-        public async Task<ActionResult> UpdateMonthlyBudget([FromBody] UpdateMonthlyBudgetCommand.Request model)
-        {
-            var UpdateMonthlyBudget = await _mediator.Send(model);
-            return Ok(UpdateMonthlyBudget);
         }
     }
 }

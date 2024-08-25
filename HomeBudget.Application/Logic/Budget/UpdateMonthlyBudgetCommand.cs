@@ -43,11 +43,11 @@ namespace HomeBudget.Application.Logic.Budget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var monthlyBudgetExist = await _applicationDbContext.MonthlyBudgets.AnyAsync(y => y.Id != request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month);
+                var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y =>  y.Id != request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month);
 
-                if (monthlyBudgetExist)
+                if (monthlyBudgetNotChanged)
                 {
-                    throw new ErrorException("MonthlyBudgetAlreadyExists");
+                    throw new ErrorException("MonthlyBudgetDidNotChange");
                 }
 
                 MonthlyBudget? model = null;

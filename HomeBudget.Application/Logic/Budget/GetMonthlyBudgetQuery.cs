@@ -52,8 +52,11 @@ namespace HomeBudget.Application.Logic.Budget
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
                 var model = await _applicationDbContext.MonthlyBudgets
-                    .Include(mb => mb.YearBudget)
-                    .FirstOrDefaultAsync(c => c.Id == request.Id && c.YearBudget.AccountId == account.Id);
+                    //.Include(mb => mb.YearBudget)
+                    //poprawic na select
+                    .Where(c => c.Id == request.Id && c.YearBudget.AccountId == account.Id)
+                    .Select(mc => new { mc.Month, mc.YearBudget.Year, mc.YearBudgetId, mc.TotalAmount })
+                    .FirstOrDefaultAsync();
 
                 
 
@@ -70,7 +73,7 @@ namespace HomeBudget.Application.Logic.Budget
                     Year = new Result.YearDTO()
                     {
                         Id = model.YearBudgetId,
-                        Year = model.YearBudget.Year
+                        Year = model.Year
                     }
                 };
             }
