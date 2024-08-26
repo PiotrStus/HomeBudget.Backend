@@ -1,5 +1,5 @@
 ﻿using HomeBudget.Domain.Common;
-using HomeBudget.Domain.Entities.Budget.Budget;
+using HomeBudget.Domain.Entities.Budget;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,12 @@ namespace HomeBudget.Domain.Entities.Budget
 {
     public class MonthlyBudgetCategory : DomainEntity
     {
+        public MonthlyBudgetCategory()
+        {
+            MonthlyBudgetCategoryTracking = new MonthlyBudgetCategoryTracking();
+
+        }
+
         public int MonthlyBudgetId { get; set; }
 
         public MonthlyBudget MonthlyBudget { get; set; } = default!;
@@ -19,5 +25,8 @@ namespace HomeBudget.Domain.Entities.Budget
         public Category Category { get; set; } = default!;
 
         public required decimal Amount { get; set; } = default!;
+
+        public MonthlyBudgetCategoryTracking MonthlyBudgetCategoryTracking { get; set; } = default!;
+
     }
 }

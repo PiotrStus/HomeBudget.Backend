@@ -1,5 +1,4 @@
 ﻿using HomeBudget.Domain.Entities.Budget;
-using HomeBudget.Domain.Entities.Budget.Budget;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

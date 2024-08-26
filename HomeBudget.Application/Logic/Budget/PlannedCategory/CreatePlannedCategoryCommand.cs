@@ -13,7 +13,7 @@ using HomeBudget.Application.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using HomeBudget.Domain.Entities.Budget;
 
-namespace HomeBudget.Application.Logic.Budget.Category
+namespace HomeBudget.Application.Logic.Budget.PlannedCategory
 {
     public static class CreatePlannedCategoryCommand
     {

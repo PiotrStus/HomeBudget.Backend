@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HomeBudget.Domain.Entities.Budget.Budget;
+using HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Infrastructure.Persistance.Configurations;
 
@@ -16,7 +16,7 @@ namespace HomeBudget.Infrastructure.Persistance
     {
         // jak parametr konfiguracja db contextu, zeby podac connection stringa itp
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
-        { 
+        {
         }
         public DbSet<User> Users { get; set; }
 
@@ -34,7 +34,7 @@ namespace HomeBudget.Infrastructure.Persistance
 
         public DbSet<YearBudget> YearBudgets { get; set; }
 
-
+        public DbSet<MonthlyBudgetCategoryTracking> MonthlyBudgetCategoriesTracking { get; set; }
 
 
 

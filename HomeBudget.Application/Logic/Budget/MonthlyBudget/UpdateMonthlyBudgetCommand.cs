@@ -11,9 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HomeBudget.Domain.Entities.Budget.Budget;
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
 {
     public static class UpdateMonthlyBudgetCommand
     {
@@ -43,14 +42,14 @@ namespace HomeBudget.Application.Logic.Budget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y =>  y.Id != request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month);
+                var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y => y.Id != request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month);
 
                 if (monthlyBudgetNotChanged)
                 {
                     throw new ErrorException("MonthlyBudgetDidNotChange");
                 }
 
-                MonthlyBudget? model = null;
+                Domain.Entities.Budget.MonthlyBudget? model = null;
 
                 model = await _applicationDbContext.MonthlyBudgets.FirstOrDefaultAsync(m => m.Id == request.Id && m.YearBudget.AccountId == account.Id);
 
@@ -65,7 +64,7 @@ namespace HomeBudget.Application.Logic.Budget
                 model.YearBudgetId = request.YearBudgetId;
                 model.Month = request.Month;
                 model.TotalAmount = request.TotalAmount ?? 0m;
-            
+
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
                 return new Result()

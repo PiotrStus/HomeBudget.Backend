@@ -11,10 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.Budget.Category.GetCategoryQuery.Result;
-using HomeBudget.Domain.Entities.Budget.Budget;
 using static HomeBudget.Application.Logic.Budget.GetBudgetsQuery.Result;
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
 {
     public static class GetMonthlyBudgetQuery
     {
@@ -52,13 +51,12 @@ namespace HomeBudget.Application.Logic.Budget
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
                 var model = await _applicationDbContext.MonthlyBudgets
-                    //.Include(mb => mb.YearBudget)
-                    //poprawic na select
+                    //.Include(mb => mb.YearBudget) -> eager loading
                     .Where(c => c.Id == request.Id && c.YearBudget.AccountId == account.Id)
                     .Select(mc => new { mc.Month, mc.YearBudget.Year, mc.YearBudgetId, mc.TotalAmount })
                     .FirstOrDefaultAsync();
 
-                
+
 
                 if (model == null)
                 {

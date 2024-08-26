@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
-using HomeBudget.Domain.Entities.Budget.Budget;
 using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Application.Exceptions;
+using BudgetMonthlyBudget3 = HomeBudget.Domain.Entities.Budget.MonthlyBudget;
 
-
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
 {
     public static class CreateMonthlyBudgetCommand
     {
@@ -29,7 +28,7 @@ namespace HomeBudget.Application.Logic.Budget
 
         public class Result
         {
-            public int MonthlyBudgetId {  get; set; }
+            public int MonthlyBudgetId { get; set; }
         }
 
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
@@ -57,10 +56,10 @@ namespace HomeBudget.Application.Logic.Budget
                 }
 
                 if (request.TotalAmount != null)
-                { 
+                {
                 }
 
-                var monthlyBudget = new MonthlyBudget()
+                var monthlyBudget = new HomeBudget.Domain.Entities.Budget.MonthlyBudget()
                 {
                     YearBudgetId = request.YearBudgetId,
                     Month = request.Month,
@@ -81,10 +80,10 @@ namespace HomeBudget.Application.Logic.Budget
                         monthlyBudget.MonthlyBudgetCategories.Add(plannedCategory);
                     }
                 }
-            
 
 
-            _applicationDbContext.MonthlyBudgets.Add(monthlyBudget);
+
+                _applicationDbContext.MonthlyBudgets.Add(monthlyBudget);
 
                 await _applicationDbContext.SaveChangesAsync();
 

@@ -1,5 +1,5 @@
 ﻿using HomeBudget.Domain.Common;
-using HomeBudget.Domain.Entities.Budget.Budget;
+using HomeBudget.Domain.Entities.Budget;
 using System;
 using System.Collections.Generic;
 using System.Linq;

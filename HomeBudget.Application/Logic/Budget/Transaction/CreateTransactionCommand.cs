@@ -8,9 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HomeBudget.Domain.Entities.Budget;
+using BudgetTransaction = HomeBudget.Domain.Entities.Budget.Transaction;
+using HomeBudget.Application.Logic.EventHandlers.TransactionCreated;
 
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.Transaction
 {
     public static class CreateTransactionCommand
     {
@@ -26,15 +28,18 @@ namespace HomeBudget.Application.Logic.Budget
 
         }
 
-        public class  Result
+        public class Result
         {
             public int TransactionId { get; set; }
         }
 
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
-            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext) : base(currentAccountProvider, applicationDbContext)
+            private readonly IMediator _mediator;
+
+            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IMediator mediator) : base(currentAccountProvider, applicationDbContext)
             {
+                _mediator = mediator;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
@@ -44,7 +49,7 @@ namespace HomeBudget.Application.Logic.Budget
 
                 var utcNow = DateTime.UtcNow;
 
-                var transaction = new Transaction()
+                var transaction = new BudgetTransaction()
                 {
                     Name = request.Name,
                     Date = request.Date ?? utcNow,
@@ -57,6 +62,16 @@ namespace HomeBudget.Application.Logic.Budget
 
 
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+                await _mediator.Publish(new TransactionCreatedEvent 
+                    { 
+                        TransactionId = transaction.Id,
+                        CategoryId = (int) transaction.CategoryId,
+                        AccountId = transaction.AccountId,
+                        Amount = transaction.Amount,
+                        Name = transaction.Name,
+                        Date = transaction.Date,
+                    }, cancellationToken);
 
 
                 return new Result()

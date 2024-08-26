@@ -1,5 +1,5 @@
 ﻿using HomeBudget.Application.Logic.Budget;
-using HomeBudget.Application.Logic.Budget.Category;
+using HomeBudget.Application.Logic.Budget.YearBudget;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,14 +12,6 @@ namespace HomeBudget.WebApi.Controllers
     {
         public BudgetController(ILogger<MonthlyBudgetController> logger, IMediator mediator) : base(logger, mediator)
         {
-        }
-
-
-        [HttpPost]
-        public async Task<ActionResult> CreateTransaction([FromBody] CreateTransactionCommand.Request model)
-        {
-            var createTransactionResult = await _mediator.Send(model);
-            return Ok(createTransactionResult);
         }
 
         [HttpPost]

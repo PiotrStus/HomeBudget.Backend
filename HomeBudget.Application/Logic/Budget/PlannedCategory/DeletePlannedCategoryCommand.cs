@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-using HomeBudget.Application.Exceptions;
+﻿using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
-using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,16 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget.Category
+namespace HomeBudget.Application.Logic.Budget.PlannedCategory
 {
-    public static class UpdatePlannedCategoryCommand
+    public static class DeletePlannedCategoryCommand
     {
         public class Request : IRequest<Result>
         {
             public required int Id { get; set; }
-
-            public required decimal Amount { get; set; }
-
         }
 
         public class Result
@@ -38,33 +33,18 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var plannedCategoryNotChanged = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.Amount == request.Amount && m.MonthlyBudget.YearBudget.AccountId == account.Id);
+                var model = await _applicationDbContext.MonthlyBudgetCategories.FirstOrDefaultAsync(c => c.Id == request.Id && c.MonthlyBudget.YearBudget.AccountId == account.Id);
 
-                if (plannedCategoryNotChanged)
-                {
-                    throw new ErrorException("PlannedCategoryDidNotChange");
-                }
-
-                var plannedMonthlyBudget = await _applicationDbContext.MonthlyBudgetCategories.FirstOrDefaultAsync(m => m.Id == request.Id && m.MonthlyBudget.YearBudget.AccountId == account.Id);
-
-                if (plannedMonthlyBudget == null)
+                if (model == null)
                 {
                     throw new UnauthorizedException();
                 }
 
-                plannedMonthlyBudget.Amount = request.Amount;
-            
+                _applicationDbContext.MonthlyBudgetCategories.Remove(model);
+
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
                 return new Result();
-            }
-
-            public class Validator : AbstractValidator<Request>
-            {
-                public Validator()
-                {
-
-                }
             }
         }
     }

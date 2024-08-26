@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
 {
     public static class DeleteMonthlyBudgetCommand
     {

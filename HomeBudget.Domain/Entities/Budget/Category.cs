@@ -1,5 +1,5 @@
 ﻿using HomeBudget.Domain.Common;
-using HomeBudget.Domain.Entities.Budget.Budget;
+using HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace HomeBudget.Domain.Entities.Budget
         public required bool IsDraft { get; set; }
 
         public int AccountId { get; set; }
-
 
         public Account Account { get; set; } = default!;
 

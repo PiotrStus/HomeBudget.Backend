@@ -2,7 +2,6 @@
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities;
 using HomeBudget.Domain.Entities.Budget;
-using HomeBudget.Domain.Entities.Budget.Budget;
 using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

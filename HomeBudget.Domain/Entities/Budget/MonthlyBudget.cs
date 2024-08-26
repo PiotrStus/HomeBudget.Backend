@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Domain.Entities.Budget.Budget
+namespace HomeBudget.Domain.Entities.Budget
 {
     public class MonthlyBudget : DomainEntity
     {

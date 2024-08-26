@@ -3,7 +3,6 @@ using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities.Budget;
-using HomeBudget.Domain.Entities.Budget.Budget;
 using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget
+namespace HomeBudget.Application.Logic.Budget.YearBudget
 {
     public static class CreateYearBudgetCommand
     {
@@ -26,7 +25,7 @@ namespace HomeBudget.Application.Logic.Budget
 
         public class Result
         {
-            public int YearBudgetId {  get; set; }
+            public int YearBudgetId { get; set; }
         }
 
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
@@ -50,7 +49,7 @@ namespace HomeBudget.Application.Logic.Budget
                     //.Where(c => c.CategoryType == CategoryType.Expense)
                     .ToListAsync();
 
-                var yearBudget = new YearBudget()
+                var yearBudget = new Domain.Entities.Budget.YearBudget()
                 {
                     Year = request.Year,
                     Description = request.Description,
@@ -72,9 +71,9 @@ namespace HomeBudget.Application.Logic.Budget
         {
             public Validator()
             {
-                    RuleFor(x => x.Year).NotEqual(0);
-                    RuleFor(x => x.Description).MaximumLength(255);
-             }
+                RuleFor(x => x.Year).NotEqual(0);
+                RuleFor(x => x.Description).MaximumLength(255);
+            }
         }
     }
 }

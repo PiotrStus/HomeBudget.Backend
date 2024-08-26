@@ -20,6 +20,14 @@ namespace HomeBudget.Infrastructure.Persistance.Configurations
             builder.HasOne(p => p.Category)
                    .WithMany(c => c.MonthlyBudgetCategories)
                    .HasForeignKey(k => k.CategoryId);
+
+            // monthlyBudgetCategory ma jeden Tracking
+            builder.HasOne(p => p.MonthlyBudgetCategoryTracking)
+                    // tracking ma jeden monthlyBudgetCategory
+                   .WithOne(t => t.MonthlyBudgetCategory)
+                   // kolumna id w tracking jest kluczem obcym
+                   // ten klucz odnosi sie do klucza glownego w monthlyBudgetCategory
+                   .HasForeignKey<MonthlyBudgetCategoryTracking>(k => k.Id);
         }
     }
 }

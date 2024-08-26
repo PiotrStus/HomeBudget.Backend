@@ -1,4 +1,4 @@
-﻿using HomeBudget.Application.Logic.Budget.Category;
+﻿using HomeBudget.Application.Logic.Budget.PlannedCategory;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

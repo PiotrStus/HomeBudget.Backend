@@ -1,5 +1,4 @@
-﻿using HomeBudget.Application.Logic.Budget;
-using HomeBudget.Application.Logic.Budget.Category;
+﻿using HomeBudget.Application.Logic.Budget.MonthlyBudget;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

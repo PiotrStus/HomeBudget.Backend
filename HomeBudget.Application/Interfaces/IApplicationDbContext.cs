@@ -1,6 +1,5 @@
 ﻿using HomeBudget.Domain.Entities;
 using HomeBudget.Domain.Entities.Budget;
-using HomeBudget.Domain.Entities.Budget.Budget;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
