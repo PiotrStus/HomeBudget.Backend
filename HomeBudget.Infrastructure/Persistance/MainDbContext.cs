@@ -35,6 +35,8 @@ namespace HomeBudget.Infrastructure.Persistance
 
         public DbSet<MonthlyBudgetCategoryTracking> MonthlyBudgetCategoriesTracking { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
 
 
         // mechanizm, ktory automatycznie zaimportuje konfiguracje z plikow z folderu Configurations

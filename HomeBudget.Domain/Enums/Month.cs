@@ -23,6 +23,4 @@ namespace HomeBudget.Domain.Enums
         November = 11,
         December = 12
     }
-
-
 }

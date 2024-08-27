@@ -18,11 +18,13 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
     {
         private readonly CategoryFilledLevel _categoryFilledLevel;
         private readonly CategoryFilledLevelExceededChecker _categoryFilledLevelExceededChecker;
+        private readonly CategoryExceededSender _categoryExceededSender;
 
-        public TransactionCreatedEventHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, CategoryFilledLevel categoryFilledLevel, CategoryFilledLevelExceededChecker categoryFilledLevelExceededChecker) : base(currentAccountProvider, applicationDbContext)
+        public TransactionCreatedEventHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, CategoryFilledLevel categoryFilledLevel, CategoryFilledLevelExceededChecker categoryFilledLevelExceededChecker, CategoryExceededSender categoryExceededSender) : base(currentAccountProvider, applicationDbContext)
         {
             _categoryFilledLevel = categoryFilledLevel;
             _categoryFilledLevelExceededChecker = categoryFilledLevelExceededChecker;
+            _categoryExceededSender = categoryExceededSender;
         }
 
         public async Task Handle(TransactionCreatedEvent notification, CancellationToken cancellationToken)
@@ -41,6 +43,11 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
             await _categoryFilledLevel.UpdateCategoryFilledLevel(transactionData, cancellationToken);
 
             var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceeded(transactionData, cancellationToken);
+
+            if (limitExceeded == true)
+            {
+                await _categoryExceededSender.SendNotification(transactionData.AccountId, "CategoryLimitExceeded", cancellationToken);
+            }
         }
     }
 }

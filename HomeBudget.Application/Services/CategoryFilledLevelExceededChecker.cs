@@ -57,16 +57,22 @@ namespace HomeBudget.Application.Services
                 return null;
             }
 
-            var limit = monthlyBudgetCategory.Amount;
+            var monthlyLimit = monthlyBudgetCategory.Amount;
 
             var currentTransactionsTotalAmount = await _applicationDbContext.Transactions
                 .Where(t => t.Id != transactionData.TransactionId && t.CategoryId == transactionData.CategoryId && t.AccountId == transactionData.AccountId && t.Date.Year == year && t.Date.Month == monthNumber)
                 .SumAsync(t => t.Amount);
 
+            if (currentTransactionsTotalAmount > monthlyLimit)
+            {
+                return false;
+            }
+
+
             currentTransactionsTotalAmount += transactionData.Amount;
 
             _logger.LogCritical($"currentTransactionsTotalAmount: {currentTransactionsTotalAmount} > monthlyBudgetCategory.Amount: {monthlyBudgetCategory.Amount}");
-            return currentTransactionsTotalAmount > monthlyBudgetCategory.Amount;
+            return currentTransactionsTotalAmount > monthlyLimit;
 
         }
     }

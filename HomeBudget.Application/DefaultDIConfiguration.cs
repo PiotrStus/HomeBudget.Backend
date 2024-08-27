@@ -30,6 +30,8 @@ namespace HomeBudget.Application
 
             services.AddScoped<CategoryFilledLevelExceededChecker>();
 
+            services.AddScoped<CategoryExceededSender>();
+
             return services;
         }
 

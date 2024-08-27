@@ -28,6 +28,8 @@ namespace HomeBudget.Application.Interfaces
 
         DbSet<YearBudget> YearBudgets { get; set; }
 
+        DbSet<Notification> Notifications { get; set; }
+
 
         // sluzy do zapisu danych do BD, jej implementacje zawiera juz klasa DbContext z Entity Frameworka
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -13,7 +13,6 @@ namespace HomeBudget.Domain.Entities.Budget
         public MonthlyBudgetCategory()
         {
             MonthlyBudgetCategoryTracking = new MonthlyBudgetCategoryTracking();
-
         }
 
         public int MonthlyBudgetId { get; set; }

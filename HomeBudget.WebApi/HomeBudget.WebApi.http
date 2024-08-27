@@ -1,6 +1,6 @@
 @HomeBudget.WebApi_HostAddress = http://localhost:5263
 
-GET {{HomeBudget.WebApi_HostAddress}}/weatherforecast/
+GET {{HomeBudget.WebApi_HostAddress}}/User/CreateUserWithAccount/
 Accept: application/json
 
 ###
