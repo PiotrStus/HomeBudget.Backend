@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HomeBudget.Domain.Entities.Budget;
-using HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Infrastructure.Persistance.Configurations;
 
 namespace HomeBudget.Infrastructure.Persistance

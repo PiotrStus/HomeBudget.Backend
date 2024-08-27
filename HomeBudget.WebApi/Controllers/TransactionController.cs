@@ -10,7 +10,7 @@ namespace HomeBudget.WebApi.Controllers
     [ApiController]
     public class TransactionController : BaseController
     {
-        public TransactionController(ILogger<MonthlyBudgetController> logger, IMediator mediator) : base(logger, mediator)
+        public TransactionController(ILogger<TransactionController> logger, IMediator mediator) : base(logger, mediator)
         {
         }
 

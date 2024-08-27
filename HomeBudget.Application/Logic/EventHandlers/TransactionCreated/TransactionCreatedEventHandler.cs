@@ -9,66 +9,38 @@ using System.Threading.Tasks;
 using HomeBudget.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using HomeBudget.Application.Exceptions;
+using HomeBudget.Domain.Entities.Budget;
+using HomeBudget.Application.Services;
 
 namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
 {
-    public class TransactionCreatedEventHandler : BaseQueryHandler, INotificationHandler<TransactionCreatedEvent>
+    public class TransactionCreatedEventHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>
     {
-        public TransactionCreatedEventHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext) : base(currentAccountProvider, applicationDbContext)
+        private readonly CategoryFilledLevel _categoryFilledLevel;
+        private readonly CategoryFilledLevelExceededChecker _categoryFilledLevelExceededChecker;
+
+        public TransactionCreatedEventHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, CategoryFilledLevel categoryFilledLevel, CategoryFilledLevelExceededChecker categoryFilledLevelExceededChecker) : base(currentAccountProvider, applicationDbContext)
         {
+            _categoryFilledLevel = categoryFilledLevel;
+            _categoryFilledLevelExceededChecker = categoryFilledLevelExceededChecker;
         }
 
         public async Task Handle(TransactionCreatedEvent notification, CancellationToken cancellationToken)
         {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-            if (notification.Date != null)
+            var transactionData = new TransactionData()
             {
-                var year = notification.Date.Value.Year;
-                var monthNumber = notification.Date.Value.Month;
+                TransactionId = notification.TransactionId,
+                CategoryId = notification.CategoryId,
+                AccountId = account.Id,
+                Amount = notification.Amount,
+                Date = notification.Date
+            };
 
-                Month? month = null;
+            await _categoryFilledLevel.UpdateCategoryFilledLevel(transactionData, cancellationToken);
 
-                if (Enum.IsDefined(typeof(Month), monthNumber))
-                {
-                    month = (Month) monthNumber;
-                }
-
-                var monthlyBudget = await _applicationDbContext.MonthlyBudgets.FirstOrDefaultAsync(mb => mb.YearBudget.Year == year && mb.Month == month && notification.AccountId == account.Id);
-
-                if (monthlyBudget == null)
-                {
-                    throw new ErrorException("MonthlyBudgetNotFound");
-                }
-
-                var category = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == notification.CategoryId && c.AccountId == notification.AccountId);
-
-                if (category == null)
-                {
-                    throw new ErrorException("MonthlyBudgetNotFound");
-                }
-
-
-                var monthlyBudgetCategory = await _applicationDbContext.MonthlyBudgetCategories
-                                        .Include(mc => mc.MonthlyBudgetCategoryTracking)
-                                        .FirstOrDefaultAsync(mc => mc.MonthlyBudgetId == monthlyBudget.Id && mc.CategoryId == category.Id);
-
-                var tracking = monthlyBudgetCategory?.MonthlyBudgetCategoryTracking;
-
-                if (tracking != null && monthlyBudgetCategory?.Amount > 0)
-                {
-                    
-                    var level = (int) (notification.Amount / monthlyBudgetCategory.Amount * 100);
-
-                    tracking.CategoriesFilledLevel = level;
-                    await _applicationDbContext.SaveChangesAsync(cancellationToken);
-                }
-            }
-
-            else
-            {
-                throw new ErrorException("CanNotCreateTransaction");
-            }
+            var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceeded(transactionData, cancellationToken);
         }
     }
 }

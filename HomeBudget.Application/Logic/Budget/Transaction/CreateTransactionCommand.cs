@@ -66,7 +66,7 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                 await _mediator.Publish(new TransactionCreatedEvent 
                     { 
                         TransactionId = transaction.Id,
-                        CategoryId = (int) transaction.CategoryId,
+                        CategoryId = transaction.CategoryId,
                         AccountId = transaction.AccountId,
                         Amount = transaction.Amount,
                         Name = transaction.Name,
@@ -78,8 +78,6 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                 {
                     TransactionId = transaction.Id
                 };
-
-
             }
         }
 

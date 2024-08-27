@@ -24,9 +24,12 @@ namespace HomeBudget.Application
             // CurrentAccountProvider jako usługę typu ICurrentAccountProvider w zakresie "scoped"
             services.AddScoped<ICurrentAccountProvider, CurrentAccountProvider>();
             // metoda AddApplicationServices zwraca zaktualizowaną kolekcję usług IServiceCollection po dodaniu nowych usług.
-            
+
             // kolejne serwisy dodawac bedziemy w kolejnych linijkach
-            
+            services.AddScoped<CategoryFilledLevel>();
+
+            services.AddScoped<CategoryFilledLevelExceededChecker>();
+
             return services;
         }
 

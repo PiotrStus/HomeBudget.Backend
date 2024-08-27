@@ -17,7 +17,7 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
 
         public string Name { get; set; } = default!;
 
-        public DateTimeOffset? Date { get; set; }
+        public DateTimeOffset Date { get; set; }
 
         public decimal Amount { get; set; }
     }
