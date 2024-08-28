@@ -23,9 +23,9 @@ namespace HomeBudget.Application.Logic.Budget.Category
 
         public class Result()
         {
-            public required List<AccountCategories> Categories { get; set; } = new List<AccountCategories>();
+            public required List<AccountCategory> Categories { get; set; } = new List<AccountCategory>();
 
-            public class AccountCategories()
+            public class AccountCategory()
             {
                 public required int Id { get; set; }
 
@@ -48,7 +48,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
 
                 var categories = await _applicationDbContext.Categories
                      .Where(c => c.AccountId == account.Id && c.IsDeleted == false)
-                     .Select(c => new Result.AccountCategories()
+                     .Select(c => new Result.AccountCategory()
                      {
                          Id = c.Id,
                          Name = c.Name,

@@ -12,31 +12,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.User.CreateUserWithAccountCommand.Request;
+using HomeBudget.Domain.Enums;
 
 namespace HomeBudget.Application.Logic.User
 {
-    public static class LoggedInUserQuery
+    public static class GetUserNotificationsQuery
     {
-        // parametry requesta beda puste
         public class Request : IRequest<Result>
         {
-
         }
 
-        // natomiast to co bedziemy zwracac to aktualnie email uzytkownika
-        // mozna zwracac inne
         public class Result
         {
-            public required string Email { get; set; }
+            public required List<UserNotification> Notifications { get; set; } = new List<UserNotification>();
+
+            public class UserNotification()
+            {
+                public required DateTimeOffset Date { get; set; }
+
+                public required string Content { get; set; }
+
+                public required NotificationType NotificationType { get; set; }
+
+                public required string CategoryName { get; set; }
+            }
         }
 
-        // zmieniamy klasę bazową z BaseCommandHandler na BaseQuerydHandler
         public class Handler : BaseQueryHandler, IRequestHandler<Request, Result>
         {
             private readonly IAuthenticationDataProvider _authenticationDataProvider;
 
-            // do Handlera potrzebowac bedziemy wstrzyknac IAuthenticationDataProvider
-            // zeby moc pobrac Id aktualnie zalogowanego uzytkownika
             public Handler(ICurrentAccountProvider currentAccountProvider,
                 IApplicationDbContext applicationDbContext,
                 IAuthenticationDataProvider authenticationDataProvider
@@ -45,30 +50,39 @@ namespace HomeBudget.Application.Logic.User
                 _authenticationDataProvider = authenticationDataProvider;
             }
 
-            // pierwsze co robimy to w handlerze pobieramy UserId aktalnie zalogowanego uzytkownika
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
-                // pierwsze co robimy to w handlerze pobieramy UserId aktalnie zalogowanego uzytkownika
                 var userId = _authenticationDataProvider.GetUserId();
 
-                // jesli id ma wartosc
                 if (userId.HasValue)
                 {
-                    // to wyciagamy z bazy danych z tabeli z uzytkownikami
-                    // naszego uzytkownika o danym id
-                    // mamy tutaj urzycie cache'a Cacheable() wiec te dane sie zcachuja
-                    var user = await _applicationDbContext.Users.Cacheable().FirstOrDefaultAsync(u => u.Id == userId.Value);
-                    // jesli istnieje w bazie to zwracamy jego email
-                    // a jesli nie to tez wyrzucimy ten wyjatek
-                    if (user != null)
+
+                    var notifications = await _applicationDbContext.Notifications
+                                                                   .Where(n => n.UserId == userId && !n.IsRead)
+                                                                   .Select(n => new Result.UserNotification()
+                                                                   {
+                                                                       Date = n.Date,
+                                                                       Content = n.Content,
+                                                                       NotificationType = n.NotificationType,
+                                                                       CategoryName = n.CategoryName,
+                                                                   })
+                                                                   .ToListAsync();
+
+                    if (notifications.Any())
                     {
                         return new Result()
                         {
-                            Email = user.Email,
+                            Notifications = notifications
+                        };
+                    }
+                    else
+                    {
+                        return new Result()
+                        {
+                            Notifications = []
                         };
                     }
                 }
-                // jesli to id nie ma value czyli jest nullem no to wyrzucamy wyjatek
                 throw new UnauthorizedException();
             }
         }
@@ -77,7 +91,6 @@ namespace HomeBudget.Application.Logic.User
         {
             public Validator()
             {
-                // walidator pozostaje pusty bo nie mamy zadnych parametrow requesta
             }
         }
 

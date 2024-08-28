@@ -115,6 +115,13 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(tokens.RequestToken);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetUserNotification()
+        {
+            var data = await _mediator.Send(new GetUserNotificationsQuery.Request() { });
+            return Ok(data);
+        }
+
 
 
         // dodajemy metode, która ustawi ciastko z tokenem

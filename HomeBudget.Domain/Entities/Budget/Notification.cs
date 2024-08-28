@@ -20,7 +20,7 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public required NotificationType NotificationType { get; set; }
 
-        public string? Category { get; set; }
+        public required string CategoryName { get; set; }
 
         public User User { get; set; } = default!;
     }

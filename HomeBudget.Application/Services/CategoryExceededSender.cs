@@ -22,7 +22,7 @@ namespace HomeBudget.Application.Services
             _applicationDbContext = applicationDbContext;
         }
         
-        public async Task SendNotification(int accountId, string content, CancellationToken cancellationToken)
+        public async Task SendNotification(int accountId, int categoryId, string content, CancellationToken cancellationToken)
         {
             var userIds = await _applicationDbContext.Users
                 .Where(u => u.AccountUsers.Any(au => au.AccountId == accountId))
@@ -31,6 +31,12 @@ namespace HomeBudget.Application.Services
 
             if (userIds.Any())
             {
+                var categoryName = await _applicationDbContext.Categories
+                                        .Where(c => c.Id == categoryId)
+                                        .Select(c => c.Name)
+                                        .FirstOrDefaultAsync();
+    
+
                 foreach (var userId in userIds)
                 {
                     var notification = new Notification()
@@ -40,6 +46,7 @@ namespace HomeBudget.Application.Services
                         Content = content,
                         IsRead = false,
                         NotificationType = NotificationType.Warning,
+                        CategoryName = categoryName ?? "UnknownCategory"
                     };
                 
                     _applicationDbContext.Notifications.Add(notification);

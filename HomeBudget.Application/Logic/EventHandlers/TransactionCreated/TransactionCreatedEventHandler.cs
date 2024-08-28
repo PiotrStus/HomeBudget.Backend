@@ -46,7 +46,7 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
 
             if (limitExceeded == true)
             {
-                await _categoryExceededSender.SendNotification(transactionData.AccountId, "CategoryLimitExceeded", cancellationToken);
+                await _categoryExceededSender.SendNotification(transactionData.AccountId, transactionData.CategoryId, "CategoryLimitExceeded", cancellationToken);
             }
         }
     }
