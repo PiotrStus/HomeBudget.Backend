@@ -1,4 +1,5 @@
 ﻿using HomeBudget.Domain.Common;
+using HomeBudget.Domain.Entities.Budget;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace HomeBudget.Domain.Entities
         public DateTimeOffset RegisterDate { get; set; }
 
         public ICollection<AccountUser> AccountUsers { get; set; } = new List<AccountUser>();
+
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     }
 }
