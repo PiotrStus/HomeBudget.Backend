@@ -116,7 +116,7 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetUserNotification()
+        public async Task<ActionResult> GetUserNotifications()
         {
             var data = await _mediator.Send(new GetUserNotificationsQuery.Request() { });
             return Ok(data);

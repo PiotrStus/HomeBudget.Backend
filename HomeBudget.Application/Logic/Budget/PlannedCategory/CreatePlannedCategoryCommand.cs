@@ -23,9 +23,7 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
 
             public required int MonthlyBudgetId { get; set; }
 
-            public required CategoryType CategoryType { get; set; }
-
-            public required string Name { get; set; }
+            public required int CategoryId { get; set; }
         }
 
         public class Result
@@ -43,7 +41,7 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var category = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Name == request.Name && c.CategoryType == request.CategoryType && c.AccountId == account.Id && !c.IsDeleted);
+                var category = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == request.CategoryId && c.AccountId == account.Id && !c.IsDeleted);
 
                 if (category == null)
                 {
@@ -57,7 +55,7 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
                     throw new ErrorException("MonthlyBudgetNotFound");
                 }
 
-                var plannedCategoryAlreadyExist = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.MonthlyBudgetId == request.MonthlyBudgetId && m.Category.Name == request.Name && m.Category.CategoryType == request.CategoryType);
+                var plannedCategoryAlreadyExist = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.MonthlyBudgetId == request.MonthlyBudgetId && m.Category.Id == request.CategoryId);
 
                 if (plannedCategoryAlreadyExist)
                 {
@@ -90,9 +88,6 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 public Validator()
                 {
-                    RuleFor(x => x.Name).NotEmpty();
-                    RuleFor(x => x.Name).MaximumLength(50);
-                    RuleFor(x => x.CategoryType).IsInEnum();
                 }
             }
         }

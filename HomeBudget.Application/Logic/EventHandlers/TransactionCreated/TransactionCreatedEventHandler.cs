@@ -40,6 +40,7 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
                 Date = notification.Date
             };
 
+            // przeniesc do osobnego handlera
             await _categoryFilledLevel.UpdateCategoryFilledLevel(transactionData, cancellationToken);
 
             var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceeded(transactionData, cancellationToken);

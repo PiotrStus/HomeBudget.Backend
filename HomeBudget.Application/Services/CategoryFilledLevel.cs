@@ -51,21 +51,20 @@ namespace HomeBudget.Application.Services
             }
 
             var currentTransactionsTotalAmount = await _applicationDbContext.Transactions
-                .Where(t => t.Id != transactionData.TransactionId
-                            && t.CategoryId == transactionData.CategoryId
+                .Where(t => t.CategoryId == transactionData.CategoryId
                             && t.AccountId == transactionData.AccountId
                             && t.Date.Year == year
                             && t.Date.Month == monthNumber)
                 .SumAsync(t => t.Amount, cancellationToken);
 
-            currentTransactionsTotalAmount += transactionData.Amount;
+  
 
             var tracking = monthlyBudgetCategory.MonthlyBudgetCategoryTracking;
 
             if (tracking != null && monthlyBudgetCategory.Amount > 0)
             {
                 var level = currentTransactionsTotalAmount / monthlyBudgetCategory.Amount * 100;
-                tracking.CategoryFilledLevel = (int)level;
+                tracking.CategoryFilledLevel = (int) level;
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
             }
 

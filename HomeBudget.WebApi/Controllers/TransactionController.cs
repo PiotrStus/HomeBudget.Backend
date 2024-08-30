@@ -21,5 +21,12 @@ namespace HomeBudget.WebApi.Controllers
             var createTransactionResult = await _mediator.Send(model);
             return Ok(createTransactionResult);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllTransactions([FromQuery] GetAllTransactionsQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            return Ok(data);
+        }
     }
 }
