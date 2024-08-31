@@ -24,5 +24,7 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public required decimal Amount {  get; set; }
 
+        public bool IsDeleted { get; set; }
+
     }
 }

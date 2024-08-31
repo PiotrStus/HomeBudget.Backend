@@ -1,9 +1,7 @@
-﻿using FluentValidation;
-using HomeBudget.Application.Exceptions;
+﻿using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Application.Logic.Events;
-using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,16 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget.PlannedCategory
+namespace HomeBudget.Application.Logic.Budget.Transaction
 {
-    public static class UpdatePlannedCategoryCommand
+    public static class DeleteTransactionCommand
     {
         public class Request : IRequest<Result>
         {
             public required int Id { get; set; }
-
-            public required decimal Amount { get; set; }
-
         }
 
         public class Result
@@ -42,40 +37,23 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var plannedCategoryNotChanged = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.Amount == request.Amount && m.MonthlyBudget.YearBudget.AccountId == account.Id);
+                var model = await _applicationDbContext.Transactions.FirstOrDefaultAsync(c => c.Id == request.Id && c.AccountId == account.Id);
 
-                if (plannedCategoryNotChanged)
-                {
-                    throw new ErrorException("PlannedCategoryDidNotChange");
-                }
-
-                var plannedMonthlyBudget = await _applicationDbContext.MonthlyBudgetCategories.FirstOrDefaultAsync(m => m.Id == request.Id && m.MonthlyBudget.YearBudget.AccountId == account.Id);
-
-                if (plannedMonthlyBudget == null)
+                if (model == null)
                 {
                     throw new UnauthorizedException();
                 }
 
-                plannedMonthlyBudget.Amount = request.Amount;
+                model.IsDeleted = true;
 
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-                await _mediator.Publish(new PlannedCategoryAmountChangedEvent
+                await _mediator.Publish(new TransactionDeletedEvent
                 {
-                    Id = request.Id,
-                    CategoryId = plannedMonthlyBudget.CategoryId,
-                    Amount = request.Amount,
+                    TransactionId = model.Id,
                 }, cancellationToken);
 
                 return new Result();
-            }
-
-            public class Validator : AbstractValidator<Request>
-            {
-                public Validator()
-                {
-
-                }
             }
         }
     }

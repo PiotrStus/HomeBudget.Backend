@@ -9,6 +9,7 @@ using HomeBudget.Infrastructure.Auth;
 using HomeBudget.WebApi.Application.Auth;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
+using System.Transactions;
 
 namespace HomeBudget.WebApi
 {
@@ -17,6 +18,7 @@ namespace HomeBudget.WebApi
         public static string APP_NAME = "HomeBudget.WebApi";
         public static void Main(string[] args)
         {
+            TransactionManager.ImplicitDistributedTransactions = true;
 
             //logi problemow ktore sie pojawia zanim w ogole aplikacja sie odpali
             Log.Logger = new LoggerConfiguration()

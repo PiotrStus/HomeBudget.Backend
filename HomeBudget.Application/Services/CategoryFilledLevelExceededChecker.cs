@@ -29,7 +29,7 @@ namespace HomeBudget.Application.Services
 
 
 
-        public async Task<bool?> IsCategoryBudgetExceeded(TransactionData transactionData, CancellationToken cancellationToken)
+        public async Task<bool?> IsCategoryBudgetExceededOnTransactionChange(TransactionData transactionData, CancellationToken cancellationToken)
         {
             var year = transactionData.Date.Year;
             var monthNumber = transactionData.Date.Month;
@@ -37,7 +37,7 @@ namespace HomeBudget.Application.Services
 
             if (Enum.IsDefined(typeof(Month), monthNumber))
             {
-                month = (Month) monthNumber;
+                month = (Month)monthNumber;
             }
 
             var monthlyBudget = await _applicationDbContext.MonthlyBudgets
@@ -74,6 +74,36 @@ namespace HomeBudget.Application.Services
             _logger.LogCritical($"currentTransactionsTotalAmount: {currentTransactionsTotalAmount} > monthlyBudgetCategory.Amount: {monthlyBudgetCategory.Amount}");
             return currentTransactionsTotalAmount > monthlyLimit;
 
+        }
+
+
+        public async Task<bool?> IsCategoryBudgetExceededOnCategoryChange(int accountId, int plannedCategoryId, CancellationToken cancellationToken)
+        {
+            var plannedCategory = await _applicationDbContext.MonthlyBudgetCategories
+                                .Where(m => m.Id == plannedCategoryId && m.MonthlyBudget.YearBudget.Account.Id == accountId)
+                                .Select(m => new
+                                {
+                                    m.MonthlyBudget.Month,
+                                    m.Amount,
+                                    m.CategoryId,
+                                    m.MonthlyBudget.YearBudget.Year,
+                                })
+                                .FirstOrDefaultAsync(cancellationToken);
+
+            if (plannedCategory != null)
+            {
+
+                var currentTransactionsTotalAmount = await _applicationDbContext.Transactions
+                    .Where(t => t.CategoryId == plannedCategory.CategoryId
+                                && t.AccountId == accountId
+                                && t.Date.Year == plannedCategory.Year
+                                && t.Date.Month == (int) plannedCategory.Month)
+                    .SumAsync(t => t.Amount, cancellationToken);
+
+                return currentTransactionsTotalAmount > plannedCategory.Amount;
+            }
+
+            return null;
         }
     }
 }

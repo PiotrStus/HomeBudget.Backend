@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HomeBudget.Domain.Entities.Budget;
 using BudgetTransaction = HomeBudget.Domain.Entities.Budget.Transaction;
-using HomeBudget.Application.Logic.EventHandlers.TransactionCreated;
+using HomeBudget.Application.Logic.Events;
 using Microsoft.EntityFrameworkCore;
 
 

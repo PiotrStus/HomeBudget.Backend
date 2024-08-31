@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
+namespace HomeBudget.Application.Logic.Events
 {
     public class TransactionCreatedEvent : INotification
     {

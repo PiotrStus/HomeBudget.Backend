@@ -9,7 +9,7 @@ namespace HomeBudget.Domain.Entities.Budget
 {
     public class MonthlyBudgetCategoryTracking : DomainEntity
     {
-        public int CategoryFilledLevel { get; set; }
+        public decimal TransactionSum { get; set; }
 
         public MonthlyBudgetCategory MonthlyBudgetCategory { get; set; } = default!;
     }

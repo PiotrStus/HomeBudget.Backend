@@ -1,5 +1,4 @@
-﻿using HomeBudget.Application.Logic.Budget.Category;
-using HomeBudget.Application.Logic.Budget.Transaction;
+﻿using HomeBudget.Application.Logic.Budget.Transaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +19,13 @@ namespace HomeBudget.WebApi.Controllers
         {
             var createTransactionResult = await _mediator.Send(model);
             return Ok(createTransactionResult);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteTransaction([FromBody] DeleteTransactionCommand.Request model)
+        {
+            var DeleteTransactionResult = await _mediator.Send(model);
+            return Ok(DeleteTransactionResult);
         }
 
         [HttpGet]
