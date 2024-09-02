@@ -22,6 +22,13 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> UpdateTransaction([FromBody] UpdateTransactionCommand.Request model)
+        {
+            var updateTransactionResult = await _mediator.Send(model);
+            return Ok(updateTransactionResult);
+        }
+
+        [HttpPost]
         public async Task<ActionResult> DeleteTransaction([FromBody] DeleteTransactionCommand.Request model)
         {
             var DeleteTransactionResult = await _mediator.Send(model);

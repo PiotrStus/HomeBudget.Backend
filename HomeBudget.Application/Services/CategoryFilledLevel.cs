@@ -24,14 +24,15 @@ namespace HomeBudget.Application.Services
             _applicationDbContext = applicationDbContext;
         }
         
-        public async Task UpdateMonthlyBudgetCategoryAfterTransactionChanged(int transactionId, int accountId, Func<decimal, decimal, decimal> updateFunction, CancellationToken cancellationToken)
+        public async Task UpdateMonthlyBudgetCategoryAfterTransactionChanged(int transactionId, int accountId, Func<decimal, decimal, decimal> updateFunction, CancellationToken cancellationToken, DateTimeOffset? previousDate = null, int? previousCategoryId = null)
         {
             var transaction = await _applicationDbContext.Transactions.FirstOrDefaultAsync(t => t.Id == transactionId);
 
             if (transaction != null)
             {
-                var year = transaction.Date.Year;
-                var monthNumber = transaction.Date.Month;
+                var year = previousDate?.Year ?? transaction.Date.Year;
+                var monthNumber = previousDate?.Month ?? transaction.Date.Month;
+                var categoryId = previousCategoryId ?? transaction.CategoryId;
 
 
                 var query = _applicationDbContext.MonthlyBudgetCategories
@@ -59,7 +60,7 @@ namespace HomeBudget.Application.Services
                     TransactionScopeAsyncFlowOption.Enabled))
                 {
                     var currentTransactionsTotalAmount = await _applicationDbContext.Transactions
-                    .Where(t => t.CategoryId == transaction.CategoryId
+                    .Where(t => t.CategoryId == categoryId
                                 && t.AccountId == transaction.AccountId
                                 && t.Date.Year == year
                                 && t.Date.Month == monthNumber

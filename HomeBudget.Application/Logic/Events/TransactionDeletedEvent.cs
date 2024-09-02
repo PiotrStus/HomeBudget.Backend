@@ -9,6 +9,6 @@ namespace HomeBudget.Application.Logic.Events
 {
     public class TransactionDeletedEvent : INotification
     {
-        public int TransactionId { get; set; }
+        public required int TransactionId { get; set; }
     }
 }

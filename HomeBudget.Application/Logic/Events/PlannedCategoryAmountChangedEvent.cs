@@ -12,6 +12,7 @@ namespace HomeBudget.Application.Logic.Events
         public required int Id { get; set; }
 
         public required int CategoryId { get; set; }
+
         public required decimal Amount { get; set; }
     }
 }
