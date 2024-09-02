@@ -23,79 +23,8 @@ namespace HomeBudget.Application.Services
         {
             _applicationDbContext = applicationDbContext;
         }
-
-        public async Task UpdateSumAfterTransactionChanged(TransactionData transactionData, CancellationToken cancellationToken)
-        {
-            var year = transactionData.Date.Year;
-            var monthNumber = transactionData.Date.Month;
-            //Month? month = null;
-
-            //if (Enum.IsDefined(typeof(Month), monthNumber))
-            //{
-            //    month = (Month) monthNumber;
-            //}
-
-            //var monthlyBudgetId = await _applicationDbContext.MonthlyBudgets
-            //    .Where(mb => mb.YearBudget.Year == year && mb.Month == (Month) monthNumber && mb.YearBudget.AccountId == transactionData.AccountId)
-            //    .Select(mb => mb.Id)
-            //    .FirstOrDefaultAsync(cancellationToken);
-
-            //if (monthlyBudget == null)
-            //{
-            //    return;
-            //}
-
-
-            var query = _applicationDbContext.MonthlyBudgetCategories
-                //.AsQueryable()
-                .Where(mc => mc.MonthlyBudget.YearBudget.Year == year)
-                .Where(mc => mc.MonthlyBudget.Month == (Month)monthNumber)
-                .Where(mc => mc.MonthlyBudget.YearBudget.AccountId == transactionData.AccountId)
-                .Where(mc => mc.CategoryId == transactionData.CategoryId)
-                .Select(mc => new
-                {
-                    Tracking = mc.MonthlyBudgetCategoryTracking,
-                    mc.Amount,
-                    MonthlyBudgetCategoryId = mc.Id
-                });
-
-            var monthlyBudgetCategory = await query
-                .FirstOrDefaultAsync(cancellationToken);
-
-
-
-            //var monthlyBudgetCategory = await _applicationDbContext.MonthlyBudgetCategories
-            //    .Where(mc => mc.MonthlyBudget.YearBudget.Year == year 
-            //                 && mc.MonthlyBudget.Month == (Month) monthNumber 
-            //                 && mc.MonthlyBudget.YearBudget.AccountId == transactionData.AccountId 
-            //                 && mc.CategoryId == transactionData.CategoryId)
-            //    .Select(mc => new
-            //    {
-            //        Tracking = mc.MonthlyBudgetCategoryTracking,
-            //        mc.Amount,
-            //        MonthlyBudgetCategoryId = mc.Id
-            //    })
-            //    .FirstOrDefaultAsync(cancellationToken);
-
-            if (monthlyBudgetCategory == null)
-            {
-                return;
-            }
-
-            var currentTransactionsTotalAmount = await _applicationDbContext.Transactions
-                .Where(t => t.CategoryId == transactionData.CategoryId
-                            && t.AccountId == transactionData.AccountId
-                            && t.Date.Year == year
-                            && t.Date.Month == monthNumber
-                            && !t.IsDeleted)
-                .SumAsync(t => t.Amount, cancellationToken);
-
-            monthlyBudgetCategory.Tracking.TransactionSum = currentTransactionsTotalAmount;
-            await _applicationDbContext.SaveChangesAsync(cancellationToken);
-        }
-
         
-        public async Task UpdateMonthlyBudgetCategoryAfterTransactionChanged(int transactionId, int accountId, CancellationToken cancellationToken, Func<decimal, decimal, decimal> updateFunction)
+        public async Task UpdateMonthlyBudgetCategoryAfterTransactionChanged(int transactionId, int accountId, Func<decimal, decimal, decimal> updateFunction, CancellationToken cancellationToken)
         {
             var transaction = await _applicationDbContext.Transactions.FirstOrDefaultAsync(t => t.Id == transactionId);
 
@@ -150,14 +79,14 @@ namespace HomeBudget.Application.Services
 
         public async Task UpdateSumAfterTransactionAdded(int transactionId, int accountId, CancellationToken cancellationToken)
         {
-            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId, cancellationToken,
-                (currentTotal, transactionAmount) => currentTotal);
+            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId,
+                (currentTotal, transactionAmount) => currentTotal, cancellationToken);
         }
 
         public async Task UpdateSumAfterTransactionDeleted(int transactionId, int accountId, CancellationToken cancellationToken)
         {
-            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId, cancellationToken,
-                (currentTotal, transactionAmount) => currentTotal - transactionAmount);
+            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId,
+                (currentTotal, transactionAmount) => currentTotal - transactionAmount, cancellationToken);
         }
     }
 }

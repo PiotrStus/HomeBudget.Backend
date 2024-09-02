@@ -22,23 +22,13 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
         {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-            var transactionData = new TransactionData()
-            {
-                TransactionId = notification.TransactionId,
-                CategoryId = notification.CategoryId,
-                AccountId = account.Id,
-                Amount = notification.Amount,
-                Date = notification.Date
-            };
-
-            await _categoryFilledLevel.UpdateSumAfterTransactionChanged(transactionData, cancellationToken);
+            await _categoryFilledLevel.UpdateSumAfterTransactionAdded(notification.TransactionId, account.Id, cancellationToken);
         }
 
         public async Task Handle(TransactionDeletedEvent notification, CancellationToken cancellationToken)
         {
 
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
-
 
             await _categoryFilledLevel.UpdateSumAfterTransactionDeleted(notification.TransactionId, account.Id, cancellationToken);
         }
