@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Application.Logic.Events
 {
-    public class TransactionCreatedEvent : INotification
+    public class TransactionCreatedEvent : ITransactionEvent
     {
         public required int TransactionId { get; set; }
 

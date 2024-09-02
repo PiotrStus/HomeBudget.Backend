@@ -25,55 +25,53 @@ namespace HomeBudget.Application.Services
             _logger = logger;
         }
 
-
-
-
-
-        public async Task<bool?> IsCategoryBudgetExceededOnTransactionChange(TransactionData transactionData, CancellationToken cancellationToken)
+        public async Task<bool?> IsCategoryBudgetExceededOnTransactionChange(int transactionId, int accountId, CancellationToken cancellationToken)
         {
-            var year = transactionData.Date.Year;
-            var monthNumber = transactionData.Date.Month;
-            Month? month = null;
-
-            if (Enum.IsDefined(typeof(Month), monthNumber))
+            var transaction = await _applicationDbContext.Transactions.FirstOrDefaultAsync(t => t.Id == transactionId);
+            if (transaction != null)
             {
-                month = (Month)monthNumber;
+                var year = transaction.Date.Year;
+                var monthNumber = transaction.Date.Month;
+                var categoryId = transaction.CategoryId;
+
+                var query = _applicationDbContext.MonthlyBudgetCategories
+                    //.Include(mc => mc.MonthlyBudgetCategoryTracking)
+                    .Where(mc => mc.MonthlyBudget.YearBudget.Year == year)
+                    .Where(mc => mc.MonthlyBudget.Month == (Month)monthNumber)
+                    .Where(mc => mc.MonthlyBudget.YearBudget.AccountId == accountId)
+                    .Where(mc => mc.CategoryId == categoryId)
+                    .Select(mc => new
+                    {
+                        Tracking = mc.MonthlyBudgetCategoryTracking,
+                        mc.Amount,
+                        MonthlyBudgetCategoryId = mc.Id
+                    });
+
+                var monthlyBudgetCategory = await query.FirstOrDefaultAsync(cancellationToken);
+
+                if (monthlyBudgetCategory == null)
+                {
+                    return null;
+                }
+
+
+                var monthlyLimit = monthlyBudgetCategory.Amount;
+
+                var currentTransactionsTotalAmount = await _applicationDbContext.Transactions
+                    .Where(t => t.Id != transactionId && t.CategoryId == categoryId && t.AccountId == accountId && t.Date.Year == year && t.Date.Month == monthNumber && !t.IsDeleted)
+                    .SumAsync(t => t.Amount);
+
+                if (currentTransactionsTotalAmount > monthlyLimit)
+                {
+                    return false;
+                }
+
+                currentTransactionsTotalAmount += transaction.Amount;
+
+                _logger.LogCritical($"currentTransactionsTotalAmount: {currentTransactionsTotalAmount} > monthlyBudgetCategory.Amount: {monthlyBudgetCategory.Amount}");
+                return currentTransactionsTotalAmount > monthlyLimit;
             }
-
-            var monthlyBudget = await _applicationDbContext.MonthlyBudgets
-                .FirstOrDefaultAsync(mb => mb.YearBudget.Year == year && mb.Month == month && mb.YearBudget.AccountId == transactionData.AccountId, cancellationToken);
-
-            if (monthlyBudget == null)
-            {
-                return null;
-            }
-
-            var monthlyBudgetCategory = await _applicationDbContext.MonthlyBudgetCategories
-                .Include(mc => mc.MonthlyBudgetCategoryTracking)
-                .FirstOrDefaultAsync(mc => mc.MonthlyBudgetId == monthlyBudget.Id && mc.CategoryId == transactionData.CategoryId);
-
-            if (monthlyBudgetCategory == null)
-            {
-                return null;
-            }
-
-            var monthlyLimit = monthlyBudgetCategory.Amount;
-
-            var currentTransactionsTotalAmount = await _applicationDbContext.Transactions
-                .Where(t => t.Id != transactionData.TransactionId && t.CategoryId == transactionData.CategoryId && t.AccountId == transactionData.AccountId && t.Date.Year == year && t.Date.Month == monthNumber)
-                .SumAsync(t => t.Amount);
-
-            if (currentTransactionsTotalAmount > monthlyLimit)
-            {
-                return false;
-            }
-
-
-            currentTransactionsTotalAmount += transactionData.Amount;
-
-            _logger.LogCritical($"currentTransactionsTotalAmount: {currentTransactionsTotalAmount} > monthlyBudgetCategory.Amount: {monthlyBudgetCategory.Amount}");
-            return currentTransactionsTotalAmount > monthlyLimit;
-
+            return null;
         }
 
 
@@ -97,7 +95,7 @@ namespace HomeBudget.Application.Services
                     .Where(t => t.CategoryId == plannedCategory.CategoryId
                                 && t.AccountId == accountId
                                 && t.Date.Year == plannedCategory.Year
-                                && t.Date.Month == (int) plannedCategory.Month)
+                                && t.Date.Month == (int)plannedCategory.Month)
                     .SumAsync(t => t.Amount, cancellationToken);
 
                 return currentTransactionsTotalAmount > plannedCategory.Amount;
