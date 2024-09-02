@@ -1,4 +1,5 @@
-﻿using HomeBudget.Application.Logic.Budget.Transaction;
+﻿using HomeBudget.Application.Logic.Budget.Category;
+using HomeBudget.Application.Logic.Budget.Transaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,13 @@ namespace HomeBudget.WebApi.Controllers
 
         [HttpGet]
         public async Task<ActionResult> GetAllTransactions([FromQuery] GetAllTransactionsQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            return Ok(data);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetTransaction([FromQuery] GetTransactionQuery.Request model)
         {
             var data = await _mediator.Send(model);
             return Ok(data);
