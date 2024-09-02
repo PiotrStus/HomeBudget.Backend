@@ -89,5 +89,14 @@ namespace HomeBudget.Application.Services
             await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId,
                 (currentTotal, transactionAmount) => currentTotal - transactionAmount, cancellationToken);
         }
+
+        public async Task UpdateSumAfterTransactionUpdated(int transactionId, int accountId, DateTimeOffset previousDate, int previousCategoryId, CancellationToken cancellationToken)
+        {
+            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId,
+                (currentTotal, transactionAmount) => currentTotal, cancellationToken, previousDate, previousCategoryId);
+                //(currentTotal, transactionAmount) => currentTotal - transactionAmount, cancellationToken, previousDate, previousCategoryId);
+
+            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId, (currentTotal, transactionAmount) => currentTotal, cancellationToken);
+        }
     }
 }

@@ -8,7 +8,7 @@ using MediatR;
 
 namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
 {
-    public class CalculatePlannedMonthlyBudgetCategoryHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>, INotificationHandler<TransactionDeletedEvent>
+    public class CalculatePlannedMonthlyBudgetCategoryHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>, INotificationHandler<TransactionDeletedEvent>, INotificationHandler<TransactionUpdatedEvent>
     {
         private readonly CategoryFilledLevel _categoryFilledLevel;
 
@@ -31,6 +31,14 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
             await _categoryFilledLevel.UpdateSumAfterTransactionDeleted(notification.TransactionId, account.Id, cancellationToken);
+        }
+
+        public async Task Handle(TransactionUpdatedEvent notification, CancellationToken cancellationToken)
+        {
+
+            var account = await _currentAccountProvider.GetAuthenticatedAccount();
+
+            await _categoryFilledLevel.UpdateSumAfterTransactionUpdated(notification.TransactionId, account.Id, notification.PreviousDate, notification.PreviousCategoryId, cancellationToken);
         }
     }
 }
