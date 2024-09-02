@@ -18,7 +18,7 @@ namespace HomeBudget.WebApi
         public static string APP_NAME = "HomeBudget.WebApi";
         public static void Main(string[] args)
         {
-            TransactionManager.ImplicitDistributedTransactions = true;
+            //TransactionManager.ImplicitDistributedTransactions = true;
 
             //logi problemow ktore sie pojawia zanim w ogole aplikacja sie odpali
             Log.Logger = new LoggerConfiguration()

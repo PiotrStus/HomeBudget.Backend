@@ -94,8 +94,8 @@ namespace HomeBudget.Application.Services
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
         }
 
-
-        public async Task UpdateSumAfterTransactionChanged(int transactionId, int accountId, CancellationToken cancellationToken)
+        
+        public async Task UpdateMonthlyBudgetCategoryAfterTransactionChanged(int transactionId, int accountId, CancellationToken cancellationToken, Func<decimal, decimal, decimal> updateFunction)
         {
             var transaction = await _applicationDbContext.Transactions.FirstOrDefaultAsync(t => t.Id == transactionId);
 
@@ -138,11 +138,26 @@ namespace HomeBudget.Application.Services
                     .SumAsync(t => t.Amount, cancellationToken);
 
 
-                    monthlyBudgetCategory.Tracking.TransactionSum = currentTransactionsTotalAmount - transaction.Amount;
+                    //monthlyBudgetCategory.Tracking.TransactionSum = currentTransactionsTotalAmount - transaction.Amount;
+                    monthlyBudgetCategory.Tracking.TransactionSum = updateFunction(currentTransactionsTotalAmount, transaction.Amount);
                     await _applicationDbContext.SaveChangesAsync(cancellationToken);
                     scope.Complete();
                 }
             }
+        }
+
+
+
+        public async Task UpdateSumAfterTransactionAdded(int transactionId, int accountId, CancellationToken cancellationToken)
+        {
+            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId, cancellationToken,
+                (currentTotal, transactionAmount) => currentTotal);
+        }
+
+        public async Task UpdateSumAfterTransactionDeleted(int transactionId, int accountId, CancellationToken cancellationToken)
+        {
+            await UpdateMonthlyBudgetCategoryAfterTransactionChanged(transactionId, accountId, cancellationToken,
+                (currentTotal, transactionAmount) => currentTotal - transactionAmount);
         }
     }
 }

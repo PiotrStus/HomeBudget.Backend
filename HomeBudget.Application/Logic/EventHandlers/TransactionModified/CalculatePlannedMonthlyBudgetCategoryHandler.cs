@@ -8,12 +8,12 @@ using MediatR;
 
 namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
 {
-    public class CalculateRealMonthlyBudgetHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>, INotificationHandler<TransactionDeletedEvent>
+    public class CalculatePlannedMonthlyBudgetCategoryHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>, INotificationHandler<TransactionDeletedEvent>
     {
         private readonly CategoryFilledLevel _categoryFilledLevel;
 
 
-        public CalculateRealMonthlyBudgetHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, CategoryFilledLevel categoryFilledLevel) : base(currentAccountProvider, applicationDbContext)
+        public CalculatePlannedMonthlyBudgetCategoryHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, CategoryFilledLevel categoryFilledLevel) : base(currentAccountProvider, applicationDbContext)
         {
             _categoryFilledLevel = categoryFilledLevel;
         }
@@ -40,7 +40,7 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
 
-            await _categoryFilledLevel.UpdateSumAfterTransactionChanged(notification.TransactionId, account.Id, cancellationToken);
+            await _categoryFilledLevel.UpdateSumAfterTransactionDeleted(notification.TransactionId, account.Id, cancellationToken);
         }
     }
 }
