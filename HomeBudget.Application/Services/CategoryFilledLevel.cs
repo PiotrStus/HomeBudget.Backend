@@ -24,7 +24,7 @@ namespace HomeBudget.Application.Services
             _applicationDbContext = applicationDbContext;
         }
         
-        public async Task UpdateMonthlyBudgetCategoryAfterTransactionChanged(int transactionId, int accountId, Func<decimal, decimal, decimal> updateFunction, CancellationToken cancellationToken, DateTimeOffset? previousDate = null, int? previousCategoryId = null)
+        private async Task UpdateMonthlyBudgetCategoryAfterTransactionChanged(int transactionId, int accountId, Func<decimal, decimal, decimal> updateFunction, CancellationToken cancellationToken, DateTimeOffset? previousDate = null, int? previousCategoryId = null)
         {
             var transaction = await _applicationDbContext.Transactions.FirstOrDefaultAsync(t => t.Id == transactionId);
 
@@ -56,7 +56,7 @@ namespace HomeBudget.Application.Services
                 }
 
                 using (var scope = new TransactionScope(TransactionScopeOption.Required,
-                    new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
+                    new TransactionOptions { IsolationLevel = IsolationLevel.Serializable },
                     TransactionScopeAsyncFlowOption.Enabled))
                 {
                     var currentTransactionsTotalAmount = await _applicationDbContext.Transactions

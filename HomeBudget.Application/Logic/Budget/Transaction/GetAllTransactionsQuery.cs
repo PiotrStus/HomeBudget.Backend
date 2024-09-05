@@ -51,7 +51,7 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
                 var transactions = await _applicationDbContext.Transactions
-                     .Where(t => t.AccountId == account.Id)
+                     .Where(t => t.AccountId == account.Id && !t.IsDeleted)
                      .Select(t => new Result.Transaction()
                      {
                         Id = t.Id,
