@@ -15,7 +15,7 @@ using HomeBudget.Application.Logic.Events;
 
 namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
 {
-    public class SendNotificationsHandler : BaseEventHandler, INotificationHandler<ITransactionEvent>
+    public class SendNotificationsHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>, INotificationHandler<TransactionUpdatedEvent>
     {
         private readonly CategoryFilledLevelExceededChecker _categoryFilledLevelExceededChecker;
         private readonly CategoryExceededSender _categoryExceededSender;
@@ -26,7 +26,8 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
             _categoryExceededSender = categoryExceededSender;
         }
 
-        public async Task Handle(ITransactionEvent notification, CancellationToken cancellationToken)
+
+        public async Task Handle(TransactionCreatedEvent notification, CancellationToken cancellationToken)
         {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
@@ -34,33 +35,21 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
 
             if (limitExceeded == true)
             {
-                await _categoryExceededSender.SendNotification(account.Id, notification.CategoryId, "CategoryLimitExceeded", cancellationToken);
+                await _categoryExceededSender.SendNotification(notification.TransactionId, notification.CategoryId, "CategoryLimitExceeded", cancellationToken);
             }
         }
 
-        //public async Task Handle(TransactionCreatedEvent notification, CancellationToken cancellationToken)
-        //{
-        //    var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-        //    var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceededOnTransactionChange(notification.TransactionId, account.Id, cancellationToken);
+        public async Task Handle(TransactionUpdatedEvent notification, CancellationToken cancellationToken)
+        {
+            var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-        //    if (limitExceeded == true)
-        //    {
-        //        await _categoryExceededSender.SendNotification(notification.TransactionId, notification.CategoryId, "CategoryLimitExceeded", cancellationToken);
-        //    }
-        //}
+            var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceededOnTransactionChange(notification.TransactionId, account.Id, cancellationToken);
 
-
-        //public async Task Handle(TransactionUpdatedEvent notification, CancellationToken cancellationToken)
-        //{
-        //    var account = await _currentAccountProvider.GetAuthenticatedAccount();
-
-        //    var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceededOnTransactionChange(notification.TransactionId, account.Id, cancellationToken);
-
-        //    if (limitExceeded == true)
-        //    {
-        //        await _categoryExceededSender.SendNotification(notification.TransactionId, notification.CategoryId, "CategoryLimitExceeded", cancellationToken);
-        //    }
-        //}
+            if (limitExceeded == true)
+            {
+                await _categoryExceededSender.SendNotification(notification.TransactionId, notification.CategoryId, "CategoryLimitExceeded", cancellationToken);
+            }
+        }
     }
 }
