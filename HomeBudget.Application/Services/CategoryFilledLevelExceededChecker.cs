@@ -75,7 +75,7 @@ namespace HomeBudget.Application.Services
         }
 
 
-        public async Task<bool?> IsCategoryBudgetExceededOnCategoryChange(int accountId, int plannedCategoryId, CancellationToken cancellationToken)
+        public async Task<bool?> IsCategoryBudgetExceededOnCategoryAmountChange(int plannedCategoryId, int accountId, CancellationToken cancellationToken)
         {
             var plannedCategory = await _applicationDbContext.MonthlyBudgetCategories
                                 .Where(m => m.Id == plannedCategoryId && m.MonthlyBudget.YearBudget.Account.Id == accountId)

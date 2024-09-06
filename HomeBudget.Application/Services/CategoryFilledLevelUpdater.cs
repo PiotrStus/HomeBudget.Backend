@@ -15,11 +15,11 @@ using System.Transactions;
 
 namespace HomeBudget.Application.Services
 {
-    public class CategoryFilledLevel
+    public class CategoryFilledLevelUpdater
     {
         private readonly IApplicationDbContext _applicationDbContext;
 
-        public CategoryFilledLevel(IApplicationDbContext applicationDbContext)
+        public CategoryFilledLevelUpdater(IApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }

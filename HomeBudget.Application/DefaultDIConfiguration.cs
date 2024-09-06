@@ -26,7 +26,7 @@ namespace HomeBudget.Application
             // metoda AddApplicationServices zwraca zaktualizowaną kolekcję usług IServiceCollection po dodaniu nowych usług.
 
             // kolejne serwisy dodawac bedziemy w kolejnych linijkach
-            services.AddScoped<CategoryFilledLevel>();
+            services.AddScoped<CategoryFilledLevelUpdater>();
 
             services.AddScoped<CategoryFilledLevelExceededChecker>();
 

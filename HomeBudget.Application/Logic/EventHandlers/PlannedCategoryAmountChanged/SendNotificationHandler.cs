@@ -30,7 +30,7 @@ namespace HomeBudget.Application.Logic.EventHandlers.PlannedCategoryAmountChange
         {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-            var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceededOnCategoryChange(account.Id, notification.Id, cancellationToken);
+            var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceededOnCategoryAmountChange(notification.Id, account.Id, cancellationToken);
             
             if (limitExceeded == true)
             {

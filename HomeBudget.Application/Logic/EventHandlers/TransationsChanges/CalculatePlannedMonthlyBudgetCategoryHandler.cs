@@ -6,14 +6,14 @@ using HomeBudget.Domain.Entities;
 using HomeBudget.Domain.Entities.Budget;
 using MediatR;
 
-namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
+namespace HomeBudget.Application.Logic.EventHandlers.TransactionsChanges
 {
     public class CalculatePlannedMonthlyBudgetCategoryHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>, INotificationHandler<TransactionDeletedEvent>, INotificationHandler<TransactionUpdatedEvent>
     {
-        private readonly CategoryFilledLevel _categoryFilledLevel;
+        private readonly CategoryFilledLevelUpdater _categoryFilledLevel;
 
 
-        public CalculatePlannedMonthlyBudgetCategoryHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, CategoryFilledLevel categoryFilledLevel) : base(currentAccountProvider, applicationDbContext)
+        public CalculatePlannedMonthlyBudgetCategoryHandler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, CategoryFilledLevelUpdater categoryFilledLevel) : base(currentAccountProvider, applicationDbContext)
         {
             _categoryFilledLevel = categoryFilledLevel;
         }

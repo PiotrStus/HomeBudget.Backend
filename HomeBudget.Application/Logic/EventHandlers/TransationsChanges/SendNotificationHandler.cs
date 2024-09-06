@@ -13,7 +13,7 @@ using HomeBudget.Domain.Entities.Budget;
 using HomeBudget.Application.Services;
 using HomeBudget.Application.Logic.Events;
 
-namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
+namespace HomeBudget.Application.Logic.EventHandlers.TransactionsChanges
 {
     public class SendNotificationsHandler : BaseEventHandler, INotificationHandler<TransactionCreatedEvent>, INotificationHandler<TransactionUpdatedEvent>
     {
@@ -26,29 +26,26 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionCreated
             _categoryExceededSender = categoryExceededSender;
         }
 
-
         public async Task Handle(TransactionCreatedEvent notification, CancellationToken cancellationToken)
         {
-            var account = await _currentAccountProvider.GetAuthenticatedAccount();
-
-            var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceededOnTransactionChange(notification.TransactionId, account.Id, cancellationToken);
-
-            if (limitExceeded == true)
-            {
-                await _categoryExceededSender.SendNotification(notification.TransactionId, notification.CategoryId, "CategoryLimitExceeded", cancellationToken);
-            }
+            await HandleTransaction(notification.TransactionId, notification.CategoryId, cancellationToken);
         }
-
 
         public async Task Handle(TransactionUpdatedEvent notification, CancellationToken cancellationToken)
         {
+            await HandleTransaction(notification.TransactionId, notification.CategoryId, cancellationToken);
+        }
+
+        private async Task HandleTransaction(int transactionId, int categoryId, CancellationToken cancellationToken)
+        {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-            var limitExceeded = await _categoryFilledLevelExceededChecker.IsCategoryBudgetExceededOnTransactionChange(notification.TransactionId, account.Id, cancellationToken);
+            var limitExceeded = await _categoryFilledLevelExceededChecker
+                .IsCategoryBudgetExceededOnTransactionChange(transactionId, account.Id, cancellationToken);
 
             if (limitExceeded == true)
             {
-                await _categoryExceededSender.SendNotification(notification.TransactionId, notification.CategoryId, "CategoryLimitExceeded", cancellationToken);
+                await _categoryExceededSender.SendNotification(transactionId, categoryId, "CategoryLimitExceeded", cancellationToken);
             }
         }
     }
