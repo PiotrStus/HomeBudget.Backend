@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Infrastructure.Auth
 {
-    public static class JwtAuthConfiguration
+    public static class AuthConfiguration
     {
         // rozszerza interfejs IServiceCollection, ktory sluzy do rejestracji w konenterze Dependency Injection
         public static IServiceCollection AddJwtAuth(this IServiceCollection services, IConfiguration configuration)
