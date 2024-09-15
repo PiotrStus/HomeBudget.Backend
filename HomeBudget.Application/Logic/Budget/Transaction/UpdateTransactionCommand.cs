@@ -96,7 +96,9 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                 public Validator()
                 {
                     RuleFor(x => x.Name).NotEmpty();
-                    RuleFor(x => x.Name).MaximumLength(50);                }
+                    RuleFor(x => x.Name).MaximumLength(50);
+                    RuleFor(x => x.Amount).PrecisionScale(8, 2, true);
+                }
             }
         }
     }

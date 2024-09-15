@@ -1,4 +1,5 @@
-﻿using HomeBudget.Application.Interfaces;
+﻿using FluentValidation;
+using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities;
 using HomeBudget.Domain.Entities.Budget;
@@ -29,13 +30,15 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
             public decimal? AmountMin { get; set; }
 
             public decimal? AmountMax { get; set; }
+
+            public bool? CountPages { get; set; }
         }
 
         public class Result()
         {
             public required List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
-            public required int TotalCount { get; set; }
+            public int? TotalCount { get; set; }
 
             public class Transaction()
             {
@@ -87,7 +90,11 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                     query = query.Where(t => t.Amount <= request.AmountMax);
                 }
 
-                var totalCount = await query.CountAsync(cancellationToken);
+                int? totalCount = null;
+                if (request.Page == 1 || request.CountPages == true)
+                {
+                    totalCount = await query.CountAsync(cancellationToken);
+                }
 
                 var transactions = await query
                     .Skip((request.Page - 1) * request.PageSize)
@@ -108,6 +115,14 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                     Transactions = transactions,
                     TotalCount = totalCount
                 };
+            }
+        }
+        public class Validator : AbstractValidator<Request>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.AmountMin).PrecisionScale(8,2,true);
+                RuleFor(x => x.AmountMax).PrecisionScale(8,2,true);
             }
         }
     }

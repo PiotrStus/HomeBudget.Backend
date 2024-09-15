@@ -91,6 +91,7 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                 RuleFor(x => x.Name).MaximumLength(100);
                 RuleFor(x => x.CategoryId).NotEmpty();
                 RuleFor(x => x.Amount).GreaterThanOrEqualTo(0);
+                RuleFor(x => x.Amount).PrecisionScale(8, 2, true);
             }
         }
 
