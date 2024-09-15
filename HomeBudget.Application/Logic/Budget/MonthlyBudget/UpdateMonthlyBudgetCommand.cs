@@ -42,7 +42,7 @@ namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y => y.Id != request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month);
+                var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y => y.Id == request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month && y.TotalAmount == request.TotalAmount);
 
                 if (monthlyBudgetNotChanged)
                 {

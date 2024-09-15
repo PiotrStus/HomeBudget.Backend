@@ -104,7 +104,7 @@ namespace HomeBudget.WebApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> AntiforgeryToken()
+        public ActionResult AntiforgeryToken()
         {
             // na podstawie contextu metoda ta generuje token,
             // ktory zwrocimy z tej akcji

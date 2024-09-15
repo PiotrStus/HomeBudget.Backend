@@ -42,7 +42,7 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-                var plannedCategoryNotChanged = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.Amount == request.Amount && m.MonthlyBudget.YearBudget.AccountId == account.Id);
+                var plannedCategoryNotChanged = await _applicationDbContext.MonthlyBudgetCategories.AnyAsync(m => m.Id == request.Id && m.Amount == request.Amount && m.MonthlyBudget.YearBudget.AccountId == account.Id);
 
                 if (plannedCategoryNotChanged)
                 {

@@ -20,7 +20,7 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public int CategoryId { get; set; }
 
-        public Category? Category { get; set; } = default;
+        public Category Category { get; set; } = default!;
 
         public required decimal Amount {  get; set; }
 
