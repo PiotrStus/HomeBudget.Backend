@@ -11,10 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HomeBudget.Application.Logic.User.CreateUserWithAccountCommand.Request;
 using HomeBudget.Domain.Enums;
 
-namespace HomeBudget.Application.Logic.User
+namespace HomeBudget.Application.Logic.Notification
 {
     public static class GetUserNotificationsQuery
     {
@@ -28,6 +27,7 @@ namespace HomeBudget.Application.Logic.User
 
             public class UserNotification()
             {
+                public required int Id { get; set; }
                 public required DateTimeOffset Date { get; set; }
 
                 public required string Content { get; set; }
@@ -61,6 +61,7 @@ namespace HomeBudget.Application.Logic.User
                                                                    .Where(n => n.UserId == userId && !n.IsRead)
                                                                    .Select(n => new Result.UserNotification()
                                                                    {
+                                                                       Id = n.Id,
                                                                        Date = n.Date,
                                                                        Content = n.Content,
                                                                        NotificationType = n.NotificationType,

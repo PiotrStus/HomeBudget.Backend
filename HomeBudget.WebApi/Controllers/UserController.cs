@@ -7,6 +7,7 @@ using HomeBudget.Application.Logic.User;
 using HomeBudget.Infrastructure.Auth;
 using HomeBudget.WebApi.Application.Auth;
 using HomeBudget.WebApi.Application.Response;
+using HomeBudget.Application.Logic.Notification;
 
 namespace HomeBudget.WebApi.Controllers
 {
@@ -114,14 +115,6 @@ namespace HomeBudget.WebApi.Controllers
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             return Ok(tokens.RequestToken);
         }
-
-        [HttpGet]
-        public async Task<ActionResult> GetUserNotifications()
-        {
-            var data = await _mediator.Send(new GetUserNotificationsQuery.Request() { });
-            return Ok(data);
-        }
-
 
 
         // dodajemy metode, która ustawi ciastko z tokenem
