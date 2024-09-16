@@ -95,8 +95,10 @@ namespace HomeBudget.Application.Services
                     .Where(t => t.CategoryId == plannedCategory.CategoryId
                                 && t.AccountId == accountId
                                 && t.Date.Year == plannedCategory.Year
-                                && t.Date.Month == (int)plannedCategory.Month)
+                                && t.Date.Month == (int)plannedCategory.Month
+                                && !t.IsDeleted)
                     .SumAsync(t => t.Amount, cancellationToken);
+
 
                 return currentTransactionsTotalAmount > plannedCategory.Amount;
             }
