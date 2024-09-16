@@ -1,4 +1,6 @@
-﻿using HomeBudget.Application.Interfaces;
+﻿using EasyCaching.Core.Interceptor;
+using EFCoreSecondLevelCacheInterceptor;
+using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities;
 using HomeBudget.Domain.Entities.Budget;
@@ -54,6 +56,7 @@ namespace HomeBudget.Application.Logic.Budget.Category
                          Name = c.Name,
                          CategoryType = c.CategoryType,
                      })
+                     .Cacheable()
                      .ToListAsync();
 
 

@@ -67,6 +67,7 @@ namespace HomeBudget.Application.Logic.Notification
                                                                        NotificationType = n.NotificationType,
                                                                        CategoryName = n.CategoryName,
                                                                    })
+                                                                   .Cacheable()
                                                                    .ToListAsync();
 
                     if (notifications.Any())
