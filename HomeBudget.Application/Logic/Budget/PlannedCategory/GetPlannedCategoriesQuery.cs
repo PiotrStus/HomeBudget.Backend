@@ -68,7 +68,7 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
                 //}
 
                 var plannedCategories = await _applicationDbContext.MonthlyBudgetCategories
-                    .Where(p => p.MonthlyBudgetId == request.MonthId)
+                    .Where(p => p.MonthlyBudgetId == request.MonthId && p.MonthlyBudget.YearBudget.AccountId == account.Id)
                     .Select(p => new PlannedCategoriesBudgets()
                     {
                         Id = p.Id,
