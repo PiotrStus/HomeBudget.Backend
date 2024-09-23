@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Application.Logic.Budget.HomePage;
 
-public static class GetPlannedMonthlyCategoriesQuery
+public static class GetMonthlyBalanceQuery
 {
 
     public class Request() : IRequest<Result>
@@ -27,17 +27,17 @@ public static class GetPlannedMonthlyCategoriesQuery
 
     public class Result()
     {
-        public required List<PlannedMonthlyCategoriesBudgets> PlannedCategories { get; set; } = new List<PlannedMonthlyCategoriesBudgets>();
+        public required List<MonthlyBalanceCategory> MonthlyBalanceCategories { get; set; } = new List<MonthlyBalanceCategory>();
 
-        public class PlannedMonthlyCategoriesBudgets()
+        public record MonthlyBalanceCategory()
         {
-            public required int Id { get; set; }
-
-            public required string? Name { get; set; }
-
-            public required decimal Amount { get; set; }
+            public required string? CategoryName { get; set; }
 
             public required CategoryType CategoryType { get; set; }
+
+            public required decimal PlannedAmount { get; set; }
+
+            public required decimal ActualAmount {  get; set; }
         }
     }
 
@@ -55,14 +55,14 @@ public static class GetPlannedMonthlyCategoriesQuery
 
             var yearFromRequest = request.Date.Year;
 
-            var plannedCategories = await _applicationDbContext.MonthlyBudgetCategories
+            var monthlyBalanceCategories = await _applicationDbContext.MonthlyBudgetCategories
                 .Where(p => p.MonthlyBudget.Month == monthFromRequest && p.MonthlyBudget.YearBudget.Year == yearFromRequest && p.MonthlyBudget.YearBudget.AccountId == account.Id)
-                .Select(p => new Result.PlannedMonthlyCategoriesBudgets()
+                .Select(p => new Result.MonthlyBalanceCategory()
                 {
-                    Id = p.Id,
-                    Name = p.Category.Name,
-                    Amount = p.Amount,
-                    CategoryType = p.Category.CategoryType
+                    CategoryName = p.Category.Name,
+                    CategoryType = p.Category.CategoryType,
+                    PlannedAmount = p.Amount,
+                    ActualAmount = p.MonthlyBudgetCategoryTracking.TransactionSum
                 })
                 .Cacheable()
                 .ToListAsync(cancellationToken);
@@ -72,7 +72,7 @@ public static class GetPlannedMonthlyCategoriesQuery
 
             return new Result()
             {
-                PlannedCategories = plannedCategories
+                MonthlyBalanceCategories = monthlyBalanceCategories
             };
         }
     }

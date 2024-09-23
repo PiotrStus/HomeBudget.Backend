@@ -19,5 +19,12 @@ namespace HomeBudget.WebApi.Controllers
             var data = await _mediator.Send(model);
             return Ok(data);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetMonthlyBalanceQuery([FromQuery] GetMonthlyBalanceQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            return Ok(data);
+        }
     }
 }
