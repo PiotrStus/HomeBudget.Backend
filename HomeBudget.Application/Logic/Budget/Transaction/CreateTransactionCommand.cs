@@ -53,6 +53,7 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                 {
                     Name = request.Name,
                     Date = request.Date ?? utcNow,
+                    CreationDate = utcNow,
                     CategoryId = request.CategoryId,
                     AccountId = account.Id,
                     Amount = request.Amount,

@@ -14,6 +14,8 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public required DateTimeOffset Date { get; set; }
 
+        public required DateTimeOffset CreationDate { get; set; }
+
         public int AccountId { get; set; }
 
         public Account Account { get; set; } = default!;
