@@ -36,7 +36,7 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetRecentTransaction([FromQuery] GetRecentTransactionsQuery.Request model)
+        public async Task<ActionResult> GetRecentTransactions([FromQuery] GetRecentTransactionsQuery.Request model)
         {
             var data = await _mediator.Send(model);
             return Ok(data);

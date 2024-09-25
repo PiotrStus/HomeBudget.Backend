@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using EFCoreSecondLevelCacheInterceptor;
+using FluentValidation;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities;
@@ -76,6 +77,7 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                         CategoryId = t.Category.Id,
                         Amount = t.Amount
                     })
+                    .Cacheable()
                     .ToListAsync(cancellationToken);
 
                 return new Result()
