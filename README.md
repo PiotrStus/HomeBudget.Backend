@@ -76,3 +76,6 @@ Planned future features include:
 
 - **Exportable CSV Reports**  
    Users will have the ability to generate and download budget and transaction reports in CSV format.
+
+- **Subcategories under Categories**  
+  Users will be able to create subcategories within existing categories to improve organization and navigation.
