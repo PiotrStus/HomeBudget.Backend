@@ -53,15 +53,15 @@ namespace HomeBudget.WebApi.Controllers
         // jest to requesta typu post
         [HttpPost]
         [IgnoreAntiforgeryToken]
-        public async Task<ActionResult> CreateUserWithAccount([FromBody] CreateUserWithAccountCommand.Request model)
+        public async Task<ActionResult> CreateUser([FromBody] CreateUserCommand.Request model)
         {
             // to co robimy to bierzemy mediatora i wysylamy obiekt o nazwie model (nasz request)
             // mediator zajmie sie wyslaniem tego i przekazaniem do handlera
             // ktory znajduje sie w klasie CreateUserWithAccountCommand
             // w projekcie Application
-            var createAccountResult = await _mediator.Send(model);
+            var createUserResult = await _mediator.Send(model);
             // request do zakladania konta tez zwraca UserId
-            var token = _jwtManager.GenerateUserToken(createAccountResult.UserId);
+            var token = _jwtManager.GenerateUserToken(createUserResult.UserId);
             SetTokenCookie(token);
             return Ok(new JwtToken() { AccessToken = token });
         }

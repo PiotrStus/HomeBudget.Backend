@@ -10,11 +10,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HomeBudget.Application.Logic.User.CreateUserWithAccountCommand.Request;
+using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
 
 namespace HomeBudget.Application.Logic.User
 {
-    public static class CreateUserWithAccountCommand
+    public static class CreateUserCommand
     {
         // tworzymy w środku klasy, które zawsze mają takie same nazwy
         // niezależnie jak nazywa się ta klasa statyczna u góry

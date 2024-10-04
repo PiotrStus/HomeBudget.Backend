@@ -28,6 +28,15 @@ namespace HomeBudget.WebApi.Controllers
         {
         }
 
+        [HttpPost]
+        public async Task<ActionResult> CreateAccount([FromBody] CreateAccountCommand.Request model)
+        {
+            var createAccountResult = await _mediator.Send(model);
+            var token = _jwtManager.GenerateUserToken(createAccountResult.AccountId);
+            SetAccountIdCookie(token);
+            return Ok(new JwtToken() { AccessToken = token });
+        }
+
         // potrzebujemy w zasadzie tylko jednej metody, czyli pobierania naszego
         // konta
         [HttpGet]
@@ -35,6 +44,19 @@ namespace HomeBudget.WebApi.Controllers
         {
             var data = await _mediator.Send(new CurrentAccountQuery.Request() { });
             return Ok(data);
+        }
+
+        private void SetAccountIdCookie(int accountId)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = DateTime.UtcNow.AddDays(30),
+                SameSite = SameSiteMode.Lax
+            };
+
+            Response.Cookies.Append("account_id", accountId.ToString(), cookieOptions);
         }
     }
 }
