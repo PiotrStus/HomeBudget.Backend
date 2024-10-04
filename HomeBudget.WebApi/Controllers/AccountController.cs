@@ -32,17 +32,21 @@ namespace HomeBudget.WebApi.Controllers
         public async Task<ActionResult> CreateAccount([FromBody] CreateAccountCommand.Request model)
         {
             var createAccountResult = await _mediator.Send(model);
-            var token = _jwtManager.GenerateUserToken(createAccountResult.AccountId);
-            SetAccountIdCookie(token);
-            return Ok(new JwtToken() { AccessToken = token });
+            SetAccountIdCookie(createAccountResult.AccountId);
+            return Ok(new { createAccountResult.AccountId });
         }
 
-        // potrzebujemy w zasadzie tylko jednej metody, czyli pobierania naszego
-        // konta
         [HttpGet]
         public async Task<ActionResult> GetCurrentAccount()
         {
             var data = await _mediator.Send(new CurrentAccountQuery.Request() { });
+            return Ok(data);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetUsersAccounts()
+        {
+            var data = await _mediator.Send(new GetUserAccountsQuery.Request() { });
             return Ok(data);
         }
 

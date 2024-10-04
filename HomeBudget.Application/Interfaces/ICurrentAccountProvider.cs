@@ -12,5 +12,7 @@ namespace HomeBudget.Application.Interfaces
         Task<Account> GetAuthenticatedAccount();
 
         Task<int?> GetAccountId();
+
+        Task<List<Account>> GetUserAccounts();
     }
 }
