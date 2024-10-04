@@ -47,6 +47,13 @@ namespace HomeBudget.Application.Logic.Account
 
                 var utcNow = DateTime.UtcNow;
 
+                var accountExist = await _applicationDbContext.AccountUsers.Where(a => a.UserId == user.Id && a.Account.Name == request.Name).FirstOrDefaultAsync();
+
+                if (accountExist != null)
+                {
+                    throw new ErrorException("AccountAlreadyExist");
+                }
+
                 var account = new Domain.Entities.Account()
                 {
                     Name = request.Name,
