@@ -5,7 +5,9 @@
         // dodajemy stałą z nazwą ciastka, ponieważ będziemy używać tej stałej
         // w różnych miejsach i dobrą praktyką jest wrzucenie tego jaką stałą, żeby
         // nie powielać tego napisu
-        public const string CookieName = "auth.token";
+        public const string CookieJWTName = "auth.token";
+
+        public const string CookieAccountName = "account.id";
 
         // ustawienie Secure, ktore bedzie przydatne ustawienie go na false,
         // kiedy bedziemy lokalnie testowac nasza aplikacje, poniewaz 

@@ -16,10 +16,12 @@ namespace HomeBudget.Application.Services
     public class CategoryExceededSender
     {
         private readonly IApplicationDbContext _applicationDbContext;
+        private readonly ICurrentAccountProvider _currentAccountProvider;
 
-        public CategoryExceededSender(IApplicationDbContext applicationDbContext)
+        public CategoryExceededSender(IApplicationDbContext applicationDbContext, ICurrentAccountProvider currentAccountProvider)
         {
             _applicationDbContext = applicationDbContext;
+            _currentAccountProvider = currentAccountProvider;
         }
         
         public async Task SendNotification(int accountId, int categoryId, string content, CancellationToken cancellationToken)
@@ -28,6 +30,8 @@ namespace HomeBudget.Application.Services
                 .Where(u => u.AccountUsers.Any(au => au.AccountId == accountId))
                 .Select(u => u.Id)
                 .ToListAsync(cancellationToken);
+
+            var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
             if (userIds.Any())
             {
@@ -43,6 +47,7 @@ namespace HomeBudget.Application.Services
                     {
                         Date = DateTimeOffset.Now,
                         UserId = userId,
+                        AccountId = account.Id,
                         Content = content,
                         IsRead = false,
                         NotificationType = NotificationType.Warning,

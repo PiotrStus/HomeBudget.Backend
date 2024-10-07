@@ -22,9 +22,8 @@ namespace HomeBudget.WebApi.Controllers
     //dzieiczy po BaseControllerze
     public class AccountController : BaseController
     {
-
         public AccountController(ILogger<AccountController> logger,
-            IMediator mediator) : base(logger, mediator)
+            IMediator mediator ) : base(logger, mediator)
         {
         }
 
@@ -43,6 +42,17 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(data);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> SwitchAccount([FromBody] SwitchAccountQuery.Request model)
+        {
+            var data = await _mediator.Send(model);
+            if (data != null)
+            {
+                SetAccountIdCookie(data.VerifiedAccountId);
+            }
+            return Ok(data);
+        }
+
         [HttpGet]
         public async Task<ActionResult> GetUsersAccounts()
         {
@@ -50,17 +60,20 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(data);
         }
 
-        private void SetAccountIdCookie(int accountId)
+        private void SetAccountIdCookie(int? accountId)
         {
-            var cookieOptions = new CookieOptions
+            if (accountId != null)
             {
-                HttpOnly = true,
-                Secure = true,
-                Expires = DateTime.UtcNow.AddDays(30),
-                SameSite = SameSiteMode.Lax
-            };
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    Expires = DateTime.UtcNow.AddDays(30),
+                    SameSite = SameSiteMode.Lax
+                };
 
-            Response.Cookies.Append("account_id", accountId.ToString(), cookieOptions);
+                Response.Cookies.Append(CookieSettings.CookieAccountName, accountId.Value.ToString(), cookieOptions);
+            }
         }
     }
 }

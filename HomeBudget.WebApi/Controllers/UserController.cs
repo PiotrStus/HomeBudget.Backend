@@ -147,13 +147,13 @@ namespace HomeBudget.WebApi.Controllers
             }
 
             // ktore przychodza jako parametr do ustawienia w repsonse
-            Response.Cookies.Append(CookieSettings.CookieName, token, cookieOption);
+            Response.Cookies.Append(CookieSettings.CookieJWTName, token, cookieOption);
         }
 
 
         private void DeleteTokenCookie()
         {
-            Response.Cookies.Delete(CookieSettings.CookieName, new CookieOptions()
+            Response.Cookies.Delete(CookieSettings.CookieJWTName, new CookieOptions()
             {
                 HttpOnly = true,
             });

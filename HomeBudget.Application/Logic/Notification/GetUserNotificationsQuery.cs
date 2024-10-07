@@ -54,11 +54,13 @@ namespace HomeBudget.Application.Logic.Notification
             {
                 var userId = _authenticationDataProvider.GetUserId();
 
+                var accountId = _authenticationDataProvider.GetAccountId();
+
                 if (userId.HasValue)
                 {
 
                     var notifications = await _applicationDbContext.Notifications
-                                                                   .Where(n => n.UserId == userId && !n.IsRead)
+                                                                   .Where(n => n.UserId == userId && n.AccountId == accountId && !n.IsRead)
                                                                    .Select(n => new Result.UserNotification()
                                                                    {
                                                                        Id = n.Id,

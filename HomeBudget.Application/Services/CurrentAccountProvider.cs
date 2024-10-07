@@ -33,6 +33,7 @@ namespace HomeBudget.Application.Services
         {
             // pobranie Id aktualnie zalogowanego użytkownika
             var userId = _authenticationDataProvider.GetUserId();
+            var accountIdFromCookie = _authenticationDataProvider.GetAccountId();
 
             // pobranie z bazy danych id konta powiazanego z uzytjkownikiem
 
@@ -40,7 +41,7 @@ namespace HomeBudget.Application.Services
                 // pobieramy AccountUsers, w ktorych
                 return await _applicationDbContext.AccountUsers
                     // userId jest tym naszym userId
-                    .Where(au => au.UserId == userId.Value)
+                    .Where(au => au.UserId == userId.Value && au.AccountId == accountIdFromCookie)
                     // sortujemy po Id, jesli jest kilka
                     .OrderBy(au => au.UserId)
                     // Select przekształca wyniki, wybierając tylko AccountId z każdego AccountUser.
@@ -89,5 +90,7 @@ namespace HomeBudget.Application.Services
                 .Select(au => au.Account)
                 .ToListAsync();
         }
+
+
     }
 }
