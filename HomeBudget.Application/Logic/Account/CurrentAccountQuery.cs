@@ -27,7 +27,7 @@ namespace HomeBudget.Application.Logic.Account
         // mozna zwracac inne
         public class Result
         {
-            public required string Name { get; set; }
+            public string? Name { get; set; }
         }
 
         // zmieniamy klasę bazową z BaseCommandHandler na BaseQuerydHandler
@@ -47,7 +47,7 @@ namespace HomeBudget.Application.Logic.Account
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
                 return new Result()
                 {
-                    Name = account.Name
+                    Name = account?.Name
                 };
             }
         }

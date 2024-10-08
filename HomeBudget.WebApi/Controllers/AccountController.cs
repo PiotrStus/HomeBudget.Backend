@@ -48,7 +48,7 @@ namespace HomeBudget.WebApi.Controllers
             var data = await _mediator.Send(model);
             if (data != null)
             {
-                SetAccountIdCookie(data.VerifiedAccountId);
+                SetAccountIdCookie(data.Id);
             }
             return Ok(data);
         }

@@ -9,7 +9,7 @@ namespace HomeBudget.Application.Interfaces
 {
     public interface ICurrentAccountProvider
     {
-        Task<Account> GetAuthenticatedAccount();
+        Task<Account?> GetAuthenticatedAccount();
 
         Task<int?> GetAccountId();
 

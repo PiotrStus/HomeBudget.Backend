@@ -57,14 +57,14 @@ namespace HomeBudget.Application.Services
 
         // to jest implementacja naszej metody z interfejsu ICurrentAccountProvider
         // 
-        public async Task<Account> GetAuthenticatedAccount()
+        public async Task<Account?> GetAuthenticatedAccount()
         {
             // najpierw pobieramy sobie Account Id wywolujac metode GetAccountId
             var accountId = await GetAccountId();
             // jesli jest nullem, to uzywkonik np. nie jest zalogowany albo nie istnieje w bazie danych
             if (accountId == null)
             {
-                throw new UnauthorizedException();
+                return null;
             }
             // pobieramy to konto z bazy danych
             var account = await _applicationDbContext.Accounts.Cacheable().FirstOrDefaultAsync(a => a.Id == accountId.Value);

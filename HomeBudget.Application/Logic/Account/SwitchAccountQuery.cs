@@ -12,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
+using AccountEntity = HomeBudget.Domain.Entities.Account;
+
 
 namespace HomeBudget.Application.Logic.Account
 {
@@ -24,7 +26,9 @@ namespace HomeBudget.Application.Logic.Account
 
         public class Result
         {
-            public int? VerifiedAccountId { get; set; }
+            public string? Name { get; set; }
+
+            public int? Id { get; set; }
         }
 
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
@@ -42,17 +46,25 @@ namespace HomeBudget.Application.Logic.Account
             {
                 var userId = _authenticationDataProvider.GetUserId();
 
-                var accountExist = await _applicationDbContext.AccountUsers.Where(au => au.UserId == userId && au.AccountId == request.AccountId).FirstOrDefaultAsync();
+                var userAccount = await _applicationDbContext.AccountUsers
+                    .Where(au => au.UserId == userId && au.AccountId == request.AccountId)
+                    .Select(au => new
+                        {
+                            AccountName = au.Account.Name,
+                            au.AccountId
+                        })
+                    .FirstOrDefaultAsync();
 
-                if (accountExist == null)
+                if (userAccount == null)
                 {
                     throw new UnauthorizedException();
                 }
 
                 return new Result()
                 {
-                    VerifiedAccountId = accountExist.AccountId
-                };
+                    Name = userAccount.AccountName,
+                    Id = userAccount.AccountId
+                }; 
             }
         }
 

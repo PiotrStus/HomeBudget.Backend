@@ -157,6 +157,11 @@ namespace HomeBudget.WebApi.Controllers
             {
                 HttpOnly = true,
             });
+
+            Response.Cookies.Delete(CookieSettings.CookieAccountName, new CookieOptions()
+            {
+                HttpOnly = true,
+            });
         }
     }
 }
