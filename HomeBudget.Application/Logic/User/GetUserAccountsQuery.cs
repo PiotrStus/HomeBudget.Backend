@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HomeBudget.Domain.Enums;
 
-namespace HomeBudget.Application.Logic.Account
+namespace HomeBudget.Application.Logic.User
 {
     public static class GetUserAccountsQuery
     {

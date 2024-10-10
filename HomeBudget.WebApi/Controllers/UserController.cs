@@ -116,6 +116,13 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(tokens.RequestToken);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetUsersAccounts()
+        {
+            var data = await _mediator.Send(new GetUserAccountsQuery.Request() { });
+            return Ok(data);
+        }
+
 
         // dodajemy metode, która ustawi ciastko z tokenem
         // w parametrze przyjmuje token

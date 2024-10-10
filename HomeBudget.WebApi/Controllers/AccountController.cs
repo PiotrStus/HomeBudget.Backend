@@ -8,6 +8,7 @@ using HomeBudget.Infrastructure.Auth;
 using HomeBudget.WebApi.Application.Auth;
 using HomeBudget.WebApi.Application.Response;
 using HomeBudget.Application.Logic.Budget.Account;
+using HomeBudget.Application.Logic.Budget.Category;
 
 namespace HomeBudget.WebApi.Controllers
 {
@@ -55,17 +56,17 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(data);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> DeleteUser([FromBody] DeleteUserCommand.Request model)
+        {
+            var DeleteUserResult = await _mediator.Send(model);
+            return Ok(DeleteUserResult);
+        }
+
         [HttpGet]
         public async Task<ActionResult> GetCurrentAccount()
         {
             var data = await _mediator.Send(new CurrentAccountQuery.Request() { });
-            return Ok(data);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> GetUsersAccounts()
-        {
-            var data = await _mediator.Send(new GetUserAccountsQuery.Request() { });
             return Ok(data);
         }
 
