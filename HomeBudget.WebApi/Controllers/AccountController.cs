@@ -7,6 +7,7 @@ using HomeBudget.Application.Logic.User;
 using HomeBudget.Infrastructure.Auth;
 using HomeBudget.WebApi.Application.Auth;
 using HomeBudget.WebApi.Application.Response;
+using HomeBudget.Application.Logic.Budget.Account;
 
 namespace HomeBudget.WebApi.Controllers
 {
@@ -57,6 +58,13 @@ namespace HomeBudget.WebApi.Controllers
         public async Task<ActionResult> GetUsersAccounts()
         {
             var data = await _mediator.Send(new GetUserAccountsQuery.Request() { });
+            return Ok(data);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetUsers()
+        {
+            var data = await _mediator.Send(new GetUsersQuery.Request() { });
             return Ok(data);
         }
 

@@ -14,9 +14,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeBudget.Application.Logic.Budget.Category
+namespace HomeBudget.Application.Logic.Budget.Account
 {
-    public static class GetAllCategoriesQuery
+    public static class GetUsersQuery
     {
 
         public class Request() : IRequest<Result>
@@ -26,15 +26,13 @@ namespace HomeBudget.Application.Logic.Budget.Category
 
         public class Result()
         {
-            public required List<AccountCategory> Categories { get; set; } = new List<AccountCategory>();
+            public required List<User> Users { get; set; } = new List<User>();
 
-            public class AccountCategory()
+            public class User()
             {
                 public required int Id { get; set; }
 
-                public required string Name { get; set; }
-
-                public required CategoryType CategoryType { get; set; }
+                public required string Email { get; set; }
 
             }
         }
@@ -53,24 +51,19 @@ namespace HomeBudget.Application.Logic.Budget.Category
                 {
                     throw new UnauthorizedException();
                 }
-
-                var categories = await _applicationDbContext.Categories
-                     .Where(c => c.AccountId == account.Id && c.IsDeleted == false)
-                     .Select(c => new Result.AccountCategory()
+                var users = await _applicationDbContext.AccountUsers
+                     .Where(u => u.AccountId == account.Id)
+                     .Select(c => new Result.User()
                      {
-                         Id = c.Id,
-                         Name = c.Name,
-                         CategoryType = c.CategoryType,
+                         Id = c.UserId,
+                         Email = c.User.Email,
                      })
                      .Cacheable()
                      .ToListAsync();
 
-
-
-
                 return new Result()
                 {
-                    Categories = categories
+                    Users = users
                 };
             }
         }
