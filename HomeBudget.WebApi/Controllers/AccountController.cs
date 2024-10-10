@@ -36,13 +36,6 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(new { createAccountResult.AccountId });
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetCurrentAccount()
-        {
-            var data = await _mediator.Send(new CurrentAccountQuery.Request() { });
-            return Ok(data);
-        }
-
         [HttpPost]
         public async Task<ActionResult> SwitchAccount([FromBody] SwitchAccountQuery.Request model)
         {
@@ -51,6 +44,21 @@ namespace HomeBudget.WebApi.Controllers
             {
                 SetAccountIdCookie(data.Id);
             }
+            return Ok(data);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AssignUser([FromBody] AssignUserCommand.Request model)
+        {
+            var data = await _mediator.Send(model);
+
+            return Ok(data);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetCurrentAccount()
+        {
+            var data = await _mediator.Send(new CurrentAccountQuery.Request() { });
             return Ok(data);
         }
 
