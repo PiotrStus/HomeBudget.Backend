@@ -65,7 +65,8 @@ namespace HomeBudget.Application.Logic.Account
                 var accountUser = new AccountUser()
                 {
                     Account = account,
-                    User = user
+                    User = user,
+                    IsAdmin = true
                 };
 
                 _applicationDbContext.AccountUsers.Add(accountUser);
