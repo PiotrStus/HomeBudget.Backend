@@ -32,6 +32,8 @@ namespace HomeBudget.Application
 
             services.AddScoped<CategoryExceededSender>();
 
+            services.AddScoped<IUserAccountsProvider, UserAccountsProvider>();
+
             return services;
         }
 

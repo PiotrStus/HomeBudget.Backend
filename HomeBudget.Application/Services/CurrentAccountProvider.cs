@@ -75,22 +75,5 @@ namespace HomeBudget.Application.Services
             }
             return account;
         }
-
-        public async Task<List<Account>> GetUserAccounts()
-        {
-            var userId = _authenticationDataProvider.GetUserId();
-
-            if (userId == null)
-            {
-                throw new UnauthorizedException();
-            }
-
-            return await _applicationDbContext.AccountUsers
-                .Where(au => au.UserId == userId.Value)
-                .Select(au => au.Account)
-                .ToListAsync();
-        }
-
-
     }
 }

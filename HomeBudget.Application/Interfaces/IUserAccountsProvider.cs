@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Application.Interfaces
 {
-    public interface ICurrentAccountProvider
+    public interface IUserAccountsProvider
     {
-        Task<Account?> GetAuthenticatedAccount();
-
-        Task<int?> GetAccountId();
+        Task<List<Account>> GetUserAccounts();
     }
 }

@@ -36,15 +36,19 @@ namespace HomeBudget.Application.Logic.User
 
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
+            private readonly IUserAccountsProvider _userAccountsProvider;
+
             public Handler(ICurrentAccountProvider currentAccountProvider,
-                IApplicationDbContext applicationDbContext
+                IApplicationDbContext applicationDbContext,
+                IUserAccountsProvider userAccountsProvider
                 ) : base(currentAccountProvider, applicationDbContext)
             {
+                _userAccountsProvider = userAccountsProvider;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
-                var accounts = await _currentAccountProvider.GetUserAccounts();
+                var accounts = await _userAccountsProvider.GetUserAccounts();
 
                 var userAccounts = accounts.Select(account => new Result.UserAccount
                 {
