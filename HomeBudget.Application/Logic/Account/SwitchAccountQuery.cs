@@ -26,8 +26,6 @@ namespace HomeBudget.Application.Logic.Account
 
         public class Result
         {
-            public string? Name { get; set; }
-
             public int? Id { get; set; }
         }
 
@@ -62,7 +60,6 @@ namespace HomeBudget.Application.Logic.Account
 
                 return new Result()
                 {
-                    Name = userAccount.AccountName,
                     Id = userAccount.AccountId
                 }; 
             }
