@@ -16,5 +16,7 @@ namespace HomeBudget.Domain.Entities
         public int UserId {  get; set; }
 
         public User User { get; set; } = default!;
+
+        public required bool IsAdmin { get; set; }
     }
 }

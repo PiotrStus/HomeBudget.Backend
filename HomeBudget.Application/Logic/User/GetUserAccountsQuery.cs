@@ -11,43 +11,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
+using HomeBudget.Domain.Enums;
 
-namespace HomeBudget.Application.Logic.Account
+namespace HomeBudget.Application.Logic.User
 {
-    public static class CurrentAccountQuery
+    public static class GetUserAccountsQuery
     {
-        // parametry requesta beda puste
         public class Request : IRequest<Result>
         {
 
         }
 
-        // natomiast to co bedziemy zwracac to aktualnie name konta
-        // mozna zwracac inne
         public class Result
         {
-            public string? Name { get; set; }
+            public required List<UserAccount> Accounts { get; set; } = new List<UserAccount>();
+
+            public class UserAccount()
+            {
+                public required int Id { get; set; }
+
+                public required string Name { get; set; }
+            }
         }
 
-        // zmieniamy klasę bazową z BaseCommandHandler na BaseQuerydHandler
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
+            private readonly IUserAccountsProvider _userAccountsProvider;
+
             public Handler(ICurrentAccountProvider currentAccountProvider,
-                IApplicationDbContext applicationDbContext
+                IApplicationDbContext applicationDbContext,
+                IUserAccountsProvider userAccountsProvider
                 ) : base(currentAccountProvider, applicationDbContext)
             {
+                _userAccountsProvider = userAccountsProvider;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
-                // GetAuthenticatedAccount - metoda ICurrentAccountProvidera, ktora juz implementowalismy wczesniej
-                // odczytuje aktualne konto z ciastka no i jak nie istnieje to rzuca wyjatki
-                // a jak istnieje to wyciaga sobie z bazy i zwraca cale to konto
-                var account = await _currentAccountProvider.GetAuthenticatedAccount();
+                var accounts = await _userAccountsProvider.GetUserAccounts();
+
+                var userAccounts = accounts.Select(account => new Result.UserAccount
+                {
+                    Id = account.Id,
+                    Name = account.Name
+                }).ToList();
+
                 return new Result()
                 {
-                    Name = account?.Name
+                    Accounts = userAccounts
                 };
             }
         }
@@ -56,9 +67,7 @@ namespace HomeBudget.Application.Logic.Account
         {
             public Validator()
             {
-                // walidator pozostaje pusty bo nie mamy zadnych parametrow requesta
             }
         }
-
     }
 }

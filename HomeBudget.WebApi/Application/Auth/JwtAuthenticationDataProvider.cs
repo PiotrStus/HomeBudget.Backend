@@ -25,7 +25,7 @@ namespace HomeBudget.WebApi.Application.Auth
             // on ma kolekcje cookies, nastepnie wyciagamy ciastko o nazwie
             // zdefiniowanej w stalej , czyli u nas to bedzie "auth.token";
             // powtazanie kodu jest zla praktyka i dlatego ta stala
-            return _httpContextAccessor.HttpContext?.Request.Cookies[CookieSettings.CookieName];
+            return _httpContextAccessor.HttpContext?.Request.Cookies[CookieSettings.CookieJWTName];
         }
 
 
@@ -95,6 +95,18 @@ namespace HomeBudget.WebApi.Application.Auth
             // jesli to sie uda to zwracamy userid
             // jesli nie to zwracamy nulla
             if (int.TryParse(userIdString, out int res))
+            {
+                return res;
+            }
+
+            return null;
+        }
+
+        public int? GetAccountId()
+        {
+            var accountIdString = _httpContextAccessor.HttpContext?.Request.Cookies[CookieSettings.CookieAccountName];
+
+            if (int.TryParse(accountIdString, out var res))
             {
                 return res;
             }

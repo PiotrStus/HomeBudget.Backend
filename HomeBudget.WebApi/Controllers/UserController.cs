@@ -53,15 +53,15 @@ namespace HomeBudget.WebApi.Controllers
         // jest to requesta typu post
         [HttpPost]
         [IgnoreAntiforgeryToken]
-        public async Task<ActionResult> CreateUserWithAccount([FromBody] CreateUserWithAccountCommand.Request model)
+        public async Task<ActionResult> CreateUser([FromBody] CreateUserCommand.Request model)
         {
             // to co robimy to bierzemy mediatora i wysylamy obiekt o nazwie model (nasz request)
             // mediator zajmie sie wyslaniem tego i przekazaniem do handlera
             // ktory znajduje sie w klasie CreateUserWithAccountCommand
             // w projekcie Application
-            var createAccountResult = await _mediator.Send(model);
+            var createUserResult = await _mediator.Send(model);
             // request do zakladania konta tez zwraca UserId
-            var token = _jwtManager.GenerateUserToken(createAccountResult.UserId);
+            var token = _jwtManager.GenerateUserToken(createUserResult.UserId);
             SetTokenCookie(token);
             return Ok(new JwtToken() { AccessToken = token });
         }
@@ -116,6 +116,13 @@ namespace HomeBudget.WebApi.Controllers
             return Ok(tokens.RequestToken);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetUsersAccounts()
+        {
+            var data = await _mediator.Send(new GetUserAccountsQuery.Request() { });
+            return Ok(data);
+        }
+
 
         // dodajemy metode, która ustawi ciastko z tokenem
         // w parametrze przyjmuje token
@@ -147,13 +154,18 @@ namespace HomeBudget.WebApi.Controllers
             }
 
             // ktore przychodza jako parametr do ustawienia w repsonse
-            Response.Cookies.Append(CookieSettings.CookieName, token, cookieOption);
+            Response.Cookies.Append(CookieSettings.CookieJWTName, token, cookieOption);
         }
 
 
         private void DeleteTokenCookie()
         {
-            Response.Cookies.Delete(CookieSettings.CookieName, new CookieOptions()
+            Response.Cookies.Delete(CookieSettings.CookieJWTName, new CookieOptions()
+            {
+                HttpOnly = true,
+            });
+
+            Response.Cookies.Delete(CookieSettings.CookieAccountName, new CookieOptions()
             {
                 HttpOnly = true,
             });

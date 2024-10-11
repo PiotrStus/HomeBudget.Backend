@@ -1,7 +1,6 @@
 ﻿using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
-using HomeBudget.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,28 +8,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HomeBudget.Application.Logic.Budget.Category.GetCategoryQuery.Result;
 
-namespace HomeBudget.Application.Logic.Budget.Category
+namespace HomeBudget.Application.Logic.Budget.Account
 {
-    public static class GetCategoryQuery
+    public static class DeleteUserCommand
     {
-        public class Request :IRequest<Result>
+        public class Request : IRequest<Result>
         {
-            public int Id { get; set; }
+            public required int Id { get; set; }
         }
 
-        public class Result 
+        public class Result
         {
-                public required string Name { get; set; }
 
-                public required CategoryType CategoryType { get; set; }
-
-                public required bool IsDraft { get; set; }
         }
 
-
-        public class Handler : BaseQueryHandler, IRequestHandler<Request, Result>
+        public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
             public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext) : base(currentAccountProvider, applicationDbContext)
             {
@@ -45,19 +38,18 @@ namespace HomeBudget.Application.Logic.Budget.Category
                     throw new UnauthorizedException();
                 }
 
-                var model = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == request.Id && c.AccountId == account.Id);
+                var model = await _applicationDbContext.AccountUsers.FirstOrDefaultAsync(au => au.UserId == request.Id && au.AccountId == account.Id && !au.IsAdmin);
 
                 if (model == null)
                 {
                     throw new UnauthorizedException();
                 }
 
-                return new Result
-                {
-                        Name = model.Name,
-                        CategoryType = model.CategoryType,
-                        IsDraft = model.IsDraft,
-                };
+                _applicationDbContext.AccountUsers.Remove(model);
+
+                await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+                return new Result();
             }
         }
     }

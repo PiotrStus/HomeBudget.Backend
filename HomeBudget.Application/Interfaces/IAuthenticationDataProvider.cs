@@ -10,5 +10,7 @@ namespace HomeBudget.Application.Interfaces
     {
 
         int? GetUserId();
+
+        int? GetAccountId();
     }
 }

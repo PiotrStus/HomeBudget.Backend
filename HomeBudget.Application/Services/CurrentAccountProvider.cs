@@ -33,6 +33,7 @@ namespace HomeBudget.Application.Services
         {
             // pobranie Id aktualnie zalogowanego użytkownika
             var userId = _authenticationDataProvider.GetUserId();
+            var accountIdFromCookie = _authenticationDataProvider.GetAccountId();
 
             // pobranie z bazy danych id konta powiazanego z uzytjkownikiem
 
@@ -40,7 +41,7 @@ namespace HomeBudget.Application.Services
                 // pobieramy AccountUsers, w ktorych
                 return await _applicationDbContext.AccountUsers
                     // userId jest tym naszym userId
-                    .Where(au => au.UserId == userId.Value)
+                    .Where(au => au.UserId == userId.Value && au.AccountId == accountIdFromCookie)
                     // sortujemy po Id, jesli jest kilka
                     .OrderBy(au => au.UserId)
                     // Select przekształca wyniki, wybierając tylko AccountId z każdego AccountUser.
@@ -56,14 +57,14 @@ namespace HomeBudget.Application.Services
 
         // to jest implementacja naszej metody z interfejsu ICurrentAccountProvider
         // 
-        public async Task<Account> GetAuthenticatedAccount()
+        public async Task<Account?> GetAuthenticatedAccount()
         {
             // najpierw pobieramy sobie Account Id wywolujac metode GetAccountId
             var accountId = await GetAccountId();
             // jesli jest nullem, to uzywkonik np. nie jest zalogowany albo nie istnieje w bazie danych
             if (accountId == null)
             {
-                throw new UnauthorizedException();
+                return null;
             }
             // pobieramy to konto z bazy danych
             var account = await _applicationDbContext.Accounts.Cacheable().FirstOrDefaultAsync(a => a.Id == accountId.Value);

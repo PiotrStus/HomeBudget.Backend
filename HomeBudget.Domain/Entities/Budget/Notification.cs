@@ -14,6 +14,8 @@ namespace HomeBudget.Domain.Entities.Budget
 
         public required int UserId { get; set; }
 
+        public required int AccountId { get; set; }
+
         public required string Content { get; set; }
 
         public required bool IsRead { get; set; }
@@ -23,5 +25,7 @@ namespace HomeBudget.Domain.Entities.Budget
         public required string CategoryName { get; set; }
 
         public User User { get; set; } = default!;
+
+        public Account Account { get; set; } = default!;
     }
 }

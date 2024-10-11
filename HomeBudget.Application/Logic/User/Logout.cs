@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HomeBudget.Application.Logic.User.CreateUserWithAccountCommand.Request;
+using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
 
 namespace HomeBudget.Application.Logic.User
 {

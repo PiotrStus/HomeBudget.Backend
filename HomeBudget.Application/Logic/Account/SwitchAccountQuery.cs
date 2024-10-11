@@ -12,43 +12,56 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
+using AccountEntity = HomeBudget.Domain.Entities.Account;
+
 
 namespace HomeBudget.Application.Logic.Account
 {
-    public static class CurrentAccountQuery
+    public static class SwitchAccountQuery
     {
-        // parametry requesta beda puste
         public class Request : IRequest<Result>
         {
-
+            public required int AccountId { get; set; }
         }
 
-        // natomiast to co bedziemy zwracac to aktualnie name konta
-        // mozna zwracac inne
         public class Result
         {
-            public string? Name { get; set; }
+            public int? Id { get; set; }
         }
 
-        // zmieniamy klasę bazową z BaseCommandHandler na BaseQuerydHandler
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
-            public Handler(ICurrentAccountProvider currentAccountProvider,
+            private readonly IAuthenticationDataProvider _authenticationDataProvider;
+
+            public Handler(IAuthenticationDataProvider authenticationDataProvider, ICurrentAccountProvider currentAccountProvider,
                 IApplicationDbContext applicationDbContext
                 ) : base(currentAccountProvider, applicationDbContext)
             {
+                _authenticationDataProvider = authenticationDataProvider;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
-                // GetAuthenticatedAccount - metoda ICurrentAccountProvidera, ktora juz implementowalismy wczesniej
-                // odczytuje aktualne konto z ciastka no i jak nie istnieje to rzuca wyjatki
-                // a jak istnieje to wyciaga sobie z bazy i zwraca cale to konto
-                var account = await _currentAccountProvider.GetAuthenticatedAccount();
+                var userId = _authenticationDataProvider.GetUserId();
+
+                var userAccount = await _applicationDbContext.AccountUsers
+                    .Where(au => au.UserId == userId && au.AccountId == request.AccountId)
+                    .Select(au => new
+                        {
+                            AccountName = au.Account.Name,
+                            au.AccountId
+                        })
+                    .FirstOrDefaultAsync();
+
+                if (userAccount == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 return new Result()
                 {
-                    Name = account?.Name
-                };
+                    Id = userAccount.AccountId
+                }; 
             }
         }
 
@@ -56,7 +69,7 @@ namespace HomeBudget.Application.Logic.Account
         {
             public Validator()
             {
-                // walidator pozostaje pusty bo nie mamy zadnych parametrow requesta
+
             }
         }
 

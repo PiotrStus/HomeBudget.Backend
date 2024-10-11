@@ -10,11 +10,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HomeBudget.Application.Logic.User.CreateUserWithAccountCommand.Request;
+using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
 
 namespace HomeBudget.Application.Logic.User
 {
-    public static class CreateUserWithAccountCommand
+    public static class CreateUserCommand
     {
         // tworzymy w środku klasy, które zawsze mają takie same nazwy
         // niezależnie jak nazywa się ta klasa statyczna u góry
@@ -102,41 +102,6 @@ namespace HomeBudget.Application.Logic.User
 
 
 
-                // nastepnie wykonujemy analogiczne czynnosci dla naszego konta
-
-                // czyli zaczynamy od utworzenia encji account
-                var account = new Domain.Entities.Account()
-                {
-                    // jako name mozemy wpisac email uzytkownika
-                    Name = request.Email,
-                    // dodajemy ta sama date co uzylismy przy tworzeniu uzytkownika
-                    CreateDate = utcNow,
-                };
-
-
-                // tak samo dodajemy ja sobie do contekstu
-                _applicationDbContext.Accounts.Add(account);
-
-                // ostatnia rzecza jaka musimy zrobic jest dodanie powiazania konta z uzytkownikiem
-                // czyli encji AccountUser
-
-                var accountUser = new AccountUser()
-                {
-                    // przypisujemy obiekty wyzej utworzone 
-                    // dzieki temu EF sam automatycznie podczas zapisuje zorientuje sie, ze
-                    // sa to powiazane ze soba obiekty i nada odpowiednie Idiki w bazie danych
-                    // takie aby byly ze soba powiazane
-                    Account = account,
-                    User = user
-                };
-
-
-                // dodajemy encje AccountUsers
-                _applicationDbContext.AccountUsers.Add(accountUser);
-
-                // POZOSTALA NAM JESZCZE NA KONCU ZAPISAC zapisac te wszystkie zmiany w bazie danych
-                
-                // robimy to metoda SaveChangesAsync
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
 
