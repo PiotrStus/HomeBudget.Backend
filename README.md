@@ -71,11 +71,14 @@ Planned future features include:
 - **Account Creation with Email Confirmation**  
    Users will be able to register for an account, and the registration will be confirmed through an activation link sent to their email address.
 
-- **User Management Independent of Accounts**  
-   The application will support the creation of users independently from accounts and assign them to specific accounts.
+- **Forgotten password recovery**
+   Users can request a password change.
+
+- **OAuth 2.0 Authorization**
+   Users can login to the app via e.g. GoogleAccount.
 
 - **Exportable CSV Reports**  
    Users will have the ability to generate and download budget and transaction reports in CSV format.
 
 - **Subcategories under Categories**  
-  Users will be able to create subcategories within existing categories to improve organization and navigation.
+   Users will be able to create subcategories within existing categories to improve organization and navigation.
