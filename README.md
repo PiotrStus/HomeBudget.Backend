@@ -71,11 +71,11 @@ Planned future features include:
 - **Account Creation with Email Confirmation**  
    Users will be able to register for an account, and the registration will be confirmed through an activation link sent to their email address.
 
-- **Forgotten password recovery**
+- **Forgotten Password Recovery**  
    Users can request a password change.
 
-- **OAuth 2.0 Authorization**
-   Users can login to the app via e.g. GoogleAccount.
+- **OAuth 2.0 Authorization**  
+   Users can login to the app via e.g GoogleAccount.
 
 - **Exportable CSV Reports**  
    Users will have the ability to generate and download budget and transaction reports in CSV format.
