@@ -12,6 +12,8 @@ namespace HomeBudget.Domain.Entities
     {
         public required string Email { get; set; }
 
+        public required bool IsActivated { get; set; }
+
         public required string HashedPassword { get; set; }
 
         public DateTimeOffset RegisterDate { get; set; }

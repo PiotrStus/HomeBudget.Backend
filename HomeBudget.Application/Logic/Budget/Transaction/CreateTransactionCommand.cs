@@ -11,6 +11,7 @@ using HomeBudget.Domain.Entities.Budget;
 using BudgetTransaction = HomeBudget.Domain.Entities.Budget.Transaction;
 using HomeBudget.Application.Logic.Events;
 using Microsoft.EntityFrameworkCore;
+using HomeBudget.Application.Exceptions;
 
 
 namespace HomeBudget.Application.Logic.Budget.Transaction
@@ -46,6 +47,11 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
+
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
 
                 var utcNow = DateTime.UtcNow;
 

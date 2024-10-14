@@ -50,6 +50,11 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 //var yearBudget = await _applicationDbContext.YearBudgets
                 //     .FirstOrDefaultAsync(y => y.AccountId == account.Id && y.Id == request.YearId, cancellationToken);
 

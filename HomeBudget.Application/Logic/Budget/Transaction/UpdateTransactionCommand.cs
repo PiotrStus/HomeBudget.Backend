@@ -51,7 +51,10 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
-
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
 
                 var categoryExist = await _applicationDbContext.Transactions.AnyAsync(y =>  y.Name == request.Name && y.CategoryId == request.CategoryId && y.AccountId == account.Id && y.Date == request.Date && y.Amount == request.Amount && !y.IsDeleted);
 

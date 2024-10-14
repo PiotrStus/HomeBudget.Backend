@@ -41,6 +41,11 @@ namespace HomeBudget.Application.Logic.Budget.Category
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var categoryExist = await _applicationDbContext.Categories.AnyAsync(y =>  y.Name == request.Name && y.CategoryType == request.CategoryType && y.AccountId == account.Id && y.IsDraft == request.IsDraft && !y.IsDeleted);
 
                 if (categoryExist)

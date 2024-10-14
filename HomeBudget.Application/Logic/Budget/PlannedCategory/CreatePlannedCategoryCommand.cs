@@ -41,6 +41,11 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var category = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == request.CategoryId && c.AccountId == account.Id && !c.IsDeleted);
 
                 if (category == null)

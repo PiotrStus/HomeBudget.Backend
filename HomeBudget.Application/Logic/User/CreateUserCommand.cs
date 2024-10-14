@@ -16,57 +16,31 @@ namespace HomeBudget.Application.Logic.User
 {
     public static class CreateUserCommand
     {
-        // tworzymy w środku klasy, które zawsze mają takie same nazwy
-        // niezależnie jak nazywa się ta klasa statyczna u góry
-        // czyli niezaleznie jaki to jest command
-
-        // Request jest na gorze, bo tak latwiej sie czyta kod
-        // ona implementuje interfejs mediatora
-        // bedziemy tutaj do wywolywania tych command i query
-        // uzywac mediatora
-        // ona implementuje request IRequest typu Result
         public class Request : IRequest<Result>
         {
             public required string Email { get; set; }
             public required string Password { get; set; }
         }
 
-
-        // Result zwraca dane, który zawiera dany command
-        // w tym przypadku jest to Id usera
         public class Result
         {
             public required int UserId { get; set; }
         }
 
-
-        // dodajemy handler do oblusgi z mediatora
-        // bazuje na klasie BaseCommandHandler (posiada rozne wymagane obiekty, potrzebne w kazdym commandzie)
-        // oraz impelemntuje interfejs tez z mediatora IRequestHandler od klas
-        // Request i Result
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
             private readonly IPasswordManager _passwordManager;
 
-            // te wszystie obiekty: currentAccountProvider, applicationDbContext 
-            // beda wstrzykniete przez DI, wiec nie musimy tutaj nic z nimi robic
-            // natomiast do dzialania klasy potrzebujemy jeszcze PasswordManagera wiec go dokladamy do paramaetrow
             public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager) : base(currentAccountProvider, applicationDbContext)
             {
                 _passwordManager = passwordManager;
             }
 
-
-            // tutaj obslugujemy logike tworzenia takiego konta
-            // czyli jesli przyjdzie command z uzytkownikiem to tutaj musimy zawrzec 
-            // cala logike tworzenia takiego konta
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
-                // pierwsze co robimy to sprawdzamy w bazie czy istnieje juz taki uzytkownik
                 var userExists = await _applicationDbContext.Users.AnyAsync(u => u.Email == request.Email);
                 if (userExists)
                 {
-                    // rzucamy wyjatek, ze konto o danym adresie email juz istnieje
                     throw new ErrorException("AccountWithThisEmailAlreadyExists");
                 }
 
@@ -83,6 +57,7 @@ namespace HomeBudget.Application.Logic.User
                     RegisterDate = utcNow,
                     // email to to co podal uzytkownik
                     Email = request.Email,
+                    IsActivated = false,
                     // jako haslo podajemy ciag pusty,
                     // w pliku DomainEntity to pole HashedPassword jest typu required
                     // wiec i tak trzeba je podac, zeby utworzyc w ogole obiekt

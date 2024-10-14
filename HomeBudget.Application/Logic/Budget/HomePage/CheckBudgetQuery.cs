@@ -40,6 +40,11 @@ public static class CheckBudgetQuery
         {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+            if (account == null)
+            {
+                throw new UnauthorizedException();
+            }
+
             var monthFromRequest = (Month)request.Date.Month;
 
             var yearFromRequest = request.Date.Year;

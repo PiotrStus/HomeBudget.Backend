@@ -39,6 +39,11 @@ namespace HomeBudget.Application.Logic.Notification
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var userIds = await _applicationDbContext.AccountUsers
                     .Where(au => au.AccountId == account.Id)
                     .Select(au => au.UserId)

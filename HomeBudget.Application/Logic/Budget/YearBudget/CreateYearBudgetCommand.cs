@@ -38,6 +38,11 @@ namespace HomeBudget.Application.Logic.Budget.YearBudget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var yearBudgetExist = await _applicationDbContext.YearBudgets.AnyAsync(y => y.Year == request.Year && y.AccountId == account.Id);
 
                 if (yearBudgetExist)

@@ -50,6 +50,11 @@ namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var model = await _applicationDbContext.MonthlyBudgets
                     //.Include(mb => mb.YearBudget) -> eager loading
                     .Where(c => c.Id == request.Id && c.YearBudget.AccountId == account.Id)

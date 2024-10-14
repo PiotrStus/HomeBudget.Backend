@@ -33,6 +33,11 @@ namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var model = await _applicationDbContext.MonthlyBudgets.FirstOrDefaultAsync(y => y.Id == request.Id && y.YearBudget.AccountId == account.Id);
 
                 if (model == null)

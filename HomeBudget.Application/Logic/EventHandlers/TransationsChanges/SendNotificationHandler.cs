@@ -40,6 +40,11 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionsChanges
         {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+            if (account == null)
+            {
+                throw new UnauthorizedException();
+            }
+
             var limitExceeded = await _categoryFilledLevelExceededChecker
                 .IsCategoryBudgetExceededOnTransactionChange(transactionId, account.Id, cancellationToken);
 

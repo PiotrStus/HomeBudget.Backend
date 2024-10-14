@@ -45,6 +45,10 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
 
                 var plannedCategory = await _applicationDbContext.MonthlyBudgetCategories
                     .Include(c => c.Category)

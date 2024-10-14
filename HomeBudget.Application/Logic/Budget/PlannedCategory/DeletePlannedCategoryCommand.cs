@@ -33,6 +33,11 @@ namespace HomeBudget.Application.Logic.Budget.PlannedCategory
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var model = await _applicationDbContext.MonthlyBudgetCategories.FirstOrDefaultAsync(c => c.Id == request.Id && c.MonthlyBudget.YearBudget.AccountId == account.Id);
 
                 if (model == null)

@@ -1,4 +1,5 @@
-﻿using HomeBudget.Application.Interfaces;
+﻿using HomeBudget.Application.Exceptions;
+using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities;
 using HomeBudget.Domain.Entities.Budget;
@@ -57,6 +58,11 @@ namespace HomeBudget.Application.Logic.Budget
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
+
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
 
                 var yearBudgets = await _applicationDbContext.YearBudgets
                      .Where(y => y.AccountId == account.Id)

@@ -1,5 +1,6 @@
 ﻿using EFCoreSecondLevelCacheInterceptor;
 using FluentValidation;
+using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Domain.Entities;
@@ -56,6 +57,10 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
 
                 var monthFromRequest = (Month)request.Date.Month;
 

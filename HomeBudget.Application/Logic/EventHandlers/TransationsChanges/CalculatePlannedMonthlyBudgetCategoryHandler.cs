@@ -1,4 +1,5 @@
-﻿using HomeBudget.Application.Interfaces;
+﻿using HomeBudget.Application.Exceptions;
+using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Application.Logic.Events;
 using HomeBudget.Application.Services;
@@ -22,6 +23,11 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionsChanges
         {
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+            if (account == null)
+            {
+                throw new UnauthorizedException();
+            }
+
             await _categoryFilledLevel.UpdateSumAfterTransactionAdded(notification.TransactionId, account.Id, cancellationToken);
         }
 
@@ -30,6 +36,11 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionsChanges
 
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+            if (account == null)
+            {
+                throw new UnauthorizedException();
+            }
+
             await _categoryFilledLevel.UpdateSumAfterTransactionDeleted(notification.TransactionId, account.Id, cancellationToken);
         }
 
@@ -37,6 +48,11 @@ namespace HomeBudget.Application.Logic.EventHandlers.TransactionsChanges
         {
 
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
+
+            if (account == null)
+            {
+                throw new UnauthorizedException();
+            }
 
             await _categoryFilledLevel.UpdateSumAfterTransactionUpdated(notification.TransactionId, account.Id, notification.PreviousDate, notification.PreviousCategoryId, cancellationToken);
         }

@@ -42,6 +42,11 @@ namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y => y.Id == request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month && y.TotalAmount == request.TotalAmount);
 
                 if (monthlyBudgetNotChanged)

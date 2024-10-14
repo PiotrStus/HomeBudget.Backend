@@ -42,6 +42,11 @@ namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
             {
                 var account = await _currentAccountProvider.GetAuthenticatedAccount();
 
+                if (account == null)
+                {
+                    throw new UnauthorizedException();
+                }
+
                 var categories = await _applicationDbContext.Categories
                     .Where(c => c.IsDraft && c.AccountId == account.Id)
                     .ToListAsync();

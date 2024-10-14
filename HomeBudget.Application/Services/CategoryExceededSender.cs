@@ -1,4 +1,5 @@
 ﻿using EFCoreSecondLevelCacheInterceptor;
+using HomeBudget.Application.Exceptions;
 using HomeBudget.Application.Interfaces;
 using HomeBudget.Domain.Common;
 using HomeBudget.Domain.Entities;
@@ -32,6 +33,11 @@ namespace HomeBudget.Application.Services
                 .ToListAsync(cancellationToken);
 
             var account = await _currentAccountProvider.GetAuthenticatedAccount();
+
+            if (account == null)
+            {
+                throw new UnauthorizedException();
+            }
 
             if (userIds.Any())
             {

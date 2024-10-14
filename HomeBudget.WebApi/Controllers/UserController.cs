@@ -8,6 +8,7 @@ using HomeBudget.Infrastructure.Auth;
 using HomeBudget.WebApi.Application.Auth;
 using HomeBudget.WebApi.Application.Response;
 using HomeBudget.Application.Logic.Notification;
+using HomeBudget.Application.Interfaces;
 
 namespace HomeBudget.WebApi.Controllers
 {
@@ -27,6 +28,7 @@ namespace HomeBudget.WebApi.Controllers
         private readonly CookieSettings? _cookieSettings;
         // interfejs, ktory pozwala na generowanie tych aniforgery tokenow przez framework
         private readonly IAntiforgery _antiforgery;
+        private readonly IEmailSender _emailSender;
 
         // dodajemy 2 properties w konstruktorze, ktora zostana wstrzykniete przez DI
         // IOptions<CookieSettings> cookieSettings => jedna z nich jest ustawienie ciastek,
@@ -37,10 +39,12 @@ namespace HomeBudget.WebApi.Controllers
             IOptions<CookieSettings> cookieSettings,
             JwtManager jwtManager,
             IAntiforgery antiforgery,
+            IEmailSender emailSender,
             IMediator mediator) : base(logger, mediator)
         {
             _jwtManager = jwtManager;
             _antiforgery = antiforgery;
+            _emailSender = emailSender;
             // jesli sa ustawienia to przypisujemy wartosc a jesli nie to null
             _cookieSettings = cookieSettings != null ? cookieSettings.Value : null;
         }
@@ -61,9 +65,10 @@ namespace HomeBudget.WebApi.Controllers
             // w projekcie Application
             var createUserResult = await _mediator.Send(model);
             // request do zakladania konta tez zwraca UserId
-            var token = _jwtManager.GenerateUserToken(createUserResult.UserId);
-            SetTokenCookie(token);
-            return Ok(new JwtToken() { AccessToken = token });
+            //var token = _jwtManager.GenerateUserToken(createUserResult.UserId);
+            //SetTokenCookie(token);
+            //return Ok(new JwtToken() { AccessToken = token });
+            return Ok(createUserResult);
         }
 
         [HttpPost]
@@ -80,6 +85,7 @@ namespace HomeBudget.WebApi.Controllers
             // jesli mamy ten token to zwracamy ciastko
             SetTokenCookie(token);
             // zwracanie respona w formacie json obiektu jwttoken, ktory zawiera accesstoken
+            await _emailSender.SendEmail("test@dev.pl", "test subject", "test body");
             return Ok(new JwtToken() { AccessToken = token });
         }
 
