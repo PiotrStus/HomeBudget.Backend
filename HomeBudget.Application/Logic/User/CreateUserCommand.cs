@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
 using HomeBudget.Domain.Enums;
+using Microsoft.Extensions.Configuration;
 
 namespace HomeBudget.Application.Logic.User
 {
@@ -31,10 +32,14 @@ namespace HomeBudget.Application.Logic.User
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
             private readonly IPasswordManager _passwordManager;
+            private readonly IEmailSender _emailSender;
+            private readonly IConfiguration _configuration;
 
-            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager) : base(currentAccountProvider, applicationDbContext)
+            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager, IEmailSender emailSender, IConfiguration configuration) : base(currentAccountProvider, applicationDbContext)
             {
                 _passwordManager = passwordManager;
+                _emailSender = emailSender;
+                _configuration = configuration;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
@@ -86,10 +91,15 @@ namespace HomeBudget.Application.Logic.User
 
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
+                var webAppBaseUrl = _configuration.GetValue<string>("WebAppBaseUrl");
+
+                var confirmationLink = $"{webAppBaseUrl}/?guid={userGuid.UserGuid}";
+
+                await _emailSender.SendEmail($"{user.Email}", "Budżet domowy - potwierdzenie aktywacji konta", $"Proszę potwierdź swoje konto klikając w poniższy link: {confirmationLink}");
 
                 // po tym wszystkich potrzebujemy jeszcze zwrocic rezultat
                 // ktory wymaga id usera
-                
+
                 return new Result()
                 { 
                     // jest to Id usera, ktore jest nadane przez baze danych

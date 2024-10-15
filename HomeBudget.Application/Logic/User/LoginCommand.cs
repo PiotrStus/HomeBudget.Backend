@@ -79,6 +79,12 @@ namespace HomeBudget.Application.Logic.User
                     // i podajemy tutaj z bazdy danych zahasowane haslo i haslo wprowadzone
                     // przez uzytkownika w requestie
                     // w srodku te metoda porownuje hasla, wylicza hasha na nowo
+
+                    if(!user.IsActivated)
+                    {
+                        throw new ErrorException("UserNotConfirmed");
+                    }
+
                     if (_passwordManager.VerifyPassword(user.HashedPassword, request.Password))
                     {
                         // jesli wszystko sie zgadza to zwracamy id uzytkownika

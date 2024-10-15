@@ -28,7 +28,6 @@ namespace HomeBudget.WebApi.Controllers
         private readonly CookieSettings? _cookieSettings;
         // interfejs, ktory pozwala na generowanie tych aniforgery tokenow przez framework
         private readonly IAntiforgery _antiforgery;
-        private readonly IEmailSender _emailSender;
 
         // dodajemy 2 properties w konstruktorze, ktora zostana wstrzykniete przez DI
         // IOptions<CookieSettings> cookieSettings => jedna z nich jest ustawienie ciastek,
@@ -39,12 +38,10 @@ namespace HomeBudget.WebApi.Controllers
             IOptions<CookieSettings> cookieSettings,
             JwtManager jwtManager,
             IAntiforgery antiforgery,
-            IEmailSender emailSender,
             IMediator mediator) : base(logger, mediator)
         {
             _jwtManager = jwtManager;
             _antiforgery = antiforgery;
-            _emailSender = emailSender;
             // jesli sa ustawienia to przypisujemy wartosc a jesli nie to null
             _cookieSettings = cookieSettings != null ? cookieSettings.Value : null;
         }
@@ -85,10 +82,8 @@ namespace HomeBudget.WebApi.Controllers
             // jesli mamy ten token to zwracamy ciastko
             SetTokenCookie(token);
             // zwracanie respona w formacie json obiektu jwttoken, ktory zawiera accesstoken
-            await _emailSender.SendEmail("test@dev.pl", "test subject", "test body");
             return Ok(new JwtToken() { AccessToken = token });
         }
-
 
         [HttpPost]
         public async Task<ActionResult> Logout()
@@ -98,6 +93,15 @@ namespace HomeBudget.WebApi.Controllers
             // usuwa ciastko
             DeleteTokenCookie();
             return Ok(logoutResult);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ConfirmUser([FromBody] ConfirmUserCommand.Request model)
+        {
+            var confirmResult = await _mediator.Send(model);
+            var token = _jwtManager.GenerateUserToken(confirmResult.UserId);
+            SetTokenCookie(token);
+            return Ok(new JwtToken() { AccessToken = token });
         }
 
         [HttpGet]
