@@ -19,6 +19,8 @@ namespace HomeBudget.Infrastructure.Persistance
         }
         public DbSet<User> Users { get; set; }
 
+        public DbSet<UserConfirmGuid> UserConfirmGuids { get; set; }
+
         public DbSet<Account> Accounts { get; set; }
 
         public DbSet<AccountUser> AccountUsers { get; set; }

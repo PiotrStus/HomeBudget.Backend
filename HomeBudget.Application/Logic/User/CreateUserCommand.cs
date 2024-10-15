@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
+using HomeBudget.Domain.Enums;
 
 namespace HomeBudget.Application.Logic.User
 {
@@ -69,13 +70,19 @@ namespace HomeBudget.Application.Logic.User
                 // wykorzystujac password managera
                 user.HashedPassword = _passwordManager.HashPassword(request.Password);
 
+                var userGuid = new UserConfirmGuid()
+                {
+                    User = user,
+                    UserGuid = Guid.NewGuid(),
+                    GuidType = UserGuidType.ConfirmAccount
+                };
+
                 // nastepnie dodajemy do contextu EF do kolekcji users danego uzytkownika
                 // on tutaj sie jeszcze nie zapisal do bazy danych
                 // jest narazie dodany tutaj do pamieci 
                 // natomiast zapis nastapi pozniej 
                 _applicationDbContext.Users.Add(user);
-
-
+                _applicationDbContext.UserConfirmGuids.Add(userGuid);
 
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

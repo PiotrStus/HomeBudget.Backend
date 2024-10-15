@@ -14,6 +14,8 @@ namespace HomeBudget.Application.Interfaces
     {
         DbSet<User> Users { get; set; }
 
+        DbSet<UserConfirmGuid> UserConfirmGuids { get; set; }
+
         DbSet<Account> Accounts { get; set; }
 
         DbSet<AccountUser> AccountUsers { get; set; }
