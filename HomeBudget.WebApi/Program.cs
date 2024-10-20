@@ -71,7 +71,7 @@ namespace HomeBudget.WebApi
             // wywolanie metody rozszerzajacej, ktora zarejestruje EF i wszystkie ustawienia w kontenerze Dependency Injection
             builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
 
-            builder.Services.AddEmailSender();
+            builder.Services.AddEmailServices();
 
 
             // to jest aby antyforgery token dzialal w ASP .NET Corze

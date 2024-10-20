@@ -11,14 +11,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HomeBudget.Infrastructure.Email;
+using HomeBudget.Infrastructure.Email.Template;
+using HomeBudget.Infrastructure.Email.Templates;
 
 namespace HomeBudget.Infrastructure.Auth
 {
     public static class EmailConfiguration
     {
-        public static IServiceCollection AddEmailSender(this IServiceCollection services)
+        public static IServiceCollection AddEmailServices(this IServiceCollection services)
         {
             services.AddScoped<IEmailSender, ConsoleEmailSender>();
+            services.AddScoped<ITemplateProvider, TemplateProvider>();
+            services.AddScoped<ITemplateRenderer, TemplateRenderer>();
+
             return services;
         }
     }

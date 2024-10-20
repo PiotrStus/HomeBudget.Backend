@@ -33,14 +33,14 @@ namespace HomeBudget.Application.Logic.User
         public class Handler : BaseCommandHandler, IRequestHandler<Request, Result>
         {
             private readonly IPasswordManager _passwordManager;
-            private readonly IEmailSender _emailSender;
             private readonly ILinkProvider _linkProvider;
+            private readonly EmailProvider _emailProvider;
 
-            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager, IEmailSender emailSender , ILinkProvider linkProvider) : base(currentAccountProvider, applicationDbContext)
+            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager, ILinkProvider linkProvider, EmailProvider emailProvider) : base(currentAccountProvider, applicationDbContext)
             {
                 _passwordManager = passwordManager;
-                _emailSender = emailSender;
                 _linkProvider = linkProvider;
+                _emailProvider = emailProvider;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
@@ -94,20 +94,23 @@ namespace HomeBudget.Application.Logic.User
 
                 var confirmationLink = _linkProvider.GenerateConfirmationLink(userGuid.UserGuid);
 
-                await _emailSender.SendEmail($"{user.Email}", "Budżet domowy - potwierdzenie aktywacji konta", $"Proszę potwierdź swoje konto klikając w poniższy link: {confirmationLink}");
 
-                // po tym wszystkich potrzebujemy jeszcze zwrocic rezultat
-                // ktory wymaga id usera
+
+                //await _emailSender.SendEmail($"{user.Email}", "Budżet domowy - potwierdzenie aktywacji konta", $"Proszę potwierdź swoje konto klikając w poniższy link: {confirmationLink}");
+
+                var model = new
+                {
+                    Username1 = user.Email,
+                    ConfirmationLink = confirmationLink
+                };
+
+
+                await _emailProvider.SendEmail("confirmAccount", user.Email, model, "Budżet domowy - potwierdzenie aktywacji konta");
+
+
 
                 return new Result()
                 { 
-                    // jest to Id usera, ktore jest nadane przez baze danych
-                    // bo po zapisie danych w bazie danych przez EF
-                    // ten id => user.Id, ktory jest kluczem glownym naszej encji
-                    // zostanie automatycznie przez Entity Framework wypelniony takim id
-                    // jakie nada baza danych
-
-                    // czyli dostaniemy id nowoutworzonego uzytkownika
                     UserId = user.Id, 
                 };
             }
@@ -130,6 +133,5 @@ namespace HomeBudget.Application.Logic.User
                 RuleFor(x => x.Password).MaximumLength(50);
             }
         }
-
     }
 }
