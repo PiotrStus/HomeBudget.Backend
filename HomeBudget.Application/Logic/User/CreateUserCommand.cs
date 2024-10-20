@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using static HomeBudget.Application.Logic.User.CreateUserCommand.Request;
 using HomeBudget.Domain.Enums;
 using Microsoft.Extensions.Configuration;
+using HomeBudget.Application.Services;
 
 namespace HomeBudget.Application.Logic.User
 {
@@ -33,13 +34,13 @@ namespace HomeBudget.Application.Logic.User
         {
             private readonly IPasswordManager _passwordManager;
             private readonly IEmailSender _emailSender;
-            private readonly IConfiguration _configuration;
+            private readonly ILinkProvider _linkProvider;
 
-            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager, IEmailSender emailSender, IConfiguration configuration) : base(currentAccountProvider, applicationDbContext)
+            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager, IEmailSender emailSender , ILinkProvider linkProvider) : base(currentAccountProvider, applicationDbContext)
             {
                 _passwordManager = passwordManager;
                 _emailSender = emailSender;
-                _configuration = configuration;
+                _linkProvider = linkProvider;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
@@ -91,9 +92,7 @@ namespace HomeBudget.Application.Logic.User
 
                 await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-                var webAppBaseUrl = _configuration.GetValue<string>("WebAppBaseUrl");
-
-                var confirmationLink = $"{webAppBaseUrl}/?guid={userGuid.UserGuid}";
+                var confirmationLink = _linkProvider.GenerateConfirmationLink(userGuid.UserGuid);
 
                 await _emailSender.SendEmail($"{user.Email}", "Budżet domowy - potwierdzenie aktywacji konta", $"Proszę potwierdź swoje konto klikając w poniższy link: {confirmationLink}");
 

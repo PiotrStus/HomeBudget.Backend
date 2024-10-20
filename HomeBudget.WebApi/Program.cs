@@ -116,7 +116,7 @@ namespace HomeBudget.WebApi
             });
 
             // wywolanie metody
-            builder.Services.AddApplicationServices();
+            builder.Services.AddApplicationServices(builder.Configuration);
 
             // wywolanie walidatorow
             builder.Services.AddValidators();
@@ -182,7 +182,7 @@ namespace HomeBudget.WebApi
                 // do naszej aplikacji frontendowej
                 // wiec WebAppBaseUrl to jest po prostu adres aplikacji frontendowej
                 // ktora bedziemy tworzyc pozniej
-                .WithOrigins(app.Configuration.GetValue<string>("WebAppBaseUrl") ?? "")
+                .WithOrigins(app.Configuration.GetValue<string>("WebApp:BaseUrl") ?? "")
                 // dodajemy tez domeny, ktore sa w AdditionalCorsOrigins
                 // to sie czasem przydaje, kiedy chcemy sie dostawac do naszego api
                 // z kilku domen, np. na jakis testach albo po prostu chcemy gdzies sie

@@ -10,6 +10,7 @@ using HomeBudget.Application.Interfaces;
 using HomeBudget.Application.Logic.Abstractions;
 using HomeBudget.Application.Logic.Validators;
 using HomeBudget.Application.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace HomeBudget.Application
 {
@@ -17,7 +18,9 @@ namespace HomeBudget.Application
     {
         // AddApplicationServices -> metoda rozszerzenia dla IServiceCollection
         // IServiceCollection jest interfejsem używanym do rejestracji usług w kontenerze DI.
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+
+
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             // w tej metodzie dodajemy implementacje do interfejsu za pomocą klas w folderze Services
             // AddScoped<ICurrentAccountProvider, CurrentAccountProvider>() rejestruje implementację
@@ -33,6 +36,12 @@ namespace HomeBudget.Application
             services.AddScoped<CategoryExceededSender>();
 
             services.AddScoped<IUserAccountsProvider, UserAccountsProvider>();
+
+            //var webAppBaseUrl = configuration.GetValue<string>("WebAppBaseUrl");
+
+            services.Configure<LinkProviderSettings>(configuration.GetSection("WebApp"));
+
+            services.AddScoped<ILinkProvider, LinkProvider>();
 
             return services;
         }
