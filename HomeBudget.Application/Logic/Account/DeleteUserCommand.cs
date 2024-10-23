@@ -42,7 +42,7 @@ namespace HomeBudget.Application.Logic.Budget.Account
 
                 if (model == null)
                 {
-                    throw new UnauthorizedException();
+                    throw new ErrorException("CanNotDeleteAdmin");
                 }
 
                 _applicationDbContext.AccountUsers.Remove(model);

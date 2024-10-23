@@ -34,6 +34,8 @@ namespace HomeBudget.Application.Logic.Budget.Account
 
                 public required string Email { get; set; }
 
+                public required bool isAdmin { get; set; }
+
             }
         }
 
@@ -57,6 +59,7 @@ namespace HomeBudget.Application.Logic.Budget.Account
                      {
                          Id = c.UserId,
                          Email = c.User.Email,
+                         isAdmin = c.IsAdmin,
                      })
                      .Cacheable()
                      .ToListAsync();

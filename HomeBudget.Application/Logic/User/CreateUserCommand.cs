@@ -100,7 +100,7 @@ namespace HomeBudget.Application.Logic.User
 
                 var model = new
                 {
-                    Username1 = user.Email,
+                    Username = user.Email,
                     ConfirmationLink = confirmationLink
                 };
 

@@ -21,7 +21,7 @@ namespace HomeBudget.Application.Services
 
         public string GenerateConfirmationLink(Guid confirmationGuid)
         {
-            var confirmationLink = $"{_baseUrl}/{_confirmActionRelativeUrl}/?guid={confirmationGuid}";
+            var confirmationLink = $"{_baseUrl}{_confirmActionRelativeUrl}/?guid={confirmationGuid}";
 
             return confirmationLink ;
         }
