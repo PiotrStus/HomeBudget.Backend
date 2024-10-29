@@ -15,15 +15,21 @@ namespace HomeBudget.Application.Services
 
         public LinkProvider(IOptions<LinkProviderSettings> settings)
         {
-            _baseUrl = settings.Value.BaseUrl;
-            _confirmActionRelativeUrl = settings.Value.ConfirmActionRelativeUrl;
+            _baseUrl = settings.Value.BaseUrl?.TrimEnd('/');
+            _confirmActionRelativeUrl = settings.Value.ConfirmActionRelativeUrl?.TrimStart('/');
         }
 
         public string GenerateConfirmationLink(Guid confirmationGuid)
         {
-            var confirmationLink = $"{_baseUrl}{_confirmActionRelativeUrl}/?guid={confirmationGuid}";
+            //var confirmationLink = $"{_baseUrl}{_confirmActionRelativeUrl}/?guid={confirmationGuid}";
 
-            return confirmationLink ;
+            var builder = new UriBuilder(_baseUrl!)
+            {
+                Path = $"{_confirmActionRelativeUrl}",
+                Query = $"guid={confirmationGuid}"
+            };
+
+            return builder.Uri.ToString();
         }
     }
 }
