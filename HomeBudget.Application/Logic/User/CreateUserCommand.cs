@@ -34,13 +34,13 @@ namespace HomeBudget.Application.Logic.User
         {
             private readonly IPasswordManager _passwordManager;
             private readonly ILinkProvider _linkProvider;
-            private readonly EmailProvider _emailProvider;
+            private readonly EmailManager _emailManager;
 
-            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager, ILinkProvider linkProvider, EmailProvider emailProvider) : base(currentAccountProvider, applicationDbContext)
+            public Handler(ICurrentAccountProvider currentAccountProvider, IApplicationDbContext applicationDbContext, IPasswordManager passwordManager, ILinkProvider linkProvider, EmailManager emailManager) : base(currentAccountProvider, applicationDbContext)
             {
                 _passwordManager = passwordManager;
                 _linkProvider = linkProvider;
-                _emailProvider = emailProvider;
+                _emailManager = emailManager;
             }
 
             public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
@@ -105,7 +105,7 @@ namespace HomeBudget.Application.Logic.User
                 };
 
 
-                await _emailProvider.SendEmail("confirmAccount", user.Email, model, "Budżet domowy - potwierdzenie aktywacji konta");
+                await _emailManager.SendEmail("confirmAccount", user.Email, model);
 
 
 

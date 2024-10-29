@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Application.Interfaces
 {
-    public interface ITemplateProvider
+    public interface ITemplate
     {
-        Task<ITemplate?> GetTemplateByName(string name);
+        string Body { get; }
+        string Subject { get; }
     }
 }

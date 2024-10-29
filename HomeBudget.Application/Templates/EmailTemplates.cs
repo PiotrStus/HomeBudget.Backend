@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HomeBudget.Application.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,12 @@ namespace HomeBudget.Application.Templates
                 "confirmAccount", new EmailTemplate(
                     @"<h3>Witaj, {{ username }}!</h3>
                       <p><a href='{{ confirmationLink }}'>Kliknij tutaj, aby potwierdzić aktywację konta</a></p>",
-                    "Potwierdzenie aktywacji konta"
+                    "Budżet domowy - potwierdzenie aktywacji konta"
                 )
             }
         };
         public static IReadOnlyDictionary<string, EmailTemplate> Templates => _templates;
-        public class EmailTemplate
+        public class EmailTemplate : ITemplate
         {
             public string Body { get; set; }
             public string Subject { get; set; }

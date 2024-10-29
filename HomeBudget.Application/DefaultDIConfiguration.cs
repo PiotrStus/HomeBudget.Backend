@@ -43,7 +43,7 @@ namespace HomeBudget.Application
 
             services.AddScoped<ILinkProvider, LinkProvider>();
 
-            services.AddScoped<EmailProvider>();
+            services.AddScoped<EmailManager>();
 
             return services;
         }

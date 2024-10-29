@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace HomeBudget.Application.Services
 {
-    public class EmailProvider
+    public class EmailManager
     {
         private readonly ITemplateProvider _templateProvider;
         private readonly ITemplateRenderer _templateRenderer;
         private readonly IEmailSender _emailSender;
 
-        public EmailProvider(ITemplateProvider templateProvider, ITemplateRenderer templateRenderer, IEmailSender emailSender)
+        public EmailManager(ITemplateProvider templateProvider, ITemplateRenderer templateRenderer, IEmailSender emailSender)
         {
             _templateProvider = templateProvider;
             _templateRenderer = templateRenderer;
             _emailSender = emailSender;
         }
 
-        public async Task SendEmail(string templateName, string to, object model, string subject)
+        public async Task SendEmail(string templateName, string to, object model)
         {
             var template = await _templateProvider.GetTemplateByName(templateName);
 
@@ -30,7 +30,9 @@ namespace HomeBudget.Application.Services
                 throw new ErrorException("EmailSendingError");
             }
 
-            var body = _templateRenderer.FillTemplate(template, model);
+            var body = _templateRenderer.FillTemplate(template.Body, model);
+
+            var subject = _templateRenderer.FillTemplate(template.Subject, model);
 
             await _emailSender.SendEmail(to, subject, body);
         }
