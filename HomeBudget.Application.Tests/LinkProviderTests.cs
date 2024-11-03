@@ -27,7 +27,7 @@ namespace HomeBudget.Application.Tests
 
             var linkProvider = new LinkProvider(Options.Create(settings));
 
-            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}/?guid={confirmationGuid}";
+            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}?guid={confirmationGuid}";
             var result = linkProvider.GenerateConfirmationLink(confirmationGuid);
 
             Assert.Equal(expectedUrl, result);
@@ -47,7 +47,7 @@ namespace HomeBudget.Application.Tests
 
             var linkProvider = new LinkProvider(Options.Create(settings));
 
-            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}/?guid={confirmationGuid}";
+            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}?guid={confirmationGuid}";
             var result = linkProvider.GenerateConfirmationLink(confirmationGuid);
 
             Assert.Equal(expectedUrl, result);
@@ -67,7 +67,7 @@ namespace HomeBudget.Application.Tests
 
             var linkProvider = new LinkProvider(Options.Create(settings));
 
-            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}/?guid={confirmationGuid}";
+            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}?guid={confirmationGuid}";
             var result = linkProvider.GenerateConfirmationLink(confirmationGuid);
 
             Assert.Equal(expectedUrl, result);

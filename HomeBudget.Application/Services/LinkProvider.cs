@@ -5,8 +5,10 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 
 namespace HomeBudget.Application.Services
@@ -33,12 +35,19 @@ namespace HomeBudget.Application.Services
             
             var builder = new UriBuilder(_baseUrl!)
             {
-                Path = $"{_confirmActionRelativeUrl}/",
-                Query = $"guid={confirmationGuid}"
+                Path = $"{_confirmActionRelativeUrl}",
+                //Query = $"guid={confirmationGuid}? "
             };
+            string additionalText = "sd? ?df";
 
+            // Łączenie GUID z dodatkowymi znakami
+            string inputString = confirmationGuid + additionalText;
+            //var test = "this is a test";
+            string encodedGuid = Uri.EscapeDataString(confirmationGuid.ToString());
+            //string encodedGuid = WebUtility.UrlEncode(confirmationGuid.ToString() + "sd? ?df");
+            builder.Query = $"guid={encodedGuid}";
 
-            return builder.Uri.ToString();
+            return builder.ToString();
         }
     }
 }
