@@ -13,10 +13,10 @@ namespace HomeBudget.Application.Tests
     public class LinkProviderTests
     {
         [Theory]
-        [InlineData("http://localhost:3000", "register/confirmAccount")]
-        [InlineData("http://localhost:3000/", "/register/confirmAccount")]
-        [InlineData("http://localhost:3000/", "register/confirmAccount/")]
-        public void ShouldGenerateCorrectUrlWithVariousBaseUrls(string baseUrl, string confirmActionRelativeUrl)
+        [InlineData("http://localhost:3000", "register/confirmAccount", "http://localhost:3000/register/confirmAccount?guid=")]
+        [InlineData("http://localhost:3000/", "/register/confirmAccount", "http://localhost:3000/register/confirmAccount?guid=")]
+        [InlineData("http://localhost:3000/", "register/confirmAccount/", "http://localhost:3000/register/confirmAccount?guid=")]
+        public void ShouldGenerateCorrectUrlWithVariousBaseUrls(string baseUrl, string confirmActionRelativeUrl, string combinedUrl)
         {
             var confirmationGuid = Guid.NewGuid();
             var settings = new LinkProviderSettings
@@ -27,47 +27,7 @@ namespace HomeBudget.Application.Tests
 
             var linkProvider = new LinkProvider(Options.Create(settings));
 
-            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}?guid={confirmationGuid}";
-            var result = linkProvider.GenerateConfirmationLink(confirmationGuid);
-
-            Assert.Equal(expectedUrl, result);
-        }
-
-        [Theory]
-        [InlineData("http://localhost:3000/", "register/confirmAccount")] 
-
-        public void ShouldTrimBaseUrl(string baseUrl, string confirmActionRelativeUrl)
-        {
-            var confirmationGuid = Guid.NewGuid();
-            var settings = new LinkProviderSettings
-            {
-                BaseUrl = baseUrl,
-                ConfirmActionRelativeUrl = confirmActionRelativeUrl
-            };
-
-            var linkProvider = new LinkProvider(Options.Create(settings));
-
-            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}?guid={confirmationGuid}";
-            var result = linkProvider.GenerateConfirmationLink(confirmationGuid);
-
-            Assert.Equal(expectedUrl, result);
-        }
-
-        [Theory]
-        [InlineData("http://localhost:3000", "/register/confirmAccount")]
-
-        public void ShouldTrimConfirmActionRelativeUrl(string baseUrl, string confirmActionRelativeUrl)
-        {
-            var confirmationGuid = Guid.NewGuid();
-            var settings = new LinkProviderSettings
-            {
-                BaseUrl = baseUrl,
-                ConfirmActionRelativeUrl = confirmActionRelativeUrl
-            };
-
-            var linkProvider = new LinkProvider(Options.Create(settings));
-
-            var expectedUrl = $"{baseUrl.TrimEnd('/')}/{confirmActionRelativeUrl.TrimStart('/')}?guid={confirmationGuid}";
+            var expectedUrl = $"{combinedUrl}{confirmationGuid}";
             var result = linkProvider.GenerateConfirmationLink(confirmationGuid);
 
             Assert.Equal(expectedUrl, result);

@@ -20,15 +20,5 @@ namespace HomeBudget.Application.Templates
             }
         };
         public static IReadOnlyDictionary<string, EmailTemplate> Templates => _templates;
-        public class EmailTemplate : ITemplate
-        {
-            public string Body { get; set; }
-            public string Subject { get; set; }
-            public EmailTemplate(string body, string subject)
-            {
-                Body = body;
-                Subject = subject;
-            }
-        }
     }
 }

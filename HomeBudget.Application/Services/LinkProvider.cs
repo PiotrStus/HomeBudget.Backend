@@ -21,7 +21,7 @@ namespace HomeBudget.Application.Services
         public LinkProvider(IOptions<LinkProviderSettings> settings)
         {
             _baseUrl = settings.Value.BaseUrl?.TrimEnd('/');
-            _confirmActionRelativeUrl = settings.Value.ConfirmActionRelativeUrl?.TrimStart('/');
+            _confirmActionRelativeUrl = settings.Value.ConfirmActionRelativeUrl?.Trim('/');
 
             if (string.IsNullOrWhiteSpace(_confirmActionRelativeUrl))
             {
