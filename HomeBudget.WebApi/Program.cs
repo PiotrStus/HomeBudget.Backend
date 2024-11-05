@@ -10,6 +10,7 @@ using HomeBudget.WebApi.Application.Auth;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using System.Transactions;
+using HomeBudget.Infrastructure.Email.Postmark;
 
 namespace HomeBudget.WebApi
 {
@@ -70,6 +71,8 @@ namespace HomeBudget.WebApi
             builder.Services.AddDatabaseCache();
             // wywolanie metody rozszerzajacej, ktora zarejestruje EF i wszystkie ustawienia w kontenerze Dependency Injection
             builder.Services.AddSqlDatabase(builder.Configuration.GetConnectionString("MainDbSql")!);
+
+            builder.Services.AddPostmarkHttpClient(builder.Configuration);
 
             builder.Services.AddEmailServices();
 
