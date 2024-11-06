@@ -17,7 +17,7 @@ namespace HomeBudget.Infrastructure.Email.Postmark
 
         public static IServiceCollection AddPostmarkHttpClient(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<PostmarkSettings>(configuration.GetSection("PostmarkSettings"));
+            services.Configure<PostmarkSettings>(configuration.GetSection("Postmark"));
 
             services.AddHttpClient(HTTP_CLIENT_NAME, (serviceProvider, c) =>
             {

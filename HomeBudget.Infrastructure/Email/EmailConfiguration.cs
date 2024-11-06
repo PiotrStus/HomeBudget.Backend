@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using HomeBudget.Infrastructure.Email;
 using HomeBudget.Infrastructure.Email.Template;
 using HomeBudget.Infrastructure.Email.Templates;
+using HomeBudget.Infrastructure.Email.Postmark;
 
 namespace HomeBudget.Infrastructure.Auth
 {
@@ -20,7 +21,7 @@ namespace HomeBudget.Infrastructure.Auth
     {
         public static IServiceCollection AddEmailServices(this IServiceCollection services)
         {
-            services.AddScoped<IEmailSender, ConsoleEmailSender>();
+            services.AddScoped<IEmailSender, PostmarkEmailSender>();
             services.AddScoped<ITemplateProvider, TemplateProvider>();
             services.AddScoped<ITemplateRenderer, TemplateRenderer>();
 
