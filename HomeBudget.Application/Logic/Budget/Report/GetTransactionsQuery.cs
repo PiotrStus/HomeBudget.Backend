@@ -107,6 +107,7 @@ namespace HomeBudget.Application.Logic.Budget.Report
                 }
 
                 var transactions = await query
+                    .OrderBy(t => t.CreationDate)
                     .Skip((request.Page - 1) * request.PageSize)
                     .Take(request.PageSize)
                     .Select(t => new Result.Transaction
