@@ -68,8 +68,6 @@ This API is designed in a **Remote Procedure Call (RPC)** style, allowing client
 
 ## Future Enhancements
 Planned future features include:
-- **Account Creation with Email Confirmation**  
-   Users will be able to register for an account, and the registration will be confirmed through an activation link sent to their email address.
 
 - **Forgotten Password Recovery**  
    Users can request a password change.
