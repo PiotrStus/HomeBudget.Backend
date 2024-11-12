@@ -8,7 +8,7 @@ namespace HomeBudget.Infrastructure.Email.Postmark
 {
     public class PostmarkSettings
     {
-        public const string From = "admin@finbudget.pl";
+        public string? From { get; set; }
         public string? MessageStream { get; set; }
 
         public string? ApiToken { get; set; }

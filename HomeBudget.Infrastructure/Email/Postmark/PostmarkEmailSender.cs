@@ -29,17 +29,14 @@ namespace HomeBudget.Infrastructure.Email.Postmark
         {
             var httpClient = _clientFactory.CreateClient(PostmarkConfiguration.HTTP_CLIENT_NAME);
 
-            var values = new Dictionary<string, object>();
-
-            values.Add("MessageStream", _postmarkSettings.MessageStream!);
-
-            values.Add("To", String.Join(',', to));
-
-            values.Add("From", PostmarkSettings.From);
-
-            values.Add("Subject", subject);
-
-            values.Add("HtmlBody", body);
+            var values = new Dictionary<string, object>
+            {
+                { "MessageStream", _postmarkSettings.MessageStream! },
+                { "To", String.Join(',', to) },
+                { "From", _postmarkSettings.From! },
+                { "Subject", subject },
+                { "HtmlBody", body }
+            };
 
             var response = await httpClient.PostAsync("/email", JsonContent.Create(values));
 
