@@ -19,7 +19,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: '**/HomeBudget.WebApi.csproj'
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory))'
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
     modifyOutputPath: false
 - task: AzureRmWebAppDeployment@4
   inputs:
