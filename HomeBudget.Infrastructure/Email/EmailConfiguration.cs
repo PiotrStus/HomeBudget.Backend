@@ -21,7 +21,7 @@ namespace HomeBudget.Infrastructure.Auth
     {
         public static IServiceCollection AddEmailServices(this IServiceCollection services)
         {
-            services.AddScoped<IEmailSender, ConsoleEmailSender>();
+            services.AddScoped<IEmailSender, PostmarkEmailSender>();
             services.AddScoped<ITemplateProvider, TemplateProvider>();
             services.AddScoped<ITemplateRenderer, TemplateRenderer>();
 
