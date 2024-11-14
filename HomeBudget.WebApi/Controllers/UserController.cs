@@ -96,6 +96,7 @@ namespace HomeBudget.WebApi.Controllers
         }
 
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<ActionResult> ConfirmUser([FromBody] ConfirmUserCommand.Request model)
         {
             var confirmResult = await _mediator.Send(model);
