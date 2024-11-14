@@ -82,12 +82,23 @@ namespace HomeBudget.Application.Logic.User
                 }
                 else
                 {
+                    if (!_passwordManager.VerifyPassword(user.HashedPassword, request.Password))
+                    {
+                        user.HashedPassword = _passwordManager.HashPassword(request.Password);
+                    }
+
                     userGuid = await _applicationDbContext.UserConfirmGuids
                         .FirstOrDefaultAsync(g => g.UserId == user.Id && g.GuidType == UserGuidType.ConfirmAccount);
 
                     if (userGuid == null)
                     {
-                        throw new ErrorException("NoConfirmationGuidFoundForUser");
+                        userGuid = new UserConfirmGuid()
+                        {
+                            User = user,
+                            UserGuid = Guid.NewGuid(),
+                            GuidType = UserGuidType.ConfirmAccount
+                        };
+                        _applicationDbContext.UserConfirmGuids.Add(userGuid);
                     }
                 }
 
