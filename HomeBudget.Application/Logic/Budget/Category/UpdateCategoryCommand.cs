@@ -46,11 +46,15 @@ namespace HomeBudget.Application.Logic.Budget.Category
                     throw new UnauthorizedException();
                 }
 
-                var categoryExist = await _applicationDbContext.Categories.AnyAsync(y =>  y.Name == request.Name && y.CategoryType == request.CategoryType && y.AccountId == account.Id && y.IsDraft == request.IsDraft && !y.IsDeleted);
+                var categoryExist = await _applicationDbContext.Categories.AnyAsync(y => y.Name == request.Name 
+                                                                                      && y.CategoryType == request.CategoryType 
+                                                                                      && y.AccountId == account.Id 
+                                                                                      && !y.IsDeleted 
+                                                                                      && y.Id != request.Id);
 
                 if (categoryExist)
                 {
-                    throw new ErrorException("CategoryDidNotChange");
+                    throw new ErrorException("CategoryAlreadyExists");
                 }
 
                 Domain.Entities.Budget.Category? model = null;

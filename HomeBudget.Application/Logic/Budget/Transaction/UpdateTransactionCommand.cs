@@ -56,13 +56,6 @@ namespace HomeBudget.Application.Logic.Budget.Transaction
                     throw new UnauthorizedException();
                 }
 
-                var categoryExist = await _applicationDbContext.Transactions.AnyAsync(y =>  y.Name == request.Name && y.CategoryId == request.CategoryId && y.AccountId == account.Id && y.Date == request.Date && y.Amount == request.Amount && !y.IsDeleted);
-
-                if (categoryExist)
-                {
-                    throw new ErrorException("TranscationDidNotChange");
-                }
-
                 Domain.Entities.Budget.Transaction? model = null;
 
                 model = await _applicationDbContext.Transactions.FirstOrDefaultAsync(c => c.Id == request.Id && c.AccountId == account.Id);

@@ -47,11 +47,11 @@ namespace HomeBudget.Application.Logic.Budget.MonthlyBudget
                     throw new UnauthorizedException();
                 }
 
-                var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y => y.Id == request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month && y.TotalAmount == request.TotalAmount);
+                var monthlyBudgetNotChanged = await _applicationDbContext.MonthlyBudgets.AnyAsync(y => y.Id != request.Id && y.YearBudget.AccountId == account.Id && y.YearBudgetId == request.YearBudgetId && y.Month == request.Month);
 
                 if (monthlyBudgetNotChanged)
                 {
-                    throw new ErrorException("MonthlyBudgetDidNotChange");
+                    throw new ErrorException("MonthlyBudgetAlreadyExists");
                 }
 
                 Domain.Entities.Budget.MonthlyBudget? model = null;
